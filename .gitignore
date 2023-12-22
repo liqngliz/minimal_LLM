@@ -1,4 +1,8 @@
-/bin
+*/bin
+*/bin/*
+*/debug
+*/debug/*
+bin/*
 */python-gguf-model-q4_k_m.bin
 */python-gguf-model-q5_k_m.bin
 */chat-gguf-model-q5_k_m.bin
