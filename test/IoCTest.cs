@@ -2,6 +2,7 @@ using Autofac;
 using Configuration;
 using Context;
 using IoC;
+using llm;
 using Run;
 
 namespace IoCTest;
@@ -23,6 +24,7 @@ public class IoCTest
     [Theory]
     [InlineData(typeof(IContext<LlamaInstance>),typeof(LlamaSharpContext))]
     [InlineData(typeof(IRun), typeof(RunLlama))]
+    [InlineData(typeof(Illm<IAsyncEnumerable<string>, string, LlamaInstance>), typeof(LlamaSharpLlm))]
     public void Should_Resolve_As(Type interfaceType, Type classType)
     {
         var res = _sut.Container().Resolve(interfaceType);

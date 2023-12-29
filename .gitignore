@@ -47,3 +47,4 @@ program/obj/Debug/net8.0/minimal_local_AI.dll
 program/obj/Debug/net8.0/minimal_local_AI.pdb
 program/obj/Debug/net8.0/ref/minimal_local_AI.dll
 program/obj/Debug/net8.0/refint/minimal_local_AI.dll
+test/mistral-7b-instruct-v0.2.Q2_K.gguf

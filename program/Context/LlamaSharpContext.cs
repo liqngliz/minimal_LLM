@@ -31,11 +31,13 @@ public class LlamaSharpContext : IContext<LlamaInstance>
             GpuLayerCount = _config.GpuLayerCount
         };
 
-        var inferenceParams = new InferenceParams() { 
-            Temperature = _config.Temperature, 
-            RepeatPenalty = _config.RepeatPenalty, 
-            AntiPrompts = new List<string> { "User:" }, 
-            MaxTokens = _config.MaxTokens };
+        var inferenceParams = new InferenceParams() 
+            { 
+                Temperature = _config.Temperature, 
+                RepeatPenalty = _config.RepeatPenalty, 
+                AntiPrompts = new List<string> { "User:" }, 
+                MaxTokens = _config.MaxTokens 
+            };
         
         return  new LlamaInstance(parameters, inferenceParams, prompt);
     }

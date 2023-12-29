@@ -2,37 +2,32 @@ using Configuration;
 using Context;
 using IoC;
 using LLama;
+using llm;
 
 namespace Run;
 
 public class RunLlama : IRun
 {   
-    readonly IContext<LlamaInstance> _settings;
+    readonly Illm<IAsyncEnumerable<string>, string, LlamaInstance> _llamaSharpLlm;
 
-    public RunLlama(IContext<LlamaInstance> settings)
+    public RunLlama(Illm<IAsyncEnumerable<string>, string, LlamaInstance> llamaSharpLlm)
     {
-        _settings = settings;
+        _llamaSharpLlm = llamaSharpLlm;
     }
 
     public async Task Run()
     {   
-        var llama = await _settings.Init();
+        var llama = _llamaSharpLlm.InferParams();
         var prompt = llama.Prompt;
-        
-        using var model = LLamaWeights.LoadFromFile(llama.ModelParams);
-        using var context = model.CreateContext(llama.ModelParams);
-        var interactiveExecutor = new InteractiveExecutor(context);
-
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine($"The executor has been enabled. In this example, the prompt is printed, the maximum tokens is set to {llama.InferenceParams.MaxTokens} (an example for medium scale usage) {llama.ModelParams.ContextSize} Max context size");
         Console.ForegroundColor = ConsoleColor.White;
-
         Console.Write(prompt);
         
         while (true)
         {   
 
-            await foreach (var text in interactiveExecutor.InferAsync(prompt, llama.InferenceParams)) 
+            await foreach (var text in _llamaSharpLlm.Infer(prompt)) 
             {   
                 Console.Write(text);
             }
@@ -41,6 +36,8 @@ public class RunLlama : IRun
             Console.ForegroundColor = ConsoleColor.White;
 
         }
+
+        _llamaSharpLlm.Dispose();
 
     }
 

@@ -1,11 +1,11 @@
 {
     "ContextSize": 1028,
     "Seed": 1337,
-    "GpuLayerCount": 6,
+    "GpuLayerCount": 3,
     "MaxTokens": 512,
     "Temperature": 0.8,
     "RepeatPenalty": 1.1,
-    "Model": "python-gguf-model-q5_k_m.bin",
+    "Model": "python-gguf-model-q4_k_m.bin",
     "Prompt": "prompt.txt"
 }
   

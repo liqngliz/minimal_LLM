@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Configuration;
 using Context;
 using Run;
+using llm;
 
 namespace IoC;
 public class IoCModule: IModule <Config>
@@ -19,8 +20,10 @@ public class IoCModule: IModule <Config>
         _configuration = JsonConvert.DeserializeObject<Config>(File.ReadAllText(configPath));
         
         //register
-         _builder.Register(c => new LlamaSharpContext(_configuration)).As<IContext<LlamaInstance>>();
-         _builder.Register(c => new RunLlama(c.Resolve<IContext<LlamaInstance>>())).As<IRun>();
+        _builder.Register(c => new LlamaSharpContext(_configuration)).As<IContext<LlamaInstance>>();
+        _builder.Register(c => new LlamaSharpLlm(c.Resolve<IContext<LlamaInstance>>())).As<Illm<IAsyncEnumerable<string>, string, LlamaInstance>>();
+
+        _builder.Register(c => new RunLlama(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlamaInstance>>())).As<IRun>();
 
         //build module container
         _container = _builder.Build();
