@@ -21,7 +21,7 @@ public class RunLlama : IRun
         var prompt = llama.Prompt;
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine($"The executor has been enabled. In this example, the prompt is printed, the maximum tokens is set to {llama.InferenceParams.MaxTokens} (an example for medium scale usage) {llama.ModelParams.ContextSize} Max context size");
-        Console.ForegroundColor = ConsoleColor.White;
+        Console.ForegroundColor = ConsoleColor.Gray;
         Console.Write(prompt);
         
         while (true)
@@ -33,7 +33,7 @@ public class RunLlama : IRun
             }
             Console.ForegroundColor = ConsoleColor.Green;
             prompt = Console.ReadLine();
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Gray;
 
         }
 
