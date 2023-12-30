@@ -24,10 +24,6 @@
       <TargetPath>%(Filename)%(Extension)</TargetPath>
     </ContentWithTargetPath>
 
-    <ContentWithTargetPath Include="python-gguf-model-q4_k_m.bin">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>%(Filename)%(Extension)</TargetPath>
-    </ContentWithTargetPath>
   </ItemGroup>
 
 </Project>
