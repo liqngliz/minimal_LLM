@@ -8,3 +8,11 @@
 test/mistral-7b-instruct-v0.2.Q2_K.gguf
 program/mistral-7b-v0.1.Q3_K_M.gguf
 test/bin/Debug/net8.0/CoverletSourceRootsMapping_test
+*/bin
+*/bin/*
+*/debug
+*/debug/*
+bin/*
+*/obj
+*/obj/*
+obj/*
