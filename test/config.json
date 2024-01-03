@@ -5,7 +5,7 @@
     "MaxTokens": 2048,
     "Temperature": 0.8,
     "RepeatPenalty": 1.1,
-    "Model": "python-gguf-model-q4_k_m.bin",
+    "Model": "mistral-7b-v0.1.Q3_K_M.gguf",
     "Prompt": "prompt.txt"
 }
   
