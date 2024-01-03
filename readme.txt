@@ -21,7 +21,7 @@ For JSON configuration (config.json)
     "Prompt": <prompt.txt file location to initiate conversation>
 }
 
-To run tests, Mistral 7B or equivalent is required, add model to test folder.
+To run program and tests, Mistral 7B or equivalent is required, add model to bin folder.
 
 example file:
 https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/blob/main/mistral-7b-instruct-v0.2.Q2_K.gguf
