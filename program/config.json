@@ -5,7 +5,7 @@
     "MaxTokens": 512,
     "Temperature": 0.8,
     "RepeatPenalty": 1.1,
-    "Model": "mistral-7b-v0.1.Q3_K_M.gguf",
+    "Model": "mistral-7b-instruct-v0.2.Q4_K_M.gguf",
     "Prompt": "prompt.txt"
 }
   
