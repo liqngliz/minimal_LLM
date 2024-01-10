@@ -15,7 +15,7 @@ public class PromptConstructLatin : IPromptConstruct<Task<List<string>>>
     public PromptConstructLatin(PromptParams promptParams, Config config, Illm<IAsyncEnumerable<string>, string, LlamaInstance> llamaSharpLlm)
     {
         _promptParams = promptParams;
-        _config = config;
+        //_config = config;
         _chunks = new List<string>();
         _llamaSharpLlm = llamaSharpLlm;
 
@@ -33,7 +33,8 @@ public class PromptConstructLatin : IPromptConstruct<Task<List<string>>>
     }
 
     public async Task<List<string>> Construct(string prompt)
-    {
+    {   
+
         var res = new List<string>();
         if(_chunks.Count <= _promptParams.Segments) return _chunks;
         res = _chunks;
@@ -81,6 +82,7 @@ public class PromptConstructLatin : IPromptConstruct<Task<List<string>>>
             }
         }
         res.Reverse();
+        _llamaSharpLlm.Dispose();
         return res.Take(_promptParams.Segments).ToList();
     }
 }
