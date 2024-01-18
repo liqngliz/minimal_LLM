@@ -1,9 +1,8 @@
-using System.ComponentModel;
 using Context;
 using LLama;
-using llm;
+using Llm;
 
-public class LlamaSharpLlm : Illm<IAsyncEnumerable<string>, string, LlamaInstance>
+public class LlamaSharpLlm : Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool>
 { 
     
     readonly IContext<LlamaInstance> _settings;
@@ -42,5 +41,7 @@ public class LlamaSharpLlm : Illm<IAsyncEnumerable<string>, string, LlamaInstanc
     }
 
     public LlamaInstance InferParams() => _llamaInstance;
+
+    public bool IsDisposed() => interactiveExecutor == null;
 }
 

@@ -1,0 +1,1264 @@
+IMA Journal of Management Mathematics (2023) 34, 355–382
+https://doi.org/10.1093/imaman/dpab037
+Advance Access publication on 13 November 2021
+Portfolio rebalancing based on time series momentum and downside risk
+Xiaoshi Guo and Sarah M. Ryan†
+Department of Industrial and Manufacturing Systems Engineering, Iowa State University, Ames, IA
+50011-2030, USA
+†Corresponding author. Email: smryan@iastate.edu
+[Received on 11 June 2020; accepted on 15 September 2021]
+To examine the familiar tradeoff between risk and return in financial investments, we use a rolling
+two-stage stochastic program to compare mean-risk optimization models with time series momentum
+strategies. In a backtest of allocating investment between a market index and a risk-free asset, we generate
+scenarios of future return according to a momentum-based stochastic process model. A new hybrid
+approach, time series momentum strategy controlling downside risk (TSMDR), frequently dominates
+traditional approaches by generating trading signals according to a modified momentum measure while
+setting the risky asset position to control the conditional value-at-risk (CVaR) of return. For insight into
+the outperformance of TSMDR, we decompose each strategy into two aspects, the trading signal and the
+asset allocation model that determines the risky asset position. We find that 1) weighted moving average
+can better capture the trend of the stock market than time series momentum computed as past 12-month
+excess return, 2) mean-risk strategies generally provide better returns whereas risk parity strategies have
+less investment risk and 3) controlling CVaR limits the investment risk better than controlling variance
+does.
+Keywords: time series momentum; mean-risk; risk parity; conditional value-at-risk; stochastic programming; scenario generation.
+1. Introduction
+In their quest to achieve high rates of return with tolerable levels of risk, many investors rebalance
+their portfolios at regular intervals. Periodic rebalancing results in a dynamic asset allocation where
+the allocation of wealth to riskier assets can vary over time in response to changing market conditions.
+While broad market indicators and fundamental assessments of individual assets’ prospects for growth
+could be considered, many asset allocation approaches rely simply on the use of previous return data to
+either (i) estimate parameters of stochastic models for returns to be used in optimization models or (ii)
+detect signals that may indicate the directions in which returns will move before the next rebalancing
+point.
+Momentum is a term employed to describe one set of such signals that have been studied empirically
+and analytically over the past few decades. In contradiction to the efficient-market hypothesis, that
+future returns are independent of their past values, considerable evidence has accumulated in support
+of momentum. Empirical studies suggest the existence of two types of momentum in the short term.
+Time series momentum describes a phenomenon in which an asset that has been trending strongly in a
+certain direction will continue to move in the same direction in the short term, while cross-sectional
+momentum identifies the tendency for assets that have recently outperformed (or underperformed)
+their peers to continue to do so for a while longer. Both of these forms of momentum have been
+© The Author(s) 2021. Published by Oxford University Press on behalf of the Institute of Mathematics and its Applications.
+This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/4.
+0/), which permits unrestricted reuse, distribution, and reproduction in any medium, provided the original work is properly cited.
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+356 X. GUO AND S. M. RYAN
+incorporated in stochastic models of asset returns (He et al., 2018; Koijen et al., 2009) and in
+so-called momentum strategies for asset allocation (Jegadeesh & Titman, 1993; Moskowitz et al.,
+2012).
+At the same time as momentum strategies have emerged, many investors have adopted a passive
+approach to reducing risk by investing in diversified index funds rather than individual assets. In the
+US stock markets, the total amount invested in index funds recently overtook the amount in actively
+managed funds (Lim, 2019). An investor who relies on indexing to diversify their investments in risky
+assets is not concerned with cross-sectional momentum. But they still must consider, and periodically
+reevaluate, how much wealth to hold in the index fund as opposed to a risk-free alternative. The
+goal of this paper is to analyze and compare optimization-based and signal-based approaches for
+dynamically allocating assets between a risky asset (an index fund) and a risk-free asset. Both the
+expected future return used in the optimization models and the trading signals employed in the rulebased strategies are based on continually updated estimates of time series momentum in the index fund
+returns.
+As a foundation for comparison, we formulate a generic mean-risk optimization problem for periodic
+rebalancing, of which a version of the Markowitz mean-variance model is a special case. We also
+consider mean-conditional value-at-risk (CVaR) optimization to employ a coherent measure of downside
+risk. We show that the optimal solutions to these two mean-risk formulations differ in their structure. The
+well-studied time series momentum strategy (TSMOM) is recast as a feasible solution to this mean-risk
+optimization problem. We also develop a new hybrid strategy, termed time series momentum controlling
+downside risk (TSMDR), as another feasible solution that combines a time series momentum trading
+signal with a position size based on CVaR rather than volatility. Although the CVaR can be evaluated
+in closed form for normally distributed returns, we compute it using discrete probabilistic scenarios to
+allow flexibility in the estimated return distribution. Also by doing so, we are able to identify methods
+and time windows for estimating the mean and volatility parameters that result in sets of scenarios that
+are evaluated as statistically reliable in a historical backtest.
+We empirically study the performance of the four strategies in a historical backtest of monthly
+rebalancing, considering the Standard & Poor’s 500 index as the risky asset and the one-month US
+Treasury bill as the risk-free asset. Using historical data from 2001 through 2019, we compare the
+results of all strategies according to multiple performance metrics. Our newly created TSMDR strategy
+significantly outperforms the others in terms of the Sortino ratio and the Sharpe ratio, while dominating
+the others in a Pareto sense for all but the highest risk tolerances. For certain values of its adjustable
+risk parameters, it also would have achieved the highest cumulative return over nearly all periods in the
+backtest. Lastly, we analyze all four trading strategies from three angles: the trading signal, the type of
+asset allocation model and the risk measure. The analysis suggests that the outperformance of TSMDR
+is due to 1) using weighted moving average, which can better forecast the trend of the stock market
+than time series momentum, 2) using risk parity, which helps reduce investment risk and increase riskadjusted returns and 3) using CVaR to control the downside investment risk while not limiting the upside
+return.
+The paper proceeds as follows. Section 2 sets the scholarly context for this work. Section 3
+introduces the mean-risk optimization model and analyzes its mean-variance and mean-CVaR variants.
+It presents the two time series momentum strategies, TSMOM and TSMDR, as heuristic solutions to this
+model. In Section 4, we introduce the model for the risky asset rate of return, the scenario generation
+method, and procedures to assess the reliability of generated scenarios and test the stability of optimal
+solutions. Section 5 describes the performance metrics used to evaluate the results of applying the
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+PORTFOLIO REBALANCING 357
+investment strategies. Section 6 presents the numerical results of the evaluation and comparison of the
+investment strategies. Section 7 finally concludes.
+2. Literature review
+Investors employ the return predictability of momentum to construct trading strategies by going long
+in recently outperforming securities and short in recently underperforming ones. The profitability of
+momentum strategies across different markets and time periods (De Bondt & Thaler, 1985; Goyal &
+Jegadeesh, 2018; He & Li, 2015; Jegadeesh & Titman, 1993) suggests that investors can improve the
+timing of their transactions by following momentum signals. In general, these momentum strategies can
+be categorized as cross-sectional (Jegadeesh & Titman, 1993) or time series (Moskowitz et al., 2012).
+They differ in whether the strategy constructs portfolios based on a security’s historical performance
+relative to other securities or only to itself. Time series momentum strategies focus on the return
+predictability of a single risky asset while cross-sectional momentum strategies focus on the relative
+returns of securities in the cross-section.
+Moskowitz et al. (2012) report that the TSMOM is significantly more profitable than the crosssectional momentum strategy across diverse asset classes, including equity indices, bonds, currencies
+and commodities, especially during the extreme periods. In this strategy, labelled TSMOM(k, h), the
+trading signal is the total excess return over a lookback period of k months. Based on this signal, traders
+hold a long or short position for h months. The size of the position in TSMOM(k, h) is determined
+by volatility scaling, which can be seen as a risk parity approach (Kim et al., 2016), in which asset
+allocation is determined according to relative risk contribution to control the investment risk (Asness
+et al., 2012).
+Despite the remarkable performance of TSMOM, it does not explicitly model the assets’ future
+returns. In this paper, we adopt the flexibility of stochastic portfolio optimization in the representation
+of the assets’ future returns and build three alternative rebalancing strategies, including a hybrid that
+improves on TSMOM with respect to the trading signal, the risk measure and the approach to balancing
+the trade-off between risk and return.
+First, the trading signal in TSMOM is the sign of the past k-month excess returns. Alternatively,
+we can estimate the distribution of the future rate of return according to a stochastic process model and
+construct the trading signal based on the sign of the difference between the expectation of the estimated
+distribution of the asset future return rates and the risk-free rate.
+Second, TSMOM uses volatility of excess returns as the risk measure. However, much theory and
+experience indicate that volatility (as the square root of variance) is not an ideal risk measure, because
+it treats the chance of success and the risk of failure equivalently, which does not accurately reflect
+most investors’ attitudes towards risk (see Kolm et al. (2014) for an overview of portfolio optimization
+developments over the past 60 years). Therefore, various downside risk measures have been proposed
+(Artzner et al., 1999; Nawrocki, 1999; Roy, 1952). One of these, the value-at-risk (VaR) with probability
+α, corresponds to an upper estimate of losses which is exceeded with probability α. However, since VaR
+does not consider information beyond this upper estimate, it cannot distinguish among different extents
+of losses beyond the VaR (Rockafellar & Uryasev, 2002). What is worse, Artzner et al. (1999) prove that
+VaR is not a coherent risk measure, as it does not satisfy the subadditivity property which is consistent
+with the investment principle that diversification can reduce risk. Rockafellar & Uryasev (2000) propose
+an improved risk measure, conditional value-at-risk (CVaR), which is coherent (Pflug, 2000). CVaR is
+defined as the expected loss beyond the VaR, and for a discrete distribution of loss it can be computed
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+358 X. GUO AND S. M. RYAN
+by solving a linear program (Rockafellar & Uryasev, 2002). Hence, we consider CVaR as an additional
+risk measure.
+Third, TSMOM employs the risk parity approach to allocate assets. The risk parity approach
+uses solely the measure of risk to determine the proportion of wealth to be allocated in each asset
+and does not require the estimation of expected returns, which significantly reduces the estimation
+error. Nevertheless, this approach has very limited power for helping investors to attain high returns.
+Accordingly, we also consider mean-risk optimization, where the objective is to minimize a convex
+combination of the expectation of negative investment return and the risk of investment loss.
+In this paper, two stochastic portfolio optimization models are formulated along with the hybrid
+strategy, TSMDR. They all use the sign of the difference between the expectation of the estimated
+distribution of the risky asset return rate and the risk-free rate as the trading signal but vary in the
+risk measures and asset allocation approaches: TSMDR uses CVaR and a risk parity approach; meanvariance uses variance and a mean-risk tradeoff; and mean-CVaR uses CVaR and a mean-risk tradeoff.
+The advantage of stochastic programming models is to incorporate more of the distribution of the
+random parameter; namely, the future rate of return of the risky asset. The success of TSMOM suggests
+that this random parameter can be modelled by the past returns of the same asset, which is partially
+validated by Koijen et al. (2009). Our model of the asset rate of return is inspired by that of Koijen et
+al. (2009), which characterizes both short-run momentum and long-run mean reversion, but different in
+three aspects. First, we incorporate the effect of mean reversion in the periodically renewed observations
+rather than regarding it as a state variable. Second, Koijen et al. (2009) use exponential moving average
+to estimate momentum. However, by comparing different moving average techniques in terms of the
+percentage of positive excess returns (prediction accuracy) and cumulative absolute log returns, we find
+that weighted moving average, where weights on more remote past observations decrease in arithmetical
+progression, can better capture the trend of the stock market. There is no consensus on how to quantify
+the trend of a single asset’s performance (e.g. Moskowitz et al. (2012) compute time series momentum
+based on rates of return differently from Koijen et al. (2009), Kouaissah et al. (2020) use simple moving
+averages of prices to detect the market trend, and Beekhuizen & Hallerbach (2017) analyze moving
+averages of prices in terms of the equivalent weights on return rates). In this paper, we adopt the time
+series momentum definition of Moskowitz et al. (2012), as (total) excess return over a fixed time period
+in the past. Third, Koijen et al. (2009) assume that the volatility of risky asset returns is constant. To
+respond to recent changes, we allow volatility to be non-stationary and estimated on a rolling basis.
+Consequently, our model of the risky asset’s future rate of return reduces to a normal distribution with
+non-stationary mean, estimated by weighted moving average of recent historical rates of return, and a
+time-dependent volatility.
+As it is usually intractable to solve a stochastic program with continuous distributions for the
+uncertain parameters, these distributions are often discretized or approximated by a finite number of
+probabilistic scenarios. Plentiful methods for scenario generation (Gülten & Ruszczynski, 2015 ´ ; Kaut
+& Wallace, 2007; Roman et al., 2010; Yu et al., 2003) have been proposed and applied to portfolio
+optimization problems. Among them, the Monte Carlo method, which simulates the distribution by
+random sampling, is the most straightforward approach that has been used in many studies (Bertsimas
+& Pachamanova, 2008; Dantzig & Infanger, 1993; Guo & Ryan, 2021; Hull, 2009).
+After generating scenarios, the next question arising is how well they approximate the distribution.
+The verification rank histogram is a recently developed technique for evaluating scenario quality
+that compares sets of scenarios that would have been generated in the past with the corresponding
+observations. Mass transportation distance (MTD) rank histograms, developed by Sarı et al. (2016), use
+the distance between scenario sets and the corresponding observations measured by MTD, also known
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+PORTFOLIO REBALANCING 359
+as the Wasserstein distance, which accounts for the scenario probabilities. The principle behind the rank
+histogram is that an ideal set of scenarios for a given problem instance and its associated observation
+could be regarded as a random sample from the same distribution. If the observation is indistinguishable
+from a scenario, then the rank of the observation-to-scenarios distance, among distances of each single
+scenario to the rest (including the observation) is uniformly distributed. Accordingly, the quality of a
+scenario generation method can be measured by the flatness of the MTD rank histogram over multiple
+instances. In this paper, we set a parameter value for the scenario generation method based on a
+hypothesis test of uniform MTD ranks.
+However, King & Wallace (2012) argue that simply evaluating the scenarios themselves without
+reference to the optimization model may not be sufficient to test the quality of scenarios, because
+the quality of a set of scenarios ultimately is determined by the resulting solution to the optimization
+problem. In addition, the randomness in the scenario generation procedure may cause inconsistency in
+the optimal solutions found when using different sets of scenarios, and thus, a loss of confidence in the
+true optimality of a solution obtained with any particular scenario set. Therefore, we further check the
+stability of the optimal solutions (Kaut & Wallace, 2007). The optimal objective value is frequently the
+focus of stability analysis because there may be a large number of potentially optimal solutions, and
+the value of the objective function presumably is what the decision maker cares about. However, in this
+paper, we are mainly interested in the optimal solutions themselves, as they are what guide investors in
+how to allocate assets at each time point. We demonstrate simple structures for the solutions of both the
+mean-variance and mean-CVaR models that allow the stability analysis to focus on the similarity among
+the optimal solutions. Mindful of the ‘fragility’ of CVaR observed by Lim et al. (2011), we generate
+large samples of scenarios to overcome it.
+This paper is closely related to He et al. (2018), who modify the asset price model of Koijen
+et al. (2009) and derive the optimal investment strategy. Like Koijen et al. (2009) and He et al. (2018),
+we consider investments in only two assets, a single risky asset and a risk-free asset, to avoid the
+ambiguity of time series momentum strategies applied to multiple risky assets in that the proportion
+of wealth allocated each risky asset is unclear and unconstrained. This paper, however, differs from
+He et al. (2018) in several ways. First, He et al. (2018) build a continuous-time asset price model
+incorporating both short-term time series momentum and long-term mean reversion components. In
+the context of regular rebalancing, we focus on the effect of time series momentum and build a
+short-term model of risky asset returns using time series momentum alone. Furthermore, like Koijen
+et al. (2009), He et al. (2018) assume the volatility of the risky asset to be constant. We estimate the
+non-stationary volatility as the standard deviation of the difference between the risky asset returns
+and the momentum estimated at each time point using recent historical data. We verify the return
+model with non-stationary time series momentum component and time-varying volatility, as well as
+methods for estimating its parameters, using the MTD rank histograms. Finally, He et al. (2018)
+formulate a long-term optimization model to maximize the constant relative risk aversion (CRRA)
+utility of future wealth. In the special case of log utility, the resulting optimal time-varying proportion
+of wealth to invest in the risky asset is the ratio of the non-stationary excess return estimate to the
+fixed estimate of the variance of risky asset returns. We observe a similarity to the optimal solution for
+our mean-variance model, which provides insight into the high risk tolerance implicit in the log-utility
+function.
+To the best of our knowledge, this paper is the first to use the flexible representation of uncertain
+parameters in stochastic programming to improve on TSMOM from three perspectives: trading signal,
+risk measure and the approach to balancing risk and return.
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+360 X. GUO AND S. M. RYAN
+Fig. 1. Timeline of period t.
+3. Rebalancing strategies
+Given a risky asset and a risk-free alternative, we consider four strategies to dynamically rebalance a
+portfolio that varies between 100% long and 100% short in the risky asset. At the beginning of each
+period, we decide on a long or short position to hold in the risky asset for the period. We define wt as
+the proportion of current wealth to invest in the risky asset at the beginning of period t. If wt > 0 (¡ < 0),
+the investor longs (shorts) the risky asset and |wt| is the size of the position taken. The generic problem,
+to be solved repeatedly for each t, is to determine wt by balancing the trade-off between maximizing
+excess returns and minimizing the investment risk, where the rate of return of the risky asset over period
+t, Rt, is uncertain and the rate of return of the risk-free asset, ft, is known at the beginning of the period.
+We denote the beginning of period t as time t and its end as time t +1. The information release schedule
+and the time point to make a decision of each period are illustrated in Figure 1, where rt is the realized
+value of Rt.
+At each time t, we can either 1) estimate the distribution of Rt according to a stochastic process
+model and determine the asset allocation by solving a stochastic program, or 2) simply generate a
+trading signal (sign of wt) and position size for the risky asset according to a time series momentum
+strategy. Both approaches are grounded on excess return rates of the risky asset before time t. Our
+goal is to compare optimal solutions to a two-stage stochastic programming formulation, using various
+risk measures (including no risk measure) and weights assigned to them, with variants of the time
+series momentum strategy according to different ways of generating the trading signal and scaling the
+position. To focus simply on the comparison of strategies, we omit any considerations of transaction
+costs, management fees, taxes or any other investment costs.
+3.1. Mean-risk stochastic optimization model
+The purpose of the mean-risk stochastic optimization model is to find an allocation of wealth between
+the two assets that maximizes the expected excess return while minimizing the investment risk. Define
+a risk measure, ρ, and a risk-aversion parameter λ ∈ [0, 1]. Then the generic mean-risk optimization
+model to be solved at time t is
+min
+wt
+(1 − λ)E[−(Rt − ft
+)wt
+] + λρ[−(Rt − ft
+)wt
+] (1a)
+s.t. − 1 ≤ wt ≤ 1 (1b)
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+PORTFOLIO REBALANCING 361
+Here, (Rt − ft)wt is the excess return to be realized at the end of period t. Given monetary wealth, Dt,
+at the beginning of period t, if wt ≥ 0 we long a monetary value wt
+Dt of the risky asset while investing
+(1 − wt)Dt in the risk-free asset. Then, at the end of period t, the wealth is Dt+1 = wtDt(1 + Rt) + (1 −
+wt
+)Dt
+(1 + ft
+) and the rate of return is Dt+1−Dt
+Dt = wt
+(Rt − ft
+) + ft
+. Therefore, the excess return rate is
+wt
+(Rt − ft
+). Similarly, if wt < 0, we borrow wtDt worth of the risky asset and sell it at the beginning
+of period t to be repurchased at time t + 1. Therefore, we will have (1 − wt)Dt > Dt invested in the
+risk-free asset during period t. The expression for Dt+1 is identical to the case where wt ≥ 0, and hence,
+the excess return equals wt(Rt − ft) in either case. Constraint (1b) limits the absolute position size of the
+risky asset to be no larger than 1.
+If the risk measure is coherent, a simple structure for optimal solutions is found.
+Proposition 1. For a coherent risk measure, ρ, one of the three values 1, 0 or –1 is optimal for model
+(1a)–(1b).
+Proof. The linearity of expectation and coherence properties of ρ allow the objective to be simplified
+as:
+min −1≤wt≤1
+(1 − λ)E[−(Rt − ft
+)wt
+] + λρ[−(Rt − ft
+)wt]
+= min −1≤wt≤1
+(1 − λ)ft
+wt − (1 − λ)E[Rt
+]wt + λρ[−(Rt − ft)wt] (Linearity of E)
+= min −1≤wt≤1
+(1 − λ)ft
+wt − (1 − λ)E[Rt
+]wt + λft
+wt + λρ[−Rt
+wt
+] (Translation invariance of ρ)
+= min −1≤wt≤1
+⎧
+⎨
+⎩
+
+ft − (1 − λ)E[Rt
+] + λρ[−Rt
+]
+
+wt, if wt ≥ 0
+
+ft − (1 − λ)E[Rt
+] − λρ[Rt
+]
+
+wt, if wt < 0
+(Positive homogeneity of ρ)
+Denote c1
+t (λ) ≡ ft − (1 − λ)E[Rt
+] + λρ[−Rt] and c2
+t (λ) ≡ ft − (1 − λ)E[Rt
+] − λρ[Rt
+]. By inspection, it
+is optimal to weigh the risky asset as follows:
+w∗
+t =
+⎧
+⎪⎨
+⎪⎩
+−1, if c2
+t (λ) > 0 and c1
+t (λ) > −c2
+t (λ)
+0, if c1
+t (λ) ≥ 0 and c2
+t (λ) ≤ 0
+1, if c1
+t (λ) < 0 and c2
+t (λ) < −c1
+t (λ).
+
+3.1.1. Mean-variance model. The mean-variance model, a variant of the one proposed by Markowitz
+(1952), results from setting ρ in (1a) to be variance. Model (1a)–(1b) simplifies to
+min
+wt
+−(1 − λ)(E[Rt
+] − ft
+)wt + λVar[Rt
+]w2
+t (2a)
+s.t. − 1 ≤ wt ≤ 1 (2b)
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+362 X. GUO AND S. M. RYAN
+Because variance is not a coherent risk measure, Proposition 1 does not apply. But optimal solutions
+for model (2a) – (2b) can be found in terms of c3
+t (λ) ≡ (1−λ)(E[Rt]−ft)
+2λVar[Rt] as follows:
+w∗
+t =
+⎧
+⎪⎨
+⎪⎩
+−1, if c3
+t (λ) < −1
+c3
+t (λ), if c3
+t (λ) ∈ [−1, 1]
+1, if c3
+t (λ) > 1.
+Note that, in contrast to coherent ρ, optimal solutions to the mean-variance model may take absolute
+values between 0 and 1.
+Additionally, when the objective function is to maximize the CRRA utility function and the return
+rate of the risky asset has a constant drift and volatility over time, Merton (1969) proves that the optimal
+proportion in the risky asset is c4
+t (γ ) = (E[Rt]−ft)
+γ Var[Rt] , where γ is the constant coefficient of relative risk
+aversion. He et al. (2018) find a similar result for γ = 1 (log-utility function), in the absence of
+mean reversion, but with non-stationary drift for the risky asset return rate to capture the time series
+momentum effect. To compare our result with He et al. (2018), we can set λ = 1
+3 by equating c4
+t (γ )
+with c3
+t ( γ
+2+γ ).
+3.1.2. Mean-CVaR model. Although variance (or standard deviation, also called volatility) is a
+traditional risk metric, it may not reflect an investor’s actual perspective on the risk. Over the past three
+decades, researchers in finance, economics and psychology have noted that individuals view return
+dispersion asymmetrically; that is, losses weigh more heavily than gains (Harlow, 1991). The equal
+treatment of gains and losses in the variance calculation does not characterize the investors’ attitudes
+towards risk accurately. Therefore, various downside risk measures have been proposed (Artzner et al.,
+1999; Nawrocki, 1999; Roy, 1952).
+CVaR, which quantifies the expected loss under the extreme cases, is one type of downside risk
+measure that has the added benefit of being coherent (Pflug, 2000). Rockafellar & Uryasev (2000)
+introduce the CVaR of a continuous loss random variable, Z, at a given probability, α, to protect against
+outcomes worse than the VaR, η, as
+CVaRα[Z] = E[Z|Z ≥ η]. (3)
+Here, η can be interpreted as the maximum loss associated with the specified probability of α, and is
+equivalent to the α-quantile of the loss distribution.
+Later, Rockafellar & Uryasev (2002) define CVaR for a general distribution by transforming the
+computation of CVaR into an optimization problem:
+CVaRα[Z] = min
+η∈R
+
+η +
+1
+1 − α
+E[(Z − η)+]
+	
+(4)
+Accordingly, when ρ represents CVaR in (1a), the model using probability α considers the values in
+the lower (1 − α)-probability tail of the excess return distribution:
+min
+wt,ηt+1
+(1 − λ)E[−(Rt − ft)wt] + λ
+
+ηt+1 +
+1
+1 − α
+E[(−(Rt − ft)wt − ηt+1)+]
+	
+(5a)
+s.t. − 1 ≤ wt ≤ 1 (5b)
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+PORTFOLIO REBALANCING 363
+where ηt+1 represents the α-quantile of the negative excess return distribution realized at time t + 1.
+If the distribution of Z is discrete, (5a) can be reformulated as a linear program. Here, by
+approximating the distribution of Rt with J scenarios, rt,1, ... ,rt,J , where rt, j occurs with probability
+pj and 
+J
+j=1 pj = 1, we can rewrite model (5a)–(5b) as
+min wt,ηt+1,{νt+1, j}
+j=J
+j=1
+ληt+1 +
+J
+j=1
+pj
+
+−(1 − λ)(rt, j − ft)wt +
+λ
+1 − α
+νt+1, j
+
+(6a)
+s.t. − 1 ≤ wt ≤ 1 (6b)
+νt+1, j ≥ −(rt, j − ft
+)wt − ηt+1, j = 1, ... , J (6c)
+νt+1, j ≥ 0, j = 1, ... , J (6d)
+Constraints (6c) and (6d) combine to compute the deviation of excess returns below ηt+1 in scenario
+j as a non-negative simple recourse variable: νt+1, j =
+
+−(rt, j − ft)wt − ηt+1
+
++
+. Proposition 1 has the
+following corollary for the mean-CVaR model.
+Corollary 1. Suppose the risk measure, ρ, in Proposition 1 is CVaRα. Define d+
+α,t ≡ CVaRα[Rt] −
+E[Rt
+] ≥ 0 and d−
+α,t ≡ CVaRα[−Rt] + E[Rt] ≥ 0. Then in model (1a) – (1b) it is optimal to weigh the
+risky asset as:
+w∗
+t =
+⎧
+⎪⎨
+⎪⎩
+−1, if E[Rt] − ft < −λd+
+α,t
+0, if − λd+
+α,t ≤ E[Rt] − ft ≤ λd−
+α,t
+1, if λd−
+α,t < E[Rt] − ft.
+Proof. Let qt(λ) = ft − (1 − λ)E[Rt]. Then the conclusion of the proof of Proposition 1 can be restated
+as
+w∗
+t =
+⎧
+⎪⎨
+⎪⎩
+−1, if qt(λ) > max{λρ[Rt
+], λ
+2 (ρ[Rt] − ρ[−Rt])}
+0, if − λρ[−Rt] ≤ qt(λ) ≤ λρ[Rt
+]
+1, if qt(λ) < min{−λρ[−Rt], λ
+2 (ρ[Rt] − ρ[−Rt])}.
+Specifying ρ as CVaRα, we have ρ[Rt] = E[Rt] + d+
+α,t and ρ[−Rt] = −E[Rt] + d−
+α,t. Then:
+ρ[Rt] − ρ[−Rt] = 2E[Rt] + d+
+α,t − d−
+α,t
+max 
+λρ[Rt],
+λ
+2
+(ρ[Rt
+] − ρ[−Rt])
+	
+= λρ[Rt
+]
+min 
+−λρ[−Rt],
+λ
+2
+(ρ[Rt] − ρ[−Rt])
+	
+= −λρ[−Rt]
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+364 X. GUO AND S. M. RYAN
+Hence, it is optimal to set
+w∗
+t =
+⎧
+⎪⎨
+⎪⎩
+−1, if qt(λ) > λρ[Rt]
+0, if − λρ[−Rt] ≤ qt(λ) ≤ λρ[Rt
+]
+1, if qt(λ) < −λρ[−Rt].
+The result follows from substitution.
+Note that, unlike the formulation to minimize risk subject to a constraint on expected return as
+analyzed by Rockafellar & Uryasev (2000), where the optimal solutions for variance and CVaR are
+identical for normally distributed returns, in our formulation to minimize a convex combination of mean
+and risk, the structure of optimal solutions differs according to the risk measure. Specifically, if Rt is
+normally distributed, d+
+α,t = d−
+α,t = k(α)σt (Rockafellar & Uryasev, 2000). In our mean-variance model,
+the continuous w∗
+t depends on the expected excess return in relation to variance, while in the mean-CVaR
+model the discrete w∗
+t depends on expected excess return in relation to volatility.
+3.2. Variants of time series momentum strategy
+In this paper, we consider a time series momentum strategy as a heuristic approach to solving the meanrisk optimization model. In this approach, the sign of past excess returns is taken as the trading signal
+to determine whether wt is positive or negative, and the position size is chosen to manage the risk.
+3.2.1. Time series momentum strategy (TSMOM). Moskowitz et al. (2012) studied time series
+momentum strategies with various values of the lookback interval (number of months over which to
+estimate the trading signal) and holding interval (number of months to hold a position). Here, to avoid
+complications of overlapping holding intervals, we consider only a special case in which the holding
+interval is equal to the time period for our optimization problem. To illustrate TSMOM(k, 1) as proposed
+by Moskowitz et al. (2012), we first define the trading signal in period t as (Moskowitz et al., 2012)
+at ≡ sign 
+Πk
+i=1(rt−i + 1) − Πk
+i=1(ft−i + 1)
+
+(7)
+which is the sign of excess returns over the past k periods.
+The position size of the risky asset in period t is set to be inversely proportional to the asset’s exante volatility, C
+σt
+. This volatility scaling is a form of risk parity approach (Kim et al., 2016), as it helps
+to produce a time series with relatively stable volatility so that the strategy is not dominated by a few
+volatile periods. Here, as in He et al. (2018), we set
+σt
+2 = N
+∞
+i=0
+(1 − δ)δi
+(rt−1−i − ft−1−i − rt
+)
+2 (8)
+where the factor, N, the number of periods in a year, scales the variance to be annual. According to
+Moskowitz et al. (2012), the parameter δ is chosen so that the centre of mass of the weights ( δ
+1−δ ) is 60
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+PORTFOLIO REBALANCING 365
+trading days. Likewise, r¯
+t is the exponential moving average of excess return:
+rt = ∞
+i=0
+(1 − δ)δi
+(rt−1−i − ft−1−i
+) (9)
+Based on Hurst et al. (2013) and He et al. (2018), the scale, C, is an annualized volatility of the realized
+rate of return of the risky asset over the simulation horizon, calculated analogously to Equation (8).
+Kim et al. (2016) show that the choice of the value of C will affect the profitability of TSMOM. In our
+numerical study, we compare the performance of various quartiles of σt in a separate training dataset
+as the values of C. This allows C to represent the annualized volatility through all periods without
+data leakage. To ensure the amount of investment in the risky asset cannot exceed the total wealth, we
+constrain the absolute value of the position size of the risky asset to be no larger than 1. Therefore, the
+position size of period t is given by
+pt = min 
+1,
+
+
+
+
+C
+σt
+
+
+
+
+	
+. (10)
+Consequently, the prescribed allocation in the risky asset at the beginning of period t is
+w∗
+t = atpt. (11)
+3.2.2. Time series momentum controlling downside risk strategy. TSMOM(k, 1) uses volatility as the
+risk measure, which has the same drawback as the mean-variance model in that it regards downside risk
+and upside reward of the investment equally. Motivated by mean-CVaR, we consider CVaR as the risk
+measure to compute the position size in TSMOM(k, 1) to focus on downside risk.
+The new trading signal of period t is the sign of the difference between the expectation of the
+distribution of the rate of return of the risky asset and the risk-free rate of period t:
+bt ≡ sign(E[Rt] − ft) (12)
+Investment risk in period t is measured by the conditional value at risk of the excess return of the
+risky investment:
+ct ≡ CVaRα[−(Rt − ft)] = ft + CVaRα[−Rt
+] (13)
+To compute ct, we approximate Rt by J scenarios, rt,1, ... ,rt,J , where rt, j occurs with probability pj
+and 
+J
+j=1 pj = 1; thus,
+ct = ft + βt +
+
+J
+i=1 pj
+[−rt, j − βt
+]+
+1 − α
+(14)
+where βt is the α-quantile of this discrete approximation of −Rt
+.
+Similar to TSMOM, the position size of period t is set to be inversely proportional to the CVaR
+estimated for period t, C∗
+ct , to equalize the risk contribution over time. In the numerical study, we
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+366 X. GUO AND S. M. RYAN
+experiment with setting the scale, C∗, equal to various quartiles of ct in the training dataset. The position
+size for period t is
+qt = min 
+1,
+
+
+
+
+C∗
+ct
+
+
+
+
+	
+. (15)
+Consequently, the prescribed allocation in the risky asset at the beginning of period t is
+w∗
+t = btqt. (16)
+4. Scenarios of the risky asset rate of return
+While the mean-variance model and the TSMOM strategy rely on point estimates of the mean and
+volatility, the mean-CVaR and TSMDR approaches require a representation of the distribution of the
+risky asset’s rate of return. A major challenge to implementing these investment strategies is to model the
+uncertainty of the rate of return in the period ahead. Because a stochastic process model for an uncertain
+continuous parameter can be formulated most accurately with continuous marginal distributions, we
+first apply a non-stationary Brownian motion process to represent the change in the return rate over time.
+This model implies a normal distribution for Rt. Although the CVaR could be computed in closed form
+using the estimated non-stationary mean and volatility, we approximate the continuous distribution at
+each time t by employing Monte Carlo simulation to generate a large number of rate of return scenarios.
+To produce trustworthy solutions, the quality of the scenarios produced by identifying, specifying and
+approximating this rate of return distribution must be assessed carefully. We employ a rank histogram
+technique in a backtest to check how well the scenarios match past realizations and choose the value
+of a key parameter in the scenario generation process. Then, to ensure that the set of scenarios is large
+enough, we conduct stability analysis on optimal solutions obtained from scenario sets of different sizes.
+4.1. Model of the risky asset rate of return
+Our model of the rate of return of the risky asset is motivated by the work of Koijen et al. (2009),
+which accommodates both return continuation (i.e. momentum) over short horizons and return reversals
+(mean reversion) over longer horizons. Because our model is intended for use to generate scenarios
+over short time horizons with frequent parameter updates, the effect of return reversals is incorporated
+in the periodically renewed observations. Moreover, the Koijen et al. (2009) model has a fixed market
+volatility for all periods. Rather than attempting to estimate a constant volatility that would be valid over
+all periods, we use a time-dependent volatility, estimated according to the standard deviation of return
+rate on a rolling basis, to capture the most recent change in volatility over time as well as match the
+procedure of estimating the expected rate of return.
+By neglecting the long-run return reversals and utilizing a non-stationary volatility, we modify the
+Koijen et al. (2009) model of the rate of return for the risky asset in discrete time as
+Rt = Mt + σt
+(Zt+1 − Zt), (17)
+where the drift parameter, Mt
+, is the expected rate of return over a short time interval, σt is the volatility
+of the rate of return, and Zt is a standard Brownian motion process (with mean 0 and variance t).
+According to the independent increments property of Brownian motion (Hull, 2009), Zt+1 − Zt is
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+PORTFOLIO REBALANCING 367
+normally distributed with mean 0 and standard deviation 1. Equivalently,
+Rt ∼ N(Mt, σt). (18)
+The continuation of equity returns over short horizons indicates that the recent rate of return has
+predictive power for the future rate of return (Koijen et al., 2009; Moskowitz et al., 2012). Based on
+this assumption, Koijen et al. (2009) use an exponential moving average of the historical return rates to
+estimate Mt
+. However, in our computational study of the S&P 500 index as the risky asset, we found
+that using a weighted moving average, where the weights on past observations decrease in arithmetic
+progression, can better predict the sign of future returns (see Section 6.3). Therefore, we use the rates of
+return over the past T periods to estimate the expected rate of return at time t as
+Mt =
+
+(1 + T)T
+2
+−1
+
+T
+i=1
+(T − i + 1)rt−i
+. (19)
+The decaying weights, T − i + 1, place emphasis on the most recent rates of return, while the
+summation smooths the effect of fluctuations of the rate of return. The weights are normalized to sum
+to one so that Mt is an unbiased estimate.
+Volatility is a statistical measure of investors’ uncertainty about market returns. In our model, the
+correlation between the past and future return rates is captured by this volatility estimate. From (18), it
+follows that
+
+Rt − Mt
+
+∼ N(0, σt). (20)
+Let ut ≡ rt − Mt
+, G be the number of historical periods used to calculate σt, and u¯t be the mean of the
+sequence {ut−G, ..., ut−1}. We can then estimate σt by
+σt ≈
+
+1
+G − 1
+t−1
+k=t−G
+(uk − ¯ut)2. (21)
+In summary, Table 1 compares and contrasts the four rebalancing strategies. In the mean-CVaR and
+TSMDR approaches, the CVaR of the return is estimated using Equation 4 and scenarios are generated
+according to the procedure described next.
+4.2. Scenario generation procedure
+To generate rate of return scenarios for the risky asset according to the model in Section 4.1, we apply
+Monte Carlo simulation, as described by Hull (2009) and Guo & Ryan (2021). To update the drift and
+volatility estimates and recalibrate the model with recent data, we repeatedly generate scenarios for the
+next period on a rolling basis. For instance, at the end of period t − 1, the realized rate of return, rt−1,
+is released. We use it, along with the past T periods’ rates of return, to compute the expected rate of
+return in period t, Mt
+, by (19). The volatility estimate for period t, σt
+, is based on the standard deviation
+of the difference in the rate of return and its mean value over the past G periods based on (21). Using
+Mt and σt, the rate of return in period t, rt, j
+, can be randomly generated for each scenario j according
+to (18). Note that since each estimate of Mt requires T realized rates of return, an estimate of Mt is not
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+368 X. GUO AND S. M. RYAN
+Table 1 Summary of rebalancing strategies
+available until period T + 1. Similarly, we obtain our first estimate of volatility, σ1, after computing
+M−G+1, M−G+2, ... , M0. By repeating this procedure, J scenarios for each period t = 1, ... , H can be
+generated.
+The procedure for generating rate of return scenarios with rolling parameter updates is detailed in
+Algorithm 1. The sequence {rt
+, t = −(T + G) + 1, ... , H − 1} represents observed values of the return
+rate, whose values up to time t − 1 are known at time t. The collection {rt, j
+, j = 1, ... , J} represents the
+set of scenarios generated for Rt.
+Algorithm 1 involves three parameters that can affect the quality of scenarios generated and the
+resulting solution (or position scaling in the TSMDR strategy). In our numerical study the number, T, of
+past return rates used to estimate the drift, is chosen to match the corresponding value in the TSMOM
+strategy. The value of G, the number of past return rates used to estimate volatility, is selected according
+to a reliability study. The number of scenarios, J, is determined by stability analysis of optimal solutions.
+4.3. Reliability of scenarios
+To evaluate the reliability of a scenario generation method, we seek to quantify the extent to which
+scenarios and observations are interchangeable. A scenario set is called reliable or calibrated if the
+relative frequency of occurrence of a scenario assigned a probability p tends to be close to p (Hsu
+& Murphy, 1986). In other words, the more similar the distribution of generated scenarios and the
+distribution of real observations are, the more reliable the generation method is judged to be. Sarı et
+al. (2016) develop and test a novel mass transportation distance (MTD) rank histogram, implemented
+as an R package by Sarı & Ryan (2016), to assess whether the scenarios have similar patterns as the
+corresponding observations.
+Sarı et al. (2016) point out that if the MTD rank histogram exhibits uniformity, it indicates that the
+observation is indistinguishable from the scenarios, and thus, the generated scenarios are reliable. We use
+a goodness-of-fit test to assess the nearness to uniformity of the MTD histogram. Elmore (2005) explains
+that the Cramér-von Mises (CvM) family of statistics is better at detecting the ordered departures from
+the null distribution than the χ2 test. In addition, it retains considerable power for relatively small
+samples. Therefore, we choose the W2 statistic (Arnold & Emerson, 2011; Choulakian et al., 1994),
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+PORTFOLIO REBALANCING 369
+one of the CvM statistics, to measure the distance between the uniform distribution and the empirical
+distribution of the MTD ranks. If the value of W2 is smaller than the critical value, the generation
+procedure is judged to be reliable. According to this criterion, we can select the best value for G from
+among all candidates when T and J are fixed.
+4.4. Stability of the optimal solutions
+King & Wallace (2012) argue that the quality of generated scenarios is ultimately determined by
+solutions to the optimization problem. We determine the sample size according to the stability of the
+optimal solutions. In many studies, the stability of the optimal objective value is examined rather than
+the optimal solution, because there may be a large number of potentially optimal solutions and the
+value of the objective function presumably reflects the concerns of the decision maker. However, we are
+mainly interested in the optimal solution obtained from a set of scenarios, to facilitate comparison of
+the stochastic optimization models with the heuristic approaches. Furthermore, the simple structure
+of solutions to our two optimization models makes it easy to check their stability. Recall that the
+mean-variance model in Section 3.1.1 does not involve random scenarios, because E[Rt] = Mt and
+Var[Rt] = σ2
+t are both deterministic parameters at the time we solve the model for period t. The existence
+of only three possible values for the optimal solution to the mean-CVaR model in Section 3.1.2 allows
+us to easily compare the optimal solutions found using different scenario sets.
+When checking the stability of the optimal solution in the mean-CVaR model, there is a trade-off
+between the computational efficiency and the scenario quality. A large sample size, J, helps avoid the
+fragility of CVaR (Lim et al., 2011) as well as guarantee that the optimality gap between the objective
+value of the true optimization model (with continuous distribution of the rate of return of the risky asset)
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+370 X. GUO AND S. M. RYAN
+and the approximate optimization model (with discrete rate of return scenarios) is small enough. But a
+small value of J will save computation time. Therefore, we initialize with a sufficiently large J value to
+balance this trade-off. For a candidate value of J, we conduct 30 replications of the generation procedure
+using different random seeds. By solving the problem at each time t with each scenario set generated
+at that time, we obtain 30 sequences of optimal solutions. Next, we check the similarity of these 30
+sequences pairwise. Similarity is measured according to the number of times the same element appears
+in the same position of the sequence divided by the length of the sequence. In this way, we compute 29
+× 15 values of the similarity, the average of which measures the stability of the optimal solutions across
+the 30 replications. We increase J until the value of stability passes a predetermined threshold.
+5. Performance metrics
+We evaluate the out-of-sample performance of the different investment strategies according to multiple
+metrics in historical backtesting. For each strategy, we simulate the process of assigning weights w∗
+t in
+periods 1, ... , H, where w∗
+t is computed or optimized according to the risky asset return rates observed
+before time t.
+The Sharpe ratio of excess returns to the standard deviation of portfolio returns is a widely used
+risk-adjusted performance measure (Sharpe, 1966, 1994). In our case, the annualized Sharpe ratio is
+computed as
+SR = √
+N
+1
+H
+
+H
+t=1 w∗
+t (rt − ft
+)
+ 1
+H−1
+
+H
+t=1
+
+w∗
+t (rt − ft
+) − B¯
+2
+, (22)
+where B¯ = 1
+H
+
+H
+t=1
+
+w∗
+t (rt − ft)
+
+and N is the number of periods in a year.
+However, the Sharpe ratio is often criticized on the grounds that it penalizes both the downside
+risk and the upside return potential equally. The Sortino ratio (Eling, 2008; Sortino & Price, 1994),
+whose risk metric focuses on returns that fall below a minimum threshold or minimum acceptable return
+(rMAR), corrects this deficiency. The formula for the annualized Sortino ratio is
+ST = √
+N
+1
+H
+
+H
+t=1[w∗
+t rt + (1 − w∗
+t )ft
+] − rMAR
+ 1
+H
+
+H
+t=1 min{0,w∗
+t rt + (1 − w∗
+t )ft − rMAR}2
+. (23)
+To be aligned with the numerator of the Sharpe ratio, we set rMAR ≡ 1
+H
+
+H
+t=1 ft
+.
+Maximum drawdown (Young, 1991) is an indicator of downside risk over a specified time period,
+representing the maximum loss an investor can suffer in the portfolio by buying at the highest point and
+selling at the lowest. A drawdown is defined as any time when the cumulative return dips below the
+maximum cumulative return. Drawdowns are measured as a percentage of that maximum cumulative
+return. Using the simulated sequence of periodic return rates generated by implementing any strategy,
+we calculate this quantity using the maxDrawdown function in the PerformanceAnalytics R package
+(Peterson et al., 2014).
+Motivated by Tse (2015) and He et al. (2018), we also investigate the relationship between the state
+of market and the portfolio returns by plotting the time series cumulative absolute returns in log scale.
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+PORTFOLIO REBALANCING 371
+The cumulative absolute log return up to period t is
+CAt = t
+i=1
+log[1 + w∗
+i ri + (1 − w∗
+i )fi
+]. (24)
+6. Numerical results
+In this study, we consider the S&P 500 index as the risky asset and the one-month US Treasury bill
+(T-bill) as the risk-free investment. The monthly rates of return of both assets are obtained from the
+CRSP database (www.crsp.com).
+The time interval of the simulation covers 1 January 2001 to 31 December 2019, containing a
+total of H = 228 trading months. In the experiments, J is initialized to be 10,000 for each instance.
+By constructing portfolios based on k = 12 in TSMOM(k, 1), referred to simply as TSMOM,
+Moskowitz et al. (2012) find that this strategy performs the best among all the momentum strategies
+with k varying from 1 to 48 months. Thus, we fix k = 12 and focus only on the discussion
+of TSMOM. Accordingly, T in Algorithm 1 is set to 12. To illustrate results for multiple risk
+attitudes, we consider α ∈ {75%, 90%, 99%}, λ ∈ {0, 0.1, 1/3, 0.5, 0.7, 0.9} for mean-variance and
+λ ∈ {0, 0.02, 0.04, 0.06, 0.08, 0.1} for mean-CVaR. Specifically, risk-neutral investors are represented
+by λ = 0. We choose relatively small values of λ for mean-CVaR because most risky periods, such as
+the extreme bear markets, historically have persisted over several months, even years, which has been
+taken into account in the construction of Mt
+. For mean-variance, along with evenly spaced values, we
+test λ = 1/3 to compare with the solution found by He et al. (2018) for maximizing log utility in the long
+run. Besides λ = 0 in the mean-risk optimization model, we consider another risk-neutral investment
+strategy, replacing (10) by pt ≡ 1. We call this strategy unscaled TSMOM because it ignores volatility
+scaling and simply uses the trading signal to determine the position without considering risk. All the
+statistical simulations and analyses are conducted in R.
+6.1. Parameter estimation and stability analysis
+To avoid data leakage while identifying suitable values for the risk-related parameters G,C and C∗,
+we use data from January 1982 to December 2000, as the training dataset of the same length as the
+simulation horizon.
+The value of G is selected from among {2, 4, 6, 8, 10, 12} according to scenario reliability based
+on J = 10, 000. We use a common set of 30 random seeds across different values of G to conduct
+30 replications of the scenario generation procedure for each candidate value of G. Values of G that
+can offer reliable scenarios can be found on the basis of their MTD rank histograms according to the
+observed values of the W2 statistic. The results for each candidate value of G are shown in Table 2,
+along with critical values provided by Choulakian et al. (1994). Because a larger significance level
+increases the power of the test and we prefer to guard against falsely failing to reject the null hypothesis
+of uniformity, we choose G = 10 or 12 based on the 0.25 significance level. Furthermore, G = 10
+yields a smaller mean, standard deviation and maximum value of W2. Therefore, we fix G = 10 in the
+following analysis.
+To further validate our model of index returns with T = 12 and G = 10, the Q–Q plots for
+the standardized actual returns, rt−Mt
+σt , in the training and test periods against the standard normal
+distribution are displayed in Figure 2. In both plots, the points fall approximately along the reference
+line. Based on the Shapiro-Wilk normality test (Shapiro & Wilk, 1965), the p-values for the training and
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+372 X. GUO AND S. M. RYAN
+Table 2 Uniformity test for G using the training dataset. The critical value for each significance level
+is shown in parentheses
+G 2 4 6 8 10 12
+Mean of W2 3.92 0.39 0.13 0.09 0.07 0.09
+Standard deviation of W2 0.29 0.06 0.05 0.04 0.03 0.04
+Maximum W2 4.40 0.51 0.27 0.25 0.13 0.20
+% rejecting H0 at significance level 0.01 (0.743) 100.00 0.00 0.00 0.00 0.00 0.00
+% rejecting H0 at significance level 0.025 (0.581) 100.00 0.00 0.00 0.00 0.00 0.00
+% rejecting H0 at significance level 0.05 (0.461) 100.00 13.30 0.00 0.00 0.00 0.00
+% rejecting H0 at significance level 0.10 (0.347) 100.00 70.00 0.00 0.00 0.00 0.00
+% rejecting H0 at significance level 0.15 (0.284) 100.00 96.70 0.00 0.00 0.00 0.00
+% rejecting H0 at significance level 0.25 (0.209) 100.00 100.00 3.30 3.30 0.00 0.00
+Fig. 2. Q-Q plots. These plots show the quantiles of empirical distribution of the standardized actual returns in the training and
+test periods against the standard normal distribution.
+test data are 0.3077 and 0.0455, respectively. The Q-Q plots, along with the Shapiro-Wilk test, make it
+evident that our model of index returns with non-stationary mean estimated by past 12-month returns and
+time-varying volatility estimated by past 10-month returns can well represent the actual index returns.
+In addition, the empirical density of the actual return of the S&P index during the simulation horizon is
+shown in Figure 3. For comparison, the empirical density of all generated scenarios for all time periods
+using G = 10 is shown in Figure 4. The statistics of the combined scenarios are close to the statistics
+of the actual returns, and both densities are asymmetric and heavy-tailed. Performance comparisons for
+G = 6, 8 and 12 are similar, as shown in the electronic companion.
+The median value (Q2) of σt is 0.109. To check its sensitivity, we also consider the first and third
+quartiles and the 90th percentile (Q1, Q3 and 90%) of σt; hence, C ∈ {0.087, 0.109, 0.135, 0.166} in
+TSMOM. In the same way, we obtain Q1, Q2, Q3 and the 90th percentile of C∗, which constitutes the
+candidate set for C∗ in TSMDR: when α = 75%, C∗ ∈ {0.032, 0.045, 0.061, 0.075}; when α = 90%,
+C∗ ∈ {0.049, 0.066, 0.085, 0.107}; when α = 99%, C∗ ∈ {0.080, 0.107, 0.130, 0.166}.
+For the stability analysis, we find that stable optimal solutions are obtained when the number of
+scenarios, J, is increased to 20,000. The stability of optimal solutions in the mean-CVaR model for
+different values of α and λ is displayed in Table 3 based on a 98% threshold. The solutions for all
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+PORTFOLIO REBALANCING 373
+Fig. 3. Empirical density plot of actual monthly return during January 2001 to December 2019.
+Fig. 4. Empirical density plot of the generated scenarios of monthly return using G = 10 during January 2001 to December 2019.
+Table 3 Results of stability test for 20,000 scenarios
+λα 75% 90% 99%
+0 99.33% 99.35% 99.37%
+0.02 98.85% 98.95% 98.37%
+0.04 98.76% 99.19% 98.75%
+0.06 98.68% 98.60% 99.45%
+0.08 99.70% 98.58% 98.93%
+0.10 98.43% 98.53% 98.60%
+combinations of α and λ are at least 98.37% similar, implying that at most four of the H = 228 instances
+have different optimal solutions.
+6.2. Evaluation and comparison of investment strategies
+Figure 5 illustrates the combinations of annualized volatility and excess return achieved by different
+strategies and values of risk parameters. The points for TSMDR occupy the top left corner, indicating
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+374 X. GUO AND S. M. RYAN
+Fig. 5. Scatter plot of annualized excess returns and volatility for different strategies for T = 12, G = 10 and J = 20, 000.
+that it provides a combination of low volatility and high excess return, which is typically desired by
+investors. The volatility and excess return of TSMOM increase as the position scale, C, increases;
+however, the rate of increase of the volatility is greater than that of the excess return. When comparing
+between the TSMOM and TSMDR strategies with the scale set at the same quartile of the respective risk
+distribution, in all pairwise comparisons TSMDR has a better return and less volatility. The excess return
+and volatility of portfolio returns obtained using the mean-CVaR model vary considerably. A relatively
+large value for the risk-aversion parameter, λ, provides a small excess return and a moderate volatility.
+Additionally, a larger value of the probability α (smaller tail probability) results in lower volatility in
+general. Mean-variance with λ = 0.1 produces the largest return and the largest volatility among all
+risk-aversion strategies. Thus, investors with high risk tolerance may prefer the mean-variance model
+with a small risk-aversion parameter. On the other hand, when λ = 0.9, the mean-variance model has
+the smallest return and the smallest volatility among all risk-aversion strategies. In addition, compared
+to the mean-CVaR model, the mean-variance model is less sensitive to changes in λ. For the same value
+of λ tested, the mean-CVaR model results in much lower volatility than the mean-variance model, which
+suggests that CVaR can better control the investment risk than variance when the distribution of returns
+is not symmetric. The volatilities of returns resulting from the two risk-neutral strategies are similar,
+but the optimization model with λ = 0 produces a higher return than the unscaled TSMOM strategy.
+This result implies that using the weighted moving average of the past 12-month index rates of return
+in excess of 1-month T-bill rate as the trading signal performs better than using past 12-month excess
+return.
+Table 4 summarizes the annualized performance metrics of the various strategies sorted by descending Sortino ratio. The three largest values of the Sharpe ratio and Sortino ratio are produced by our
+newly created TSMDR when C∗ is set at its first quartile. The TSMDR strategy produces a larger
+Sharpe ratio than the other strategies for all values of α, λ and risk-scaling parameters tested, including
+the optimal strategy derived by the log utility function in He et al. (2018). For (α, λ) = (0.99, 0.08),
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+PORTFOLIO REBALANCING 375
+Table 4 Annualized performance metrics of different strategies sorted by the descending Sortino ratio
+Group Parameter value Sortino ratio (%) Sharpe ratio (%) Maximum drawdown (%)
+TSMDR α = 75%, C* at Q1 88.23 58.83 22.24
+TSMDR α = 90%, C* at Q1 86.88 57.70 23.23
+TSMDR α = 99%, C* at Q1 84.63 56.14 23.85
+TSMDR α = 75%, C* at Q2 84.10 56.04 25.37
+TSMDR α = 90%, C* at Q2 80.92 53.97 26.93
+TSMDR α = 90%, C* at 90% 78.93 51.58 32.32
+TSMDR α = 75%, C* at 90% 78.83 51.99 31.47
+TSMDR α = 75%, C* at Q3 78.79 52.57 29.9
+TSMDR α = 99%, C* at Q2 78.38 52.18 28.95
+Mean-variance λ = 0.5 77.98 50.53 36.66
+TSMDR α = 99%, C* at 90% 77.88 50.79 33.84
+Mean-CVaR α = 75%, λ = 0.06 77.87 50.07 30.30
+Mean-variance λ = 1/3 77.70 50.53 39.40
+TSMDR α = 90%, C* at Q3 77.19 51.40 30.88
+Mean-CVaR α = 75%, λ = 0.02 77.16 50.12 38.53
+Mean-CVaR α = 90%, λ= 0.04 77.16 49.77 33.61
+TSMDR α = 99%, C* at Q3 76.31 50.54 32.21
+Mean-variance λ = 0.1 75.78 49.57 40.25
+Mean-CVaR α = 75%, λ = 0.08 74.43 47.26 22.22
+Mean-CVaR α = 90%, λ = 0.02 74.24 48.35 38.53
+Mean-CVaR α = 90%, λ = 0.06 73.35 46.58 22.22
+Mean-CVaR α = 99%, λ = 0.04 73.35 46.58 22.22
+Mean-CVaR α = 99%, λ = 0.02 73.27 47.74 38.53
+Mean-variance λ = 0.7 73.04 46.98 30.85
+Mean-CVaR α = 75%, λ = 0.04 72.16 47.03 38.53
+Mean-variance λ = 0 70.60 45.93 40.85
+TSMOM C at Q1 70.04 46.14 27.54
+TSMOM C at Q2 65.90 43.35 30.96
+TSMOM C at Q3 65.10 42.25 31.62
+TSMOM C at 90% 62.13 40.41 32.92
+Mean-CVaR α = 75%, λ = 0.1 62.09 39.87 29.99
+Mean-CVaR α = 90%, λ = 0.1 60.28 38.72 30.52
+Mean-CVaR α = 90%, λ = 0.08 59.65 38.50 25.99
+Mean-CVaR α = 99%, λ = 0.06 58.15 37.54 25.99
+TSMOM Unscaled TSMOM 57.94 38.05 37.99
+Mean-CVaR α = 99%, λ = 0.1 50.55 31.88 22.12
+Mean-variance λ = 0.9 48.15 32.84 20.89
+Mean-CVaR α = 99%, λ = 0.08 44.19 28.63 32.47
+mean-CVaR produces the worst results in terms of the Sortino ratio. However, mean-CVaR and mMeanvariance achieve the smallest maximum drawdown values when λ is large. TSMDR also has low values
+of maximum drawdown when C∗ is at Q1. In TSMDR and TSMOM, setting the scale parameter at Q1
+results in the largest Sortino and Sharpe ratios, all else equal.
+Figure 6 displays the cumulative absolute log returns of the TSMDR, mean-CVaR, mean-variance,
+TSMOM and risk-neutral approaches to compare their cumulative performance over time. Although α
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+376 X. GUO AND S. M. RYAN
+Fig. 6. Cumulative absolute log returns of TSMDR, mean-CVaR, mean-variance, risk-neutral and TSMOM. Only TSMDR and
+mean-CVaR are different in the three panels.
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+PORTFOLIO REBALANCING 377
+Table 5 Decomposition of investment strategies
+Investment strategy Trading signal Model type Risk
+Mean-variance Weighted moving average Mean-risk Variance
+Mean-CVaR Weighted moving average Mean-risk CVaR
+TSMOM Time series momentum Risk parity Volatility
+TSMDR Weighted moving average Risk parity CVaR
+Table 6 Percentage of positive excess returns during January 2001 to December 2019, when using
+different trading signals
+Trading signal Percentage of positive excess returns (Prediction accuracy)
+Weighted moving average 60.4%
+Simple moving average 59.9%
+Time series momentum 57.7%
+Exponential moving average 55.5%
+is relevant to TSMDR and mean-CVaR only, the plots of the other three strategies are repeated in the
+three panels to facilitate comparison. When comparing among different strategies for each value of α,
+mean-variance with λ = 0.1 and TSMDR with C∗ set at the 90th percentile are the best during most of
+the simulation horizon. All strategies, especially the mean-variance models, would have performed well
+during the 2007–2008 financial crisis. When comparing the same strategy with different parameters, we
+observe that a large scale value in TSMOM or TSMDR and a small λ value in mean-CVaR or meanvariance almost always provide a large cumulative return. Between the risk-neutral approaches, simply
+maximizing expected returns is better than unscaled TSMOM during most of the periods. Comparing
+across the three panels, we see that mean-CVaR is much more sensitive to the change in α values than
+TSMDR is.
+6.3. Insights from investment strategy decomposition
+In general, we can conclude that TSMDR is a promising strategy as it produces the largest Sortino
+ratio, Sharpe ratio and cumulative returns. To investigate why TSMDR consistently outperforms, we
+decompose all strategies into three aspects: the trading signal, the asset allocation model used to
+determine the position size and the risk measure, as described in Table 5.
+To analyze the trading signal, we apply several typical moving average techniques, including simple,
+weighted and exponential moving average, to the past excess returns to compute the trading signal and
+compare them with the TSMOM trading signal, which is the sign of the past 12-month excess return. If
+the trading signal is positive, the investment position in the S&P 500 index is 1. Otherwise, it is –1. This
+comparison excludes the effect of the investors’ attitudes towards risk and uses the trading signal as the
+only element to determine the quality of the strategy.
+Table 6 shows the performance of different trading signals in terms of the percentage of positive
+and negative excess returns during the 228 months from January 2001 to December 2019. These values
+indicate that the weighted moving average produces the most accurate predictions of the trend of the
+S&P index, and exponential moving average is the worst.
+Figure 7 displays the sequences of trading signals generated by different moving average techniques
+and time series momentum, along with the sign of the actual excess return. Weighted moving average,
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+378 X. GUO AND S. M. RYAN
+Fig. 7. Sequence of trading signals, along with the sign of the actual excess return.
+time series momentum and simple moving average produce similar signals. However, exponential
+moving average performs like a lagged realized excess return, which helps explain the results in Table 6
+that exponential moving average has less accuracy in predicting the sign of the excess return of the next
+month. In addition, the top three trading signals appear to be less volatile and produce less turnover,
+whereas exponential moving average is very sensitive to any change in the stock market, even small
+ones, which results in frequent transactions. When using exponential moving average, we put 37% of
+the total weight on the most recent index rate of return and only 0.0006% weight on the rate of return
+observed 12 months previously (the corresponding weights for the weighted moving average are 15%
+and 1%, respectively).
+Figure 8 plots the cumulative absolute log return of portfolios built using different trading signals,
+and includes the cumulative returns of the realized S&P 500 index, which can be treated as the
+cumulative return of a buy-and-hold (or passive long) strategy, as a comparison. From Figure 8, we
+find that all trading signals produce their best performance under extreme conditions. We conjecture
+that this is because most extreme bear or bull markets historically have lasted over several months or
+years, with the result that using past returns as the trading signal takes short (long) positions as markets
+begin to decline (improve) in prolonged bear (bull) markets. The returns of simple moving average and
+time series momentum are overlapped during most periods. The return from following weighted moving
+average remains above the returns from all other trading signals during most of the time horizon.
+In short, using weighted moving average as the trading signal can provide the best accuracy of
+predicting the sign of excess returns among all tested trading signals, as shown in Table 6, as well as
+a higher cumulative absolute return than time series momentum, as exhibited in Figure 8. Recall that
+TSMOM uses the sign of time series momentum as the trading signal while TSMDR employs weighted
+moving average to obtain the trading signal. The trading signal helps explain why TSMDR outperforms
+TSMOM.
+A good trading signal is not the only factor that determines performance. For example, both MeanCVaR and TSMDR use weighted moving average as a signal and CVaR as the risk measure, but TSMDR
+achieves better Sortino and Sharpe ratios, suggesting that the asset allocation model to determine the
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+PORTFOLIO REBALANCING 379
+Fig. 8. Cumulative absolute log return when using different trading signals. The blue line, representing time series momentum,
+and the green line, representing simple moving average, are separate only from December 2011 to December 2015, and from
+August 2019 to the end.
+position size also plays an important role. From Figure 5, we observe that the mean-risk strategies
+generally have a better return whereas risk parity strategies produce less risk. These results were to
+be expected because mean-risk models balance the trade-off between maximizing the expected return
+and minimizing the risk, but risk parity models simply determine the allocation by equalizing the risk
+without attempting to maximize the expected return.
+Finally, by comparing mean-variance and mean-CVaR, which differ only in the risk measure, we
+find that CVaR can better control the investment risk than variance, as mean-variance models have
+much worse performance in both volatility and maximum drawdown when using the same risk-aversion
+parameter value (see Figure 5 and Table 4).
+7. Conclusion
+To find an optimal dynamic allocation between a risky asset and a risk-free investment, two meanrisk stochastic optimization models and two heuristics based on the return predictability of the time
+series momentum are compared. To model the future return rates of the risky asset, we employ a
+modified geometric Brownian motion process with non-stationary drift to accommodate the time series
+momentum and time-dependent volatility to capture the most recent change in volatility. The optimal
+solutions to the mean-variance and mean-CVaR models differ in their structure, even for normally
+distributed returns. In the heuristic strategies, different estimates of time series momentum are used
+to determine the trading signals. In both optimization and heuristic strategies, two risk measures
+are considered: variance (volatility), which treats both upside reward and downside risk equally, and
+CVaR, which quantifies downside risk only. By backtesting all strategies using stock index returns
+and 1-month T-bill rates during 2001–2019, we validate the stochastic model of index returns. We
+observe that conditional normal distributions with time-varying mean and volatility produce a simulated
+unconditional return distribution with skewness and kurtosis similar to the empirical distribution.
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+380 X. GUO AND S. M. RYAN
+Our newly created TSMDR strategy, a hybrid of time series momentum heuristic with a stochastic
+programming approach to risk estimation, significantly outperforms the others in terms of the Sharpe
+ratio and the Sortino ratio. TSMDR not only provides a relatively high excess return but also maintains
+a very low investment risk, as preferred by many investors. When the risk-aversion parameter, λ, is
+small, mean-variance optimization can provide the largest excess returns among all strategies, which is
+favoured by investors with high risk tolerance. Although the investment risk of mean-CVaR optimization
+is large, it results in a larger Sharpe ratio and Sortino ratio than TSMOM when the tail probability, 1−α,
+of CVaR is set to a moderate value. The insights obtained from considering trading signal and position
+size separately are that 1) using weighted moving average of returns can better capture the trend of
+the stock market than time series momentum, 2) mean-risk strategies generally provide better returns
+whereas risk parity strategies have less investment risk and 3) CVaR can control the investment risk
+better than variance can.
+This paper can be extended in various directions. One possible extension could be to conduct a similar comparison between the cross-sectional momentum strategy and multi-asset portfolio optimization.
+In addition, we considered only basic moving average techniques to compute the trading signal in this
+paper. Because the trading signal is essential to the performance of the strategy, it is worthwhile to test
+additional moving average, or even moving median, techniques. Finally, besides CVaR and variance (or
+volatility), there are many other risk measures, such as entropic risk measures and expected conditional
+risk measures for time consistency over multiple stages. Employing different types of risk measures to
+see how they would affect the performance of an investment strategy could be another avenue to explore.
+References
+Arnold, T. B. & Emerson, J. W. (2011) Nonparametric goodness-of-fit tests for discrete null distributions.
+R. Journal, 3.
+Artzner, P., Delbaen, F., Eber, J.-M. & Heath, D. (1999) Coherent measures of risk Math. Finance. 9, 203–228.
+Asness, C. S., Frazzini, A. & Pedersen, L. H. (2012) Leverage aversion and risk parity. Financ. Anal. J., 68,
+47–59.
+Beekhuizen, P. & Hallerbach, W. G. (2017) Uncovering trend rules. J. Altern. Invest., 20, 28–38.
+Bertsimas, D. & Pachamanova, D. (2008) Robust multiperiod portfolio management in the presence of
+transaction costs. Comput. Oper. Res., 35, 3–17.
+Choulakian, V., Lockhart, R. A. & Stephens, M. A. (1994) Cramér-von Mises statistics for discrete
+distributions. Can. J. Stat., 22, 125–137.
+Dantzig, G. B. & Infanger, G. (1993) Multi-stage stochastic linear programs for portfolio optimization. Ann.
+Oper. Res., 45, 59–76.
+De Bondt, W. F. & Thaler, R. (1985) Does the stock market overreact?. J. Financ., 40, 793–805.
+Eling, M. (2008) Does the measure matter in the mutual fund industry?. Financ. Anal. J., 64, 54–66.
+Elmore, K. L. (2005) Alternatives to the chi-square test for evaluating rank histograms from ensemble forecasts.
+Weather Forecast., 20, 789–795.
+Goyal, A. & Jegadeesh, N. (2018) Cross-sectional and time-series tests of return predictability: what is the
+difference? The Review of Financial Studies, 31, 1784–1824.
+Gülten, S. & Ruszczy ´nski, A. (2015) Two-stage portfolio optimization with higher-order conditional measures
+of risk. Ann. Oper. Res., 229, 409–427.
+Guo, X. & Ryan, S. M. (2021) Reliability assessment of scenarios generated for stock index returns incorporating
+momentum. Int. J. Financ. Econ., 26, 4013–4031.
+Harlow, W. V. (1991) Asset allocation in a downside-risk framework. Financ. Anal. J., 47, 28–40.
+He, X.-Z. & Li, K. (2015) Profitability of time series momentum. J. Bank. Financ., 53, 140–157.
+He, X.-Z., Li, K. & Li, Y. (2018) Asset allocation with time series momentum and reversal. J. Econom. Dynam.
+Control, 91, 441–457.
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+PORTFOLIO REBALANCING 381
+Hsu, W.-R. & Murphy, A. H. (1986) The attributes diagram: a geometrical framework for assessing the quality of
+probability forecasts. International Journal of Forecasting, 2, 285–293.
+Hull, J. C. (2009) Option. Pearson Education: Futures and other Derivatives.
+Hurst, B., Ooi, Y. H. & Pedersen, L. H. (2013) Demystifying managed futures. Journal of Investment
+Management, 11, 42–58.
+Jegadeesh, N. & Titman, S. (1993) Returns to buying winners and selling losers: implications for stock market
+efficiency. J. Financ., 48, 65–91.
+Kaut, M. & Wallace, S. W. (2007) Evaluation of scenario-generation methods for stochastic programming.
+Pacific Journal of Optimization, 3, 257–271.
+Kim, A. Y., Tse, Y. & Wald, J. K. (2016) Time series momentum and volatility scaling. Journal of Financial
+Markets, 30, 103–124.
+King, A. J. & Wallace, S. W. (2012) Modeling with Stochastic Programming. Springer Science & Business Media.
+Koijen, R. S. J., Rodríguez, J. C. & Sbuelz, A. (2009) Momentum and mean reversion in strategic asset
+allocation. Management Science, 55, 1199–1213.
+Kolm, P. N., Tütüncü, R. & Fabozzi, F. J. (2014) 60 years of portfolio optimization: practical challenges and
+current trends. European Journal of Operational Research, 234, 356–371.
+Kouaissah, N., Orlandini, D., Ortobelli, S. & Tichy, T. (2020) Theoretical and practical motivations for the
+use of the moving average rule in the stock market. IMA Journal of Management Mathematics, 31, 117–138.
+Lim, A. E., Shanthikumar, J. G. & Vahn, G.-Y. (2011) Conditional value-at-risk in portfolio optimization:
+coherent but fragile. Oper. Res. Lett., 39, 163–171.
+Lim, D. (2019) Index funds are the new kings of Wall Street, The Wall Street Journal.
+Markowitz, H. (1952) Portfolio selection. Journal of Finance, 7, pp.77–91.
+Merton, R. C. (1969) Lifetime portfolio selection under uncertainty: the continuous-time case. Rev. Econ. Stat.,
+51, 247–257.
+Moskowitz, T. J., Ooi, Y. H. & Pedersen, L. H. (2012) Time series momentum. J. Financ. Econ., 104, 228–250.
+Nawrocki, D. N. (1999) A brief history of downside risk measures. J. Invest., 8, 9–25.
+Peterson, B. G., Carl, P., Boudt, K., Bennett, R., Ulrich, J. & Zivot, E. (2014) PerformanceAnalytics:
+econometric tools for performance and risk analysis. R Package Version, 1, 107.
+Pflug, G. C. (2000) Some remarks on the value-at-risk and the conditional value-at-risk. Probabilistic Constrained
+Optimization. Springer, pp. 272–281.
+Rockafellar, R. T. & Uryasev, S. (2000) Optimization of conditional value-at-risk. J. Risk, 2, 21–42.
+Rockafellar, R. T. & Uryasev, S. (2002) Conditional value-at-risk for general loss distributions. J. Bank. Financ.,
+26, 1443–1471.
+Roman, D., Mitra, G. & Spagnolo, N. (2010) Hidden Markov models for financial optimization problems. IMA
+Journal of Management Mathematics, 21, 111–129.
+Roy, A. D. (1952) Safety first and the holding of assets. Econometrica, 431–449.
+Sarı, D., Lee, Y., Ryan, S. & Woodruff, D. (2016) Statistical metrics for assessing the quality of wind power
+scenarios for stochastic unit commitment. Wind Energy, 19, 873–893.
+Sarı, D. & Ryan, S. M. (2016), ‘MTDrh: mass transportation distance rank histogram’, https://cran.r-project.org/
+web/packages/MTDrh/index.html.
+Shapiro, S. S. & Wilk, M. B. (1965) An analysis of variance test for normality (complete samples). Biometrika,
+52, 591–611.
+Sharpe, W. F. (1966) Mutual fund performance. The Journal of Business, 39, 119–138.
+Sharpe, W. F. (1994) The Sharpe ratio. Journal of Portfolio Management, 21, 49–58.
+Sortino, F. A. & Price, L. N. (1994) Performance measurement in a downside risk framework. J. Invest., 3, 59–64.
+Tse, Y. (2015) Momentum strategies with stock index exchange-traded funds. The North American Journal of
+Economics and Finance, 33, 134–148.
+Young, T. W. (1991) Calmar ratio: a smoother tool. Futures, 20, 40.
+Yu, L.-Y., Ji, X.-D. & Wang, S.-Y. (2003) Stochastic programming models in financial optimization: a survey.
+AMO - Advanced Modeling and Optimization, 5, 1–26.
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024
+Downloaded from https://academic.oup.com/imaman/article/34/2/355/6427746 by guest on 17 January 2024

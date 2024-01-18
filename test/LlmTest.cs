@@ -1,22 +1,19 @@
-using System.ComponentModel;
-using System.Reflection;
 using Autofac;
-using Configuration;
 using Context;
 using IoC;
-using llm;
-using Run;
+using Llm;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Engine.ClientProtocol;
 
 namespace LlmTest;
 
 public class LlmTest
 {   
-    readonly Illm<IAsyncEnumerable<string>, string, LlamaInstance> _sut;
+    readonly Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool> _sut;
 
     public LlmTest()
     {   
         var modules = new IoCModule("config.json");
-        _sut = modules.Container().Resolve<Illm<IAsyncEnumerable<string>, string, LlamaInstance>>();
+        _sut = modules.Container().Resolve<Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool>>();
     }
 
     [Fact]
@@ -37,17 +34,10 @@ public class LlmTest
 
         Assert.Equal(res, "");
 
-        prompt = @"what is 2 + 2, can you only answer with the numerical result?";
+        string context = utils.testLargeContext;
 
-        await foreach (var text in _sut.Infer(prompt)) 
-        {   
-                res = res + text;
-        }
-
-        Assert.NotEqual(res, "");
-        Assert.True(res.Contains("4"));
-
-        prompt = @"what is your name?";
+        prompt = $"I have a stock portfolio where I invested 50% in crypto currencies 25% in a bond etf and 25% in equities etf, now my crypto currencies are worth 900$ while the bond etf is worth 280$ and equities etf 300$ what should I do according to {utils.testLargeContext}";
+        
         res = "";
         
         await foreach (var text in _sut.Infer(prompt)) 
@@ -55,8 +45,13 @@ public class LlmTest
                 res = res + text;
         }
         Assert.NotEqual(res, "");
-        Assert.True(res.Contains("AIssistant"));
-        
+        Assert.True(res.ToLowerInvariant().Contains("rebalance"));
     }
 
+}
+
+public static class utils
+{
+        public static string testLargeContext = @"How To Rebalance Your Portfolio
+The optimal frequency of portfolio rebalancing depends on your transaction costs, personal preferences, and tax considerations, including what type of account you are selling from and whether your capital gains or losses will be taxed at a short-term versus long-term rate. It also differs based on your age. For example, if you are relatively young, say in your 20s and 30s, you might not want to rebalance your portfolio as frequently as when you are nearing retirement and need to maximize your gains. Usually, about once a year is sufficient; however, if some assets in your portfolio haven't experienced a large appreciation within the year, longer periods may also be appropriate.";
 }

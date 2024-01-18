@@ -4,7 +4,8 @@ using Autofac;
 using Configuration;
 using Context;
 using IoC;
-using llm;
+using Llm;
+using Reasoner;
 using Run;
 
 namespace IoCTest;
@@ -24,13 +25,14 @@ public class IoCTest
     [Fact]
     public void Should_Return_Config()
     {
-        Assert.Equal(_sut.Configuration(), new Config(4096, 1337, 5, 2048, 0.8f, 1.1f, "mistral-7b-instruct-v0.2.Q4_K_M.gguf","prompt.txt"));
+        Assert.Equal(_sut.Configuration(), new Config(2048, 1337, 1, 1024, 0.8f, 1.1f, "mistral-7b-instruct-v0.2.Q4_K_M.gguf","prompt.txt"));
     }
 
     [Theory]
     [InlineData(typeof(IContext<LlamaInstance>),typeof(LlamaSharpContext))]
     [InlineData(typeof(IRun), typeof(RunLlama))]
-    [InlineData(typeof(Illm<IAsyncEnumerable<string>, string, LlamaInstance>), typeof(LlamaSharpLlm))]
+    [InlineData(typeof(Illm<IAsyncEnumerable<string>, string, LlamaInstance,bool>), typeof(LlamaSharpLlm))]
+    [InlineData(typeof(IReasoner<bool, Relevance>), typeof(LlmReasonerRelevance))]
     public void Should_Resolve_As(Type interfaceType, Type classType)
     {
         var res = _sut.Container().Resolve(interfaceType);

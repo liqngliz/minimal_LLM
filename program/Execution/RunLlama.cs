@@ -2,15 +2,15 @@ using Configuration;
 using Context;
 using IoC;
 using LLama;
-using llm;
+using Llm;
 
 namespace Run;
 
 public class RunLlama : IRun
 {   
-    readonly Illm<IAsyncEnumerable<string>, string, LlamaInstance> _llamaSharpLlm;
+    readonly Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool> _llamaSharpLlm;
 
-    public RunLlama(Illm<IAsyncEnumerable<string>, string, LlamaInstance> llamaSharpLlm)
+    public RunLlama(Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool> llamaSharpLlm)
     {
         _llamaSharpLlm = llamaSharpLlm;
     }

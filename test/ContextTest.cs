@@ -2,20 +2,20 @@ using Autofac;
 using Configuration;
 using Context;
 using IoC;
-using llm;
+using Llm;
 using Run;
 
 namespace ContextTest;
 public class ContextTest 
 {
     readonly IContext<LlamaInstance> _sut;
-    readonly Illm<IAsyncEnumerable<string>, string, LlamaInstance> _sut2;
+    readonly Illm<IAsyncEnumerable<string>, string, LlamaInstance,bool> _sut2;
 
     public ContextTest () 
     {
         var modules = new IoCModule("config.json");
         _sut = modules.Container().Resolve<IContext<LlamaInstance>>();
-        _sut2 = modules.Container().Resolve<Illm<IAsyncEnumerable<string>, string, LlamaInstance>>();
+        _sut2 = modules.Container().Resolve<Illm<IAsyncEnumerable<string>, string, LlamaInstance,bool>>();
         
     }
 
@@ -27,11 +27,11 @@ public class ContextTest
         var infParams = llmParams.InferenceParams;
 
         Assert.True(llmParams != null);
-        Assert.True(modelParams.ContextSize == 4096);
+        Assert.True(modelParams.ContextSize == 2048);
         Assert.True(modelParams.Seed == 1337);
-        Assert.True(modelParams.GpuLayerCount == 5);
+        Assert.True(modelParams.GpuLayerCount == 1);
 
-        Assert.True(infParams.MaxTokens == 2048);
+        Assert.True(infParams.MaxTokens == 1024);
         Assert.True(infParams.Temperature == 0.8f);
         Assert.True(infParams.RepeatPenalty == 1.1f);
         Assert.True(llmParams.Prompt == File.ReadAllText("prompt.txt"));
@@ -41,11 +41,11 @@ public class ContextTest
         infParams = llmParams.InferenceParams;
 
         Assert.True(llmParams != null);
-        Assert.True(modelParams.ContextSize == 4096);
+        Assert.True(modelParams.ContextSize == 2048);
         Assert.True(modelParams.Seed == 1337);
-        Assert.True(modelParams.GpuLayerCount == 5);
+        Assert.True(modelParams.GpuLayerCount == 1);
 
-        Assert.True(infParams.MaxTokens == 2048);
+        Assert.True(infParams.MaxTokens == 1024);
         Assert.True(infParams.Temperature == 0.8f);
         Assert.True(infParams.RepeatPenalty == 1.1f);
         Assert.True(llmParams.Prompt == File.ReadAllText("prompt.txt"));

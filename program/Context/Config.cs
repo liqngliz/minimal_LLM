@@ -29,5 +29,4 @@ public record Location(string locationValue)
     } 
 }
 
-public record PromptParams(Location ContextFile, int ShiftSize, int Segments, int ChunkSize);
 

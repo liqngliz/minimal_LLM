@@ -1,0 +1,89 @@
+Rebalance Your Portfolio To Stay on Track
+By SHAUNA CARTHER HEYFORD
+Full Bio
+Shauna Carther Heyford is one of Investopedia’s first contributors. She is the director of strategy and operations for BlueTrain.
+Learn about our editorial policies 
+ Updated July 16, 2023
+Reviewed by JEFREDA R. BROWN
+So you've established an asset allocation strategy that is right for you, but at the end of the year, you find that the weighting of each asset class in your portfolio has changed. What happened?
+
+Over the course of the year, the market value of each security within your portfolio earned a different return, resulting in a weighting change. Portfolio rebalancing is the process of changing the weightings of assets in an investment portfolio. It is like a tune-up for your car: it allows individuals to keep their risk levels in check and minimize risk.
+
+KEY TAKEAWAYS
+Rebalancing a portfolio is the process of changing the weightings of assets in an investment portfolio.
+To rebalance a portfolio, an individual buys or sells assets to reach their desired portfolio composition.
+As the values of assets change, inevitably the original asset mix will change due to the differing returns of the asset classes. This will change the risk profile of your portfolio.
+When rebalancing an investment portfolio, it is important to be aware of the taxes you will incur when selling profitable investments.
+How often an individual rebalances their portfolio is a personal matter, depending on a variety of factors, such as age and risk tolerance. However, it is recommended that a portfolio should be rebalanced at least once a year.
+What Is Rebalancing?
+Rebalancing is the process of buying and selling portions of your portfolio in order to set the weight of each asset class back to its original state. In addition, if an investor's investment strategy or tolerance for risk has changed, they can use rebalancing to readjust the weightings of each security or asset class in the portfolio to fulfill a newly devised asset allocation.
+
+Blown Out of Proportion?
+The asset mix originally created by an investor inevitably changes as a result of differing returns among various securities and asset classes. As a result, the percentage that you've allocated to different asset classes will change.
+
+This change may increase or decrease the risk of your portfolio, so let's compare a rebalanced portfolio to one in which changes were ignored, and then we'll look at the potential consequences of neglected allocations in a portfolio.
+
+Here's a simple example. Bob has $100,000 to invest. He decides to invest 50% in a bond fund, 10% in a Treasury fund, and 40% in an equity fund.
+
+
+At the end of the year, Bob finds that the equity portion of his portfolio has dramatically outperformed the bond and Treasury portions. This has caused a change in his allocation of assets, increasing the percentage that he has in the equity fund while decreasing the amount invested in the Treasury and bond funds.
+
+More specifically, the above chart shows that Bob's $40,000 investment in the equity fund has grown to $55,000; an increase of 37%. Conversely, the bond fund suffered, realizing a loss of 5%, but the Treasury fund realized a modest increase of 4%.
+
+The overall return on Bob's portfolio was 12.9%, but now, there's more weight on equities than on bonds. Bob might be willing to leave the asset mix as it is for the time being, but leaving it for too long could result in an overweighting in the equity fund, which is riskier than the bond and Treasury fund.
+
+The Consequences of Imbalance
+A popular belief among many investors is that if an investment has performed well over the last year, it should perform well over the next year. Unfortunately, past performance is not always an indication of future performance—a fact many mutual funds disclose.
+
+ You may not need to rebalance your portfolio if all of your investments are in a target-date fund or a fund that rebalances automatically.
+Many investors, however, remain heavily invested in last year's winning fund and may drop their portfolio weighting in last year's losing fixed-income fund. But remember, equities are more volatile than fixed-income securities, so last year's large gains may translate into losses over the next year.
+
+Let's continue with Bob's portfolio and compare the values of his rebalanced portfolio with the portfolio left unchanged.
+
+
+At the end of the second year, the equity fund performs poorly, losing 7%. At the same time, the bond fund performs well, appreciating 15%, and Treasuries remain relatively stable, with a 2% increase. If Bob had rebalanced his portfolio the previous year, his total portfolio value would be $118,500; an increase of 5%.
+
+But if Bob had left his portfolio with the skewed weightings, his total portfolio value would be $116,858; an increase of only 3.5%. In this case, rebalancing would be the optimal strategy.
+
+
+However, if the stock market rallies again throughout the second year, the equity fund would appreciate more and the ignored portfolio may realize a greater appreciation in value than the bond fund. Just as with many hedging strategies, the upside potential may be limited, but by rebalancing, you are nevertheless adhering to your risk-return tolerance level.
+
+Risk-loving investors are able to tolerate the gains and losses associated with a heavy weighting in an equity fund and risk-averse investors, who choose the safety offered in Treasury and fixed-income funds, are willing to accept limited upside potential in exchange for greater investment security.
+
+How To Rebalance Your Portfolio
+The optimal frequency of portfolio rebalancing depends on your transaction costs, personal preferences, and tax considerations, including what type of account you are selling from and whether your capital gains or losses will be taxed at a short-term versus long-term rate. It also differs based on your age. For example, if you are relatively young, say in your 20s and 30s, you might not want to rebalance your portfolio as frequently as when you are nearing retirement and need to maximize your gains. Usually, about once a year is sufficient; however, if some assets in your portfolio haven't experienced a large appreciation within the year, longer periods may also be appropriate.
+
+Additionally, changes in an investor's lifestyle may warrant changes to their asset-allocation strategy. Whatever your preference, the following guidelines are the basic steps for rebalancing your portfolio:
+
+Record: If you have recently decided on an asset-allocation strategy that seems perfect for you and purchased the appropriate securities in each asset class, keep a record of the total cost of each security at that time, as well as the total cost of your portfolio. These numbers will provide you with historical data of your portfolio, so at a future date, you can compare them with current values.
+Compare: On a chosen future date, review the current value of your portfolio and of each asset class. Calculate the weightings of each fund in your portfolio by dividing the current value of each asset class by the total current portfolio value. Compare this figure to the original weightings. Are there any significant changes? If not—and if you have no need to liquidate your portfolio in the short term—it may be better to remain passive.
+Adjust: If you find that changes in your asset class weightings have distorted the portfolio's exposure to risk, take the current total value of your portfolio and multiply it by each of the (percentage) weightings originally assigned to each asset class. The figures you calculate will be the amounts that should be invested in each asset class in order to maintain your original asset allocation.
+Of course, you may want to sell securities from asset classes whose weights are too high and purchase additional securities in asset classes whose weights have declined. However, when selling assets to rebalance your portfolio, take a moment to consider the tax implications of readjusting your portfolio.
+
+The long-term capital gains tax rate for 2022 is 0%, 15%, or 20%, depending on the individual's income tax bracket.
+1
+2
+
+In some cases, it might be more beneficial simply not to contribute any new funds to the asset class that is overweighted while continuing to contribute to other asset classes that are underweighted. Your portfolio will rebalance over time without you incurring capital gains taxes.
+
+What does rebalancing a portfolio mean?
+Rebalancing a portfolio means adjusting the weightings of the different asset classes in your investment portfolio. This is achieved by buying or selling assets, which changes the weighting of a specific asset class.
+
+Why is rebalancing your portfolio important?
+Rebalancing your portfolio is important because over time, based on the returns of your investments, each asset class's weighting will change, altering the risk profile of your portfolio. To ensure that your portfolio is composed in a manner that adheres to your investment strategy and risk profile, rebalancing is an important practice.
+
+How often should I rebalance my 401(k)?
+How often a person rebalances their investment portfolio, including their 401(k), is a personal matter based on a variety of factors, such as age, risk tolerance, salary allocation, and more. Professionals recommend that individuals rebalance their 401(k) portfolios every quarter but doing so once a year is also sufficient.
+
+An example of how rebalancing a portfolio works
+If you had $10,000 to invest and wanted to equally invest in stocks and bonds, you would allocate $5,000 to stocks and $5,000 to bonds. If, after a year, the stock portfolio performed well and was now valued at $7,000 and the bond portfolio performed poorly and is now valued at $4,000, you would be more concentrated in stocks than you are in bonds—no longer the 50/50 split you had envisioned. Rebalancing your portfolio to achieve the 50/50 split would require you to either sell some stocks or buy some bonds until the value of each asset class is $5,500.
+
+How to avoid taxes when rebalancing investments
+Avoiding taxes when rebalancing a portfolio means not selling any investments. When an individual sells investments that they have made a profit on, they will be subject to taxes. If the investments are sold within a year, an investor will be charged a tax equal to their ordinary income tax bracket. If investments are sold after a year, they will be charged the capital gains tax, which is less than the ordinary income tax.
+2
+ To avoid this, an individual can rebalance their portfolio by buying more assets of the asset class that is currently undervalued.
+
+Another way to avoid taxes is to place your portfolio in a tax-advantaged account, such as an individual retirement account (IRA). This way, you can avoid taxes while rebalancing the portfolio and are liable for taxes only when you start withdrawing from the account.
+
+The Bottom Line
+Rebalancing your portfolio will help you maintain your original asset-allocation strategy and allow you to implement any changes you make to your investing style. Essentially, rebalancing will help you stick to your investing plan regardless of what the market does, which helps you to stick to your risk tolerance levels.
