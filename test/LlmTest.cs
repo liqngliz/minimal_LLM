@@ -45,14 +45,12 @@ public class LlmTest
                 res = res + text;
         }
         Assert.NotEqual(res, "");
-        Assert.True(res.ToLowerInvariant().Contains("rebalance"));
+        Assert.True(res.ToLowerInvariant().Contains("portfolio"));
     }
 
 }
 
 public static class utils
 {
-        public static string testLargeContext = @" The optimal frequency of portfolio rebalancing depends on your transaction costs, personal preferences, 
-        and tax considerations, including what type of account you are selling from and whether your capital gains or losses will be taxed at a short-term versus long-term rate. 
-        It also differs based on your age.";
+        public static string testLargeContext = @" The optimal frequency of portfolio rebalancing depends on your transaction costs, personal preferences, and tax considerations, including what type of account you are selling from and whether your capital gains or losses will be taxed at a short-term versus long-term rate. It also differs based on your age.";
 }

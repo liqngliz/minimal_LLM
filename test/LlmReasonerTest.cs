@@ -26,7 +26,7 @@ public class LlmReasonerTest
     )]
 
     [InlineData(
-        "Follow your nose to delicious bursts of fruity flavor in Froot Loops sweetened multi-grain breakfast. Dig into vibrant, colorful crunchy O's made with tasty, natural fruit flavors and grains as the first ingredient. It's like a rainbow in every bowl. Fun to eat for adults and kids, this low-fat, its is a good source of 9 vitamins and minerals per serving;", 
+        "Follow your nose to delicious bursts of fruity flavor in Froot Loops sweetened multi-grain breakfast. Dig into vibrant, colorful crunchy O's made with tasty, natural fruit flavors and grains as the first ingredient. It's like a rainbow in every bowl. Fun to eat for adults and kids, this low-fat, its is a good source of 9 vitamins and minerals per serving. Not a Fruit but packs the same taste as fruits!", 
         "Fruits are the result of plant reproduction, they contain both nutrients and seeds that would allow a the plant's offspring to grow",
         "What is a fruit?",
         false

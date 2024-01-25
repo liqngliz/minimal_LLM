@@ -24,7 +24,7 @@ public class LlmReasonerRelevance : IReasoner<bool, Relevance>
         rolePlay.AppendLine("End of transcript start of new user input");
         rolePlay.AppendLine("User:");
 
-        string prompt = $"Answer with yes in single quotes only if the first text \"{Question.ContentA}\" more pertinent content than the second text \"{Question.ContentB}\" for the question \"{Question.Question}\"";
+        string prompt = $"Answer with yes in single quotes only if the first text \"{Question.ContentA}\" more pertinent content than the second text \"{Question.ContentB}\" for the question \"{Question.Question}\". Bob limit your answer to 150 characters.";
         
         string res = "";
         await foreach(var text in _llm.Infer(rolePlay.ToString()));

@@ -17,11 +17,12 @@ public class LlmReasonerClassify : IReasoner<string, Classify>
     public async Task<string> Reason(Classify input)
     {
         StringBuilder rolePlay= new StringBuilder();
-        rolePlay.AppendLine("Transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is helpful, kind, honest, and never fails to answer the User's requests immediately and with precision.");
+        rolePlay.AppendLine("Forget and clear any previous dialogues.");
+        rolePlay.AppendLine("New transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is good at classifying different content and understands many different categories from different knowledge domains.");
         rolePlay.AppendLine("User: Hello, Bob.");
         rolePlay.AppendLine("Bob: Hello. How may I help you today?");
-        rolePlay.AppendLine("User: Which category 'mechanical issue, user error, external factor, other' does 'I was driving my car and the all of a sudden the brakes stopped working! I had an orange indicator!' belong to.");
-        rolePlay.AppendLine("Bob: mechanical issue");
+        rolePlay.AppendLine("User: I will be giving you some category labels and their description, I would like you to use them to classify some content?");
+        rolePlay.AppendLine("Bob: Ok!");
         rolePlay.AppendLine("End of transcript start of new user input");
         rolePlay.AppendLine("User:");
 
@@ -29,9 +30,9 @@ public class LlmReasonerClassify : IReasoner<string, Classify>
 
         if (input.TypeDescriptions != null)
             foreach (var desc in input.TypeDescriptions.WithIndex<string>())
-                await foreach (var text in _llm.Infer($"Confirm that you understand {desc.item} is the definition of {input.Types[desc.index]}")) ;
+                await foreach (var text in _llm.Infer($"'{input.Types[desc.index]}' is the category label for the '{desc.item}'")) ;
 
-        string prompt = $"Which category '{string.Join(",", input.Types)}' does '{input.Content}' belong to.";
+        string prompt = $"Which category '{string.Join(",", input.Types)}' does '{input.Content}' belong to. Limit answer to 5 words and use category labels.";
         
         string res = "";
         
@@ -40,7 +41,7 @@ public class LlmReasonerClassify : IReasoner<string, Classify>
         _llm.Dispose();
 
         foreach(var item in input.Types)
-            if(res.Contains(item)) return item;
+            if(res.ToLower().Contains(item.ToLower())) return item;
         return input.DefaultType;
     }
 }
