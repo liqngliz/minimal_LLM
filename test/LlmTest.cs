@@ -54,6 +54,4 @@ public static class utils
 {
         public static string testLargeContext = @" The optimal frequency of portfolio rebalancing depends on your transaction costs, personal preferences, 
         and tax considerations, including what type of account you are selling from and whether your capital gains or losses will be taxed at a short-term versus long-term rate. 
-        It also differs based on your age. For example, if you are relatively young, say in your 20s and 30s, you might not want to rebalance your portfolio as frequently as when you are nearing retirement and need to maximize your gains. 
-        Usually, about once a year is sufficient; however, if some assets in your portfolio haven't experienced a large appreciation within the year, longer periods may also be appropriate.";
-}
+        It also differs based on your age. ";}
