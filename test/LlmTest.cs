@@ -9,12 +9,12 @@ namespace LlmTest;
 [Collection("Sequential")]
 public class LlmTest
 {   
-    readonly Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool> _sut;
+    readonly Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> _sut;
 
     public LlmTest()
     {   
         var modules = IoCSingleton.Module;
-        _sut = modules.Container().Resolve<Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool>>();
+        _sut = modules.Container().Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>();
     }
 
     [Fact]

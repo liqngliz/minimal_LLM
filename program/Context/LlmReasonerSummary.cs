@@ -7,9 +7,9 @@ public record Summary(string Content, int CharacterLimit);
 
 public class LlmReasonerSummary : IReasoner<string, Summary>
 {
-    readonly Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool> _llm;
+    readonly Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> _llm;
 
-    public LlmReasonerSummary(Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool> llm)
+    public LlmReasonerSummary(Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> llm)
     {
         _llm = llm;
     }

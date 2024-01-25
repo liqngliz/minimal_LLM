@@ -2,17 +2,17 @@ using Context;
 using LLama;
 using Llm;
 
-public class LlamaSharpLlm : Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool>
+public class LlmInstance : Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>
 { 
     
-    readonly IContext<LlamaInstance> _settings;
-    readonly LlamaInstance _llamaInstance;
+    readonly IContext<LlmContextInstance> _settings;
+    readonly LlmContextInstance _llamaInstance;
     private LLamaWeights model;
     private LLamaContext context;
     private InteractiveExecutor interactiveExecutor;
 
 
-    public LlamaSharpLlm (IContext<LlamaInstance> settings)
+    public LlmInstance (IContext<LlmContextInstance> settings)
     { 
         _settings = settings;
         _llamaInstance = _settings.Init().Result;
@@ -40,7 +40,7 @@ public class LlamaSharpLlm : Illm<IAsyncEnumerable<string>, string, LlamaInstanc
         return interactiveExecutor.InferAsync(prompt, _llamaInstance.InferenceParams);
     }
 
-    public LlamaInstance InferParams() => _llamaInstance;
+    public LlmContextInstance InferParams() => _llamaInstance;
 
     public bool IsDisposed() => interactiveExecutor == null;
 }

@@ -10,14 +10,14 @@ namespace ContextTest;
 [Collection("Sequential")]
 public class ContextTest 
 {
-    readonly IContext<LlamaInstance> _sut;
-    readonly Illm<IAsyncEnumerable<string>, string, LlamaInstance,bool> _sut2;
+    readonly IContext<LlmContextInstance> _sut;
+    readonly Illm<IAsyncEnumerable<string>, string, LlmContextInstance,bool> _sut2;
 
     public ContextTest () 
     {
         var modules = new IoCModule("config.json");
-        _sut = modules.Container().Resolve<IContext<LlamaInstance>>();
-        _sut2 = modules.Container().Resolve<Illm<IAsyncEnumerable<string>, string, LlamaInstance,bool>>();
+        _sut = modules.Container().Resolve<IContext<LlmContextInstance>>();
+        _sut2 = modules.Container().Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance,bool>>();
         
     }
 

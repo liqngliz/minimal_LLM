@@ -8,9 +8,9 @@ namespace Run;
 
 public class RunLlama : IRun
 {   
-    readonly Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool> _llamaSharpLlm;
+    readonly Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> _llamaSharpLlm;
 
-    public RunLlama(Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool> llamaSharpLlm)
+    public RunLlama(Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> llamaSharpLlm)
     {
         _llamaSharpLlm = llamaSharpLlm;
     }

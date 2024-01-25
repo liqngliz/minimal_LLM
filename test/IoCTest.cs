@@ -29,9 +29,9 @@ public class IoCTest
     }
 
     [Theory]
-    [InlineData(typeof(IContext<LlamaInstance>),typeof(LlamaSharpContext))]
+    [InlineData(typeof(IContext<LlmContextInstance>),typeof(LlamaSharpContext))]
     [InlineData(typeof(IRun), typeof(RunLlama))]
-    [InlineData(typeof(Illm<IAsyncEnumerable<string>, string, LlamaInstance,bool>), typeof(LlamaSharpLlm))]
+    [InlineData(typeof(Illm<IAsyncEnumerable<string>, string, LlmContextInstance,bool>), typeof(LlmInstance))]
     [InlineData(typeof(IReasoner<bool, Relevance>), typeof(LlmReasonerRelevance))]
     [InlineData(typeof(IReasoner<string, Summary>), typeof(LlmReasonerSummary))]
     [InlineData(typeof(IReasoner<string, Classify>), typeof(LlmReasonerClassify))]

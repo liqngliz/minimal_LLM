@@ -6,9 +6,9 @@ namespace Reasoners;
 public record Relevance(string ContentA, string ContentB, string Question);
 public class LlmReasonerRelevance : IReasoner<bool, Relevance>
 {   
-    readonly Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool> _llm;
+    readonly Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> _llm;
 
-    public LlmReasonerRelevance(Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool> llm)
+    public LlmReasonerRelevance(Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> llm)
     {
         _llm = llm;
     }

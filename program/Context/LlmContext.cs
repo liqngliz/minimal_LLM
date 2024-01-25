@@ -5,9 +5,9 @@ using LLama.Native;
 
 namespace Context;
 
-public record LlamaInstance(ModelParams ModelParams, InferenceParams InferenceParams, string Prompt);
+public record LlmContextInstance(ModelParams ModelParams, InferenceParams InferenceParams, string Prompt);
 
-public class LlamaSharpContext : IContext<LlamaInstance>
+public class LlamaSharpContext : IContext<LlmContextInstance>
 {   
     readonly Config _config;
     public LlamaSharpContext(Config config)
@@ -15,7 +15,7 @@ public class LlamaSharpContext : IContext<LlamaInstance>
         _config = config;
     }
 
-    public async Task<LlamaInstance> Init()
+    public async Task<LlmContextInstance> Init()
     {   
 
         string modelPath = _config.Model; 
@@ -39,6 +39,6 @@ public class LlamaSharpContext : IContext<LlamaInstance>
                 MaxTokens = _config.MaxTokens 
             };
         
-        return  new LlamaInstance(parameters, inferenceParams, prompt);
+        return  new LlmContextInstance(parameters, inferenceParams, prompt);
     }
 }

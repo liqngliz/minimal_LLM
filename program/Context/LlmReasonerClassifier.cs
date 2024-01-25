@@ -8,9 +8,9 @@ public record Classify(string Content, string DefaultType, string[] Types, strin
 
 public class LlmReasonerClassify : IReasoner<string, Classify>
 {
-    readonly Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool> _llm;
+    readonly Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> _llm;
 
-    public LlmReasonerClassify(Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool> llm)
+    public LlmReasonerClassify(Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> llm)
     {
         _llm = llm;
     }
