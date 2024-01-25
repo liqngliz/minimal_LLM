@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.Reflection;
 using Autofac;
 using Configuration;
