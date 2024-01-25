@@ -2,7 +2,7 @@ using Context;
 using IoC;
 using Llm;
 using Autofac;
-using Reasoner;
+using Reasoners;
 
 
 namespace LlmReasonerTest;

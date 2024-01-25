@@ -1,6 +1,6 @@
 using Llm;
 
-namespace Reasoner;
+namespace Reasoners;
 
 public interface IReasoner <T,C>
 {

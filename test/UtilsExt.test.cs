@@ -42,7 +42,16 @@ public class UtilsExtTest
         Assert.Equal(res[0], "relevant"); 
     }
 
+    [Fact]
+    public void should_give_index()
+    {   
+        var nums = new int[]{5,4,3,2,1,0};
+        foreach (var num in nums.WithIndex<int>()) 
+            Assert.Equal(num.item, nums[num.index]);
+    }
     private bool reverse (string a, string b, string q) => a.Count() > b.Count();
 
     private bool relevance (string a, string b, string q) => a == q;
+
+    
 }

@@ -5,7 +5,7 @@ using Configuration;
 using Context;
 using IoC;
 using Llm;
-using Reasoner;
+using Reasoners;
 using Run;
 
 namespace IoCTest;
@@ -33,6 +33,8 @@ public class IoCTest
     [InlineData(typeof(IRun), typeof(RunLlama))]
     [InlineData(typeof(Illm<IAsyncEnumerable<string>, string, LlamaInstance,bool>), typeof(LlamaSharpLlm))]
     [InlineData(typeof(IReasoner<bool, Relevance>), typeof(LlmReasonerRelevance))]
+    [InlineData(typeof(IReasoner<string, Summary>), typeof(LlmReasonerSummary))]
+    [InlineData(typeof(IReasoner<string, Classify>), typeof(LlmReasonerClassify))]
     public void Should_Resolve_As(Type interfaceType, Type classType)
     {
         var res = _sut.Container().Resolve(interfaceType);

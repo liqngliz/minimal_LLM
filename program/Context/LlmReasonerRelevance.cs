@@ -1,9 +1,8 @@
 using System.Text;
 using Context;
-using LLama;
 using Llm;
 
-namespace Reasoner;
+namespace Reasoners;
 public record Relevance(string ContentA, string ContentB, string Question);
 public class LlmReasonerRelevance : IReasoner<bool, Relevance>
 {   

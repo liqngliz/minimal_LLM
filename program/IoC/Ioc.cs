@@ -4,7 +4,7 @@ using Configuration;
 using Context;
 using Run;
 using Llm;
-using Reasoner;
+using Reasoners;
 
 namespace IoC;
 public class IoCModule: IModule <Config>
@@ -24,6 +24,8 @@ public class IoCModule: IModule <Config>
         _builder.Register(c => new LlamaSharpLlm(c.Resolve<IContext<LlamaInstance>>())).As<Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool>>();
         
         _builder.Register(c => new LlmReasonerRelevance(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool>>())).As<IReasoner<bool, Relevance>>();
+        _builder.Register(c => new LlmReasonerSummary(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool>>())).As<IReasoner<string, Summary>>();
+        _builder.Register(c => new LlmReasonerClassify(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool>>())).As<IReasoner<string, Classify>>();
 
         _builder.Register(c => new RunLlama(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool>>())).As<IRun>();
 
