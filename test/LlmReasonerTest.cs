@@ -7,6 +7,7 @@ using Reasoners;
 
 namespace LlmReasonerTest;
 
+[Collection("Sequential")]
 public class LlmReasonerTest 
 {
     readonly IReasoner<bool, Relevance> _relevanceReasoner;

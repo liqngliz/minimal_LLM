@@ -5,6 +5,7 @@ using Reasoners;
 
 namespace LlmClassifierTest;
 
+[Collection("Sequential")]
 public class LlmClassifierTest
 {
     readonly IReasoner<string, Classify> _classificationReasoner;

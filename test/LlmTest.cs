@@ -6,13 +6,14 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Engine.ClientProtocol;
 
 namespace LlmTest;
 
+[Collection("Sequential")]
 public class LlmTest
 {   
     readonly Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool> _sut;
 
     public LlmTest()
     {   
-        var modules = new IoCModule("config.json");
+        var modules = IoCSingleton.Module;
         _sut = modules.Container().Resolve<Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool>>();
     }
 

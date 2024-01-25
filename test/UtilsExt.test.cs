@@ -3,6 +3,7 @@ using UtilsExt;
 
 namespace UtilsExtTest;
 
+[Collection("Sequential")]
 public class UtilsExtTest
 {
     [Fact]

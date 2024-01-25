@@ -38,8 +38,6 @@ public class LlmReasonerClassify : IReasoner<string, Classify>
         
         await foreach(var text in _llm.Infer(prompt)) res += text;
 
-        _llm.Dispose();
-
         foreach(var item in input.Types)
             if(res.ToLower().Contains(item.ToLower())) return item;
         return input.DefaultType;

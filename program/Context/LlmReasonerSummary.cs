@@ -16,7 +16,8 @@ public class LlmReasonerSummary : IReasoner<string, Summary>
     public async Task<string> Reason(Summary Input)
     {
         StringBuilder rolePlay= new StringBuilder();
-        rolePlay.AppendLine("Transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is helpful, kind, honest, good at writing, and never fails to answer the User's requests immediately and with precision.");
+        rolePlay.AppendLine("Forget and clear any previous dialogues.");
+        rolePlay.AppendLine("New transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is helpful, kind, honest, good at writing, and never fails to answer the User's requests immediately and with precision.");
         rolePlay.AppendLine("User: Hello, Bob.");
         rolePlay.AppendLine("Bob: Hello. How may I help you today?");
         rolePlay.AppendLine("User: Can you provide a 150 character summary of the following \'First documented in 1147, Moscow grew to become a prosperous and powerful city that served as the capital of the Grand Duchy of Moscow. When the Tsardom of Russia was proclaimed, Moscow remained the political and economic center for most of its history. Under the reign of Peter the Great, the Russian capital was moved to the newly founded city of Saint Petersburg in 1712, diminishing Moscow's influence.\'");

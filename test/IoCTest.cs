@@ -9,6 +9,7 @@ using Run;
 
 namespace IoCTest;
 
+[Collection("Sequential")]
 public class IoCTest
 {   
     readonly IModule<Config> _sut;

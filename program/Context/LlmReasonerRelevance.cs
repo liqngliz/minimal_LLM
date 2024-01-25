@@ -16,7 +16,8 @@ public class LlmReasonerRelevance : IReasoner<bool, Relevance>
     public async Task<bool> Reason(Relevance Question)
     {   
         StringBuilder rolePlay= new StringBuilder();
-        rolePlay.AppendLine("Transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is helpful, kind, honest, good at writing, and never fails to answer the User's requests immediately and with precision.");
+        rolePlay.AppendLine("Forget and clear any previous dialogues.");
+        rolePlay.AppendLine("New transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is helpful, kind, honest, good at writing, and never fails to answer the User's requests immediately and with precision.");
         rolePlay.AppendLine("User: Hello, Bob.");
         rolePlay.AppendLine("Bob: Hello. How may I help you today?");
         rolePlay.AppendLine("User: Answer with yes in single quotes only if the first text \"Swiss import laws on fruit state that there is an added tax on the value of fruit. Export fruits however do not have to pay any tax, rather they recieve a subsidy.\" more relevant than the second text \"Fruits are the result of plant reproduction, they contain both nutrients and seeds that would allow a the plant's offspring to grow\" for the question \"What is a fruit?\".");

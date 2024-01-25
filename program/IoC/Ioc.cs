@@ -20,8 +20,8 @@ public class IoCModule: IModule <Config>
         _configuration = JsonConvert.DeserializeObject<Config>(File.ReadAllText(configPath));
         
         //register
-        _builder.Register(c => new LlamaSharpContext(_configuration)).As<IContext<LlamaInstance>>();
-        _builder.Register(c => new LlamaSharpLlm(c.Resolve<IContext<LlamaInstance>>())).As<Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool>>();
+        _builder.Register(c => new LlamaSharpContext(_configuration)).As<IContext<LlamaInstance>>().SingleInstance();
+        _builder.Register(c => new LlamaSharpLlm(c.Resolve<IContext<LlamaInstance>>())).As<Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool>>().SingleInstance();
         
         _builder.Register(c => new LlmReasonerRelevance(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool>>())).As<IReasoner<bool, Relevance>>();
         _builder.Register(c => new LlmReasonerSummary(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlamaInstance, bool>>())).As<IReasoner<string, Summary>>();

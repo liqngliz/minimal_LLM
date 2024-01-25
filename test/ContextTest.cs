@@ -6,6 +6,8 @@ using Llm;
 using Run;
 
 namespace ContextTest;
+
+[Collection("Sequential")]
 public class ContextTest 
 {
     readonly IContext<LlamaInstance> _sut;
