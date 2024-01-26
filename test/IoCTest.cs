@@ -34,7 +34,7 @@ public class IoCTest
     [InlineData(typeof(Illm<IAsyncEnumerable<string>, string, LlmContextInstance,bool>), typeof(LlmInstance))]
     [InlineData(typeof(IReasoner<bool, Relevance>), typeof(LlmReasonerRelevance))]
     [InlineData(typeof(IReasoner<string, Summary>), typeof(LlmReasonerSummary))]
-    [InlineData(typeof(IReasoner<string, Classify>), typeof(LlmReasonerClassify))]
+    [InlineData(typeof(IReasoner<List<string>, Classify>), typeof(LlmReasonerClassify))]
     public void Should_Resolve_As(Type interfaceType, Type classType)
     {
         var res = _sut.Container().Resolve(interfaceType);
