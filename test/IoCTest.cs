@@ -25,7 +25,7 @@ public class IoCTest
     [Fact]
     public void Should_Return_Config()
     {
-        Assert.Equal(_sut.Configuration(), new Config(2048, 1337, 1, 1024, 0.8f, 1.1f, "mistral-7b-instruct-v0.2.Q4_K_M.gguf","prompt.txt"));
+        Assert.Equal(_sut.Configuration(), new Config(2048, 1337, 1, 1024, 0.8f, 1.1f, "openhermes-2.5-mistral-7b.Q4_K_M.gguf","prompt.txt"));
     }
 
     [Theory]
@@ -34,7 +34,8 @@ public class IoCTest
     [InlineData(typeof(Illm<IAsyncEnumerable<string>, string, LlmContextInstance,bool>), typeof(LlmInstance))]
     [InlineData(typeof(IReasoner<bool, Relevance>), typeof(LlmReasonerRelevance))]
     [InlineData(typeof(IReasoner<string, Summary>), typeof(LlmReasonerSummary))]
-    [InlineData(typeof(IReasoner<List<string>, Classify>), typeof(LlmReasonerClassify))]
+    [InlineData(typeof(IReasoner<List<string>, ClassifyL1>), typeof(LlmReasonerClassifyL1))]
+    [InlineData(typeof(IReasoner<List<string>, ClassifyL2>), typeof(LlmReasonerClassifyL2))]
     public void Should_Resolve_As(Type interfaceType, Type classType)
     {
         var res = _sut.Container().Resolve(interfaceType);

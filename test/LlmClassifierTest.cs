@@ -2,18 +2,21 @@ using Context;
 using IoC;
 using Autofac;
 using Reasoners;
+using UtilsExt;
 
 namespace LlmClassifierTest;
 
 [Collection("Sequential")]
 public class LlmClassifierTest
 {
-    readonly IReasoner<List<string>, Classify> _classificationReasoner;
+    readonly IReasoner<List<string>, ClassifyL1> _classificationReasonerL1;
+    readonly IReasoner<List<string>, ClassifyL2> _classificationReasonerL2;
     
     public LlmClassifierTest()
     {
         var modules = new IoCModule("config.json");
-        _classificationReasoner = modules.Container().Resolve<IReasoner<List<string>, Classify>>();
+        _classificationReasonerL1 = modules.Container().Resolve<IReasoner<List<string>, ClassifyL1>>();
+        _classificationReasonerL2 = modules.Container().Resolve<IReasoner<List<string>, ClassifyL2>>();
     }
 
     [Theory]
@@ -32,16 +35,16 @@ public class LlmClassifierTest
     )]
 
     [InlineData(
-        new string[]{"Denial Of Service", "Hack", "End Of Life", "Program Vulnerability", "Transient Incident", "Network Issue", "Program Bug", "Other"}, 
+        new string[]{"Denial Of Service", "Hack", "End Of Life", "Program Vulnerability", "Transient Incident", "Network Issue", "Program Bug", "Authentication","Other"}, 
         "When trying to update a field in SAP I get an error that says Login Failed", 
-        new string[]{"Network Issue"}, 
+        new string[]{"Authentication"}, 
         new string[]{"Denial Of Service", "Hack", "End Of Life", "Program Vulnerability", "Transient Incident", "Program Bug"}
     )]
 
     public async void should_classify_as_state(string[] categories, string content, string[] positives, string[] negatives)
     {
-        Classify input = new Classify(content, categories);
-        var res = await _classificationReasoner.Reason(input);
+        ClassifyL1 input = new ClassifyL1(content, categories);
+        var res = await _classificationReasonerL1.Reason(input);
         foreach(string positive in positives) Assert.Contains(positive, res);
         foreach(string negative in negatives) Assert.DoesNotContain(negative, res);
     }
@@ -51,33 +54,38 @@ public class LlmClassifierTest
         new string[]{"Conti", "Ctry", "Rg", "Cty", "Vg", "Oth"}, 
         new string[]{"A continent", "A country", "A region, province, state, canton or equivalent", "A city, district or similar", "A village", "Belongs to none of the specified categories"},
         "Virginia", 
-        "Rg"
+        "Rg",
+        new string[] {"Vg", "Oth", "Conti"}
     )]
     [InlineData(
         new string[]{"Conti", "Ctry", "Rg", "Cty", "Vg", "Oth"}, 
         new string[]{"A continent", "A country", "A region, province, state, canton or equivalent", "A city, district or similar", "A village", "Belongs to none of the specified categories"},
-        "Vaud", 
-        "Rg"
+        "The valley of joux", 
+        "Rg",
+        new string[] {"Vg", "Oth", "Conti", "Cty"}
     )]
 
     [InlineData(
         new string[]{"Conti", "Ctry", "Rg", "Cty", "Vg", "Oth"}, 
         new string[]{"A continent", "A country", "A region, province, state, canton or equivalent", "A city, district or similar", "A village", "Belongs to none of the specified categories"},
         "fish sticks", 
-        "Oth"
+        "Oth",
+        new string[] {"Conti", "Ctry", "Rg", "Cty", "Vg",}
     )]
 
     [InlineData(
         new string[]{"2356sdragh", "serdheasraerjsrnm", "weart43qraseh", "dyfrhjn23qt5dfbh", "34q6qewahae", "346q34dafjajer"}, 
         new string[]{"A continent", "A country", "A region, province, state, canton or equivalent", "A city, district or similar", "A village", "Belongs to none of the specified categories"},
         "Antartica", 
-        "2356sdragh"
+        "2356sdragh",
+        new string[] {"serdheasraerjsrnm", "weart43qraseh", "dyfrhjn23qt5dfbh", "34q6qewahae", "346q34dafjajer"}
     )]
 
-    public async void should_classify_as_Rg(string[] categories, string[] categoriesDesc, string content ,string result)
-    {
-        Classify input = new Classify(content, categories, categoriesDesc);
-         var res = await _classificationReasoner.Reason(input);
+    public async void should_classify_as_Rg(string[] categories, string[] categoriesDesc, string content ,string result, string[] negatives)
+    {   
+        Category[] cats = categories.WithIndex().Select(x => new Category(x.item, categoriesDesc[x.index]) ).ToArray();
+        ClassifyL2 input = new ClassifyL2(content, cats);
+         var res = await _classificationReasonerL2.Reason(input);
         Assert.Contains(result, res);
     }
 }
