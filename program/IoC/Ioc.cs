@@ -25,7 +25,8 @@ public class IoCModule: IModule <Config>
         
         _builder.Register(c => new LlmReasonerRelevance(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>())).As<IReasoner<bool, Relevance>>();
         _builder.Register(c => new LlmReasonerSummary(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>())).As<IReasoner<string, Summary>>();
-        _builder.Register(c => new LlmReasonerClassify(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>())).As<IReasoner<List<string>, Classify>>();
+        _builder.Register(c => new LlmReasonerClassifyL1(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>())).As<IReasoner<List<string>, ClassifyL1>>();
+        _builder.Register(c => new LlmReasonerClassifyL2(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>())).As<IReasoner<List<string>, ClassifyL2>>();
 
         _builder.Register(c => new RunLlama(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>())).As<IRun>();
 

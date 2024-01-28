@@ -21,7 +21,9 @@ For JSON configuration (config.json)
     "Prompt": <prompt.txt file location to initiate conversation>
 }
 
-To run program and tests, Mistral 7B or equivalent is required, add model to bin folder.
+To run program and tests, openhermes-2.5-mistral-7b.Q4_K_M or equivalent is required, add model to bin folder.
 
-example file:
-https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/blob/main/mistral-7b-instruct-v0.2.Q2_K.gguf
+GGUF Files:
+https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/tree/main
+OpenHermes Project Page:
+https://huggingface.co/teknium/OpenHermes-2.5-Mistral-7B

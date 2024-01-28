@@ -42,7 +42,7 @@ public class LlmReasonerTest
 
     [InlineData(
         "In Swiss law the general test of good faith is as such that a contract is an agreement between two or more parties to create one or more mutual obligations between them. To conclude a contract under Swiss Law, three conditions must be met: the parties to the contract must be capable of acting; the parties must have the intention of entering into a binding contract (the 'declaration of intent', i.e., offer and acceptance); the parties' declarations of intent must coincide (actually or normatively).", 
-        "Swiss contract law distinguishes between express and implied declarations of intent (Art. 1(2) CO). An implied declaration of intent is derived from the conduct of a party. Such conduct may constitute a declaration of intent if there are indications that, in good faith, point to a declaration of intent. Whether or not specific conduct of a party constitutes an implicit declaration of intent is regularly the subject matter of disputes.",
+        "Even when in done in good faith, according to swiss law food importers must ensure by means of self-inspection that their goods comply with the legal requirements. The labels of foods intended for sale to consumers must contain all the necessary information.",
         "What is a good faith in contract law?",
         true
     )]

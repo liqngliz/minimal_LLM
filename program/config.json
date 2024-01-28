@@ -5,7 +5,7 @@
     "MaxTokens": 1024,
     "Temperature": 0.8,
     "RepeatPenalty": 1.1,
-    "Model": "minichat-2-3b.q6_k.gguf",
+    "Model": "openhermes-2.5-mistral-7b.Q4_K_M.gguf",
     "Prompt": "prompt.txt"
 }
   
