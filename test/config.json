@@ -1,7 +1,7 @@
 {
     "ContextSize": 2048,
     "Seed": 1337,
-    "GpuLayerCount": 1,
+    "GpuLayerCount": 10,
     "MaxTokens": 1024,
     "Temperature": 0.8,
     "RepeatPenalty": 1.1,
