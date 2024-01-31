@@ -22,16 +22,16 @@ public class LlmReasonerRelevance : IReasoner<bool, Relevance>
         rolePlay.AppendLine("Bob: Hello. How may I help you today?");
         rolePlay.AppendLine("User: Answer with yes in single quotes only if the first text \"Swiss import laws on fruit state that there is an added tax on the value of fruit. Export fruits however do not have to pay any tax, rather they recieve a subsidy.\" more relevant than the second text \"Fruits are the result of plant reproduction, they contain both nutrients and seeds that would allow a the plant's offspring to grow\" for the question \"What is a fruit?\".");
         rolePlay.AppendLine("Bob: 'No'. The second text is more relevant as it directly explains that fruits are the result of plant reproduction, containing both nutrients and seeds for the plant's offspring. The first text is about a specific swiss law on fruits and doesn't address the general definition of fruits.");
+        rolePlay.AppendLine("User: Forget the previous comparison, I will ask a new one.");
         rolePlay.AppendLine("End of transcript start of new user input");
         rolePlay.AppendLine("User:");
 
-        string prompt = $"Answer with yes in single quotes only if the first text \"{Question.ContentA}\" more pertinent content than the second text \"{Question.ContentB}\" for the question \"{Question.Question}\". Bob limit your answer to 150 characters.";
+        string prompt = $"Answer with yes in single quotes only if the first text \"{Question.ContentA}\" more pertinent content than the second text \"{Question.ContentB}\" for the question \"{Question.Question}\". Bob limit your answer to 150 characters and use 'yes' or 'no'.";
         
         string res = "";
         await foreach(var text in _llm.Infer(rolePlay.ToString()));
         await foreach(var text in _llm.Infer(prompt)) res += text;
 
-        _llm.Dispose();
         return res.ToLowerInvariant().Contains("'yes'");
     }
 
