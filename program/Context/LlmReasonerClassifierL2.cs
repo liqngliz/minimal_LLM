@@ -6,8 +6,8 @@ using UtilsExt;
 
 namespace Reasoners;
 
-public record Category(string Name, string Description);
-public record ClassifyL2(string Content,  Category[] Categories);
+public record CategoryL2(string Name, string Description);
+public record ClassifyL2(string Content,  CategoryL2[] Categories);
 
 public class LlmReasonerClassifyL2 : IReasoner<List<string>, ClassifyL2>
 {
