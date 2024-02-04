@@ -4,6 +4,7 @@ using Autofac;
 using Reasoners;
 using UtilsExt;
 using LLama.Common;
+using System.Text;
 
 namespace LlmClassifierTest;
 
@@ -118,19 +119,52 @@ public class LlmClassifierTest
     [InlineData("name","{name}", "desc", "{description}" , "{name} is label for {description}", "name is label for desc")]
     [InlineData("name","{asdf}", "desc", "{fgh}" , "{asdf} is label for {fgh}", "name is label for desc")]
 
-    public async void should_convert_to_category_relation_prompt(string name, string nameTag, string description, string descTag, string relation, string prompt)
+    public void should_convert_to_category_relation_prompt(string name, string nameTag, string description, string descTag, string relation, string prompt)
     {   
 
         Category category = new(name.ToName(nameTag), description.ToDescription(descTag), relation);
         Assert.Equal(category.ToRelationPrompt(), prompt);
     }
 
-    public async void should_classify_with_template(string initialPrompt, string [] queries ,string[] categories, string[] categoriesDesc, string[] relations, string [] negatives)
-    {
+    [Theory]
+    [InlineData(
+        new string[]
+        {
+            "Forget and clear any previous dialogues, transcripts, and instructions.", 
+            "New transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is good at classifying different content and understands many different categories from different knowledge domains.",
+            "User: Hello, Bob.",
+            "Bob: Hello. How may I help you today?",
+            "User: I will be giving you some category labels and their corrsponding labels, I would like you to remember them when asked to classify content into categories.",
+            "Bob: Ok, I am ready to recieve instructions and start classifying?",
+            "User:",
+        },
+        new string[]
+        {
+            "France belongs to which possible category or categories, based upon this list 'Conti, Ctry, Rg, Cty, Vg, Oth'?"
+        },
+        new string[]{"Conti", "Ctry", "Rg", "Cty", "Vg", "Oth"}, 
+        new string[]{"A continent", "A country", "A region, province, state, canton or equivalent", "A city, district or similar", "A village", "Belongs to none of the specified categories"},
+        new string[]
+        {
+            "The category label '{name}' corresponds to the description '{description}' for our classification", 
+            "The category label '{name}' corresponds to the description '{description}' for our classification", 
+            "The category label '{name}' corresponds to the description '{description}' for our classification",
+            "The category label '{name}' corresponds to the description '{description}' for our classification",
+            "The category label '{name}' corresponds to the description '{description}' for our classification",
+            "The category label '{name}' corresponds to the description '{description}' for our classification"
+        },
+        new string[] {"Vg", "Oth", "Conti"},
+        new string [] {"Ctry"}
+    )]
+    public async void should_classify_with_template(string[] initialPrompt, string[] queries ,string[] categories, string[] categoriesDesc, string[] relations, string [] negatives, string[] positives)
+    {   
+        var startPrompt = new StringBuilder();
+        initialPrompt.ToList().ForEach(x => startPrompt.AppendLine(x));
+
         var names = categories.Select(x => x.ToName()).ToArray();
         var descriptions = categoriesDesc.Select(x => x.ToDescription()).ToArray();
         Category[] cats = relations.WithIndex().Select(x => new Category(names[x.index], descriptions[x.index], x.item)).ToArray();
-        var res = await _classification.Reason(new(initialPrompt, queries, cats, ClassificationExtensions.HasTag));
+        var res = await _classification.Reason(new(startPrompt.ToString(), queries, cats, ClassificationExtensions.HasTag));
         Assert.True(res.Categories.All(x => !negatives.ToList().Contains(x.Name.Text)));
     }
 

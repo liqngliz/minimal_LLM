@@ -6,9 +6,7 @@ using UtilsExt;
 
 namespace Reasoners;
 
-public record ClassificationTemplate(string Initial, string[] Queries, Category[] Categories, Func<string, string, bool> Func);
-
-public record Category(Name Name, Description Description, string Relation);
+public record ClassificationTemplate(string Initial, string[] Queries, Category[] Categories, Func<Category, string, bool> Func);
 public record Name(string Text, string Tag);
 public record Description(string Text, string Tag);
 
@@ -46,17 +44,17 @@ public class LlmClassifier : IReasoner<Classification, ClassificationTemplate>
             results.Add(result);
         }
 
-        var categories = Input.Categories.Where(x => Input.Func(x.Name.Text, results.Last()));
+        var categories = Input.Categories.Where(x => Input.Func(x, results.Last()));
 
         return new(categories.ToList(), transcript);
     }
 }
 
+public record Category(Name Name, Description Description, string Relation);
 public static class ClassificationExtensions
 {
     public static string ToRelationPrompt (this Category category) =>  category.Relation.Replace(category.Name.Tag, category.Name.Text).Replace(category.Description.Tag, category.Description.Text);
     public static Name ToName(this string text, string tag = "{name}") => new Name(text, tag);
     public static Description ToDescription(this string text, string tag = "{description}") => new Description(text, tag);
-
-    public static bool HasTag(string tag, string content) => content.ToLower().Contains(tag.ToLower());
+    public static bool HasTag(Category category, string content) => content.ToLower().Contains(category.Name.Tag.ToLower());
 }
