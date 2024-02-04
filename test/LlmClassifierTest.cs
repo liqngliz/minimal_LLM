@@ -92,6 +92,7 @@ public class LlmClassifierTest
          var res = await _classificationReasonerL2.Reason(input);
         Assert.Contains(result, res);
     }
+
     [Theory]
     [InlineData("name", null)]
     [InlineData("name", "tag")]
@@ -115,16 +116,34 @@ public class LlmClassifierTest
         else Assert.Equal(tag, res.Tag);
         Assert.IsType<Description>(res);
     }
+
     [Theory]
     [InlineData("name","{name}", "desc", "{description}" , "{name} is label for {description}", "name is label for desc")]
     [InlineData("name","{asdf}", "desc", "{fgh}" , "{asdf} is label for {fgh}", "name is label for desc")]
-
     public void should_convert_to_category_relation_prompt(string name, string nameTag, string description, string descTag, string relation, string prompt)
     {   
 
         Category category = new(name.ToName(nameTag), description.ToDescription(descTag), relation);
         Assert.Equal(category.ToRelationPrompt(), prompt);
     }
+
+    [Theory]
+    [InlineData
+    (
+        "Virginia belongs to Rg.", 
+        new string[]{"Conti", "Ctry", "Rg", "Cty", "Vg", "Oth"}, 
+        new string[]{"A continent", "A country", "A region, province, state, canton or equivalent", "A city, district or similar", "A village", "Belongs to none of the specified categories"},
+        new string[]{"Rg"}
+    )]
+    public void should_extract_label(string text, string[] labels, string[] description, string[] expected)
+    {
+        var categories = new List<Category>();
+        foreach(var label in labels.WithIndex())
+            categories.Add(new Category(label.item.ToName(), description[label.index].ToDescription(), "sgesa" ));
+        var actual = categories.Where(x => ClassificationExtensions.HasTag(x, text));
+        Assert.Equal(expected.ToList(), actual.Select(x => x.Name.Text).ToList());
+    }
+
 
     [Theory]
     [InlineData(
@@ -143,7 +162,7 @@ public class LlmClassifierTest
             "France belongs to which possible category or categories, based upon this list 'Conti, Ctry, Rg, Cty, Vg, Oth'?"
         },
         new string[]{"Conti", "Ctry", "Rg", "Cty", "Vg", "Oth"}, 
-        new string[]{"A continent", "A country", "A region, province, state, canton or equivalent", "A city, district or similar", "A village", "Belongs to none of the specified categories"},
+        new string[]{"A continent", "A country", "Part of a country usually a region, province, state in the Unite States, canton in Switzerlandd or equivalent", "A city, district or similar", "A village", "Belongs to none of the specified categories"},
         new string[]
         {
             "The category label '{name}' corresponds to the description '{description}' for our classification", 
@@ -155,6 +174,37 @@ public class LlmClassifierTest
         },
         new string[] {"Vg", "Oth", "Conti"},
         new string [] {"Ctry"}
+    )]
+
+    [InlineData(
+        new string[]
+        {
+            "Forget and clear any previous dialogues, transcripts, and instructions.", 
+            "New transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is good at classifying different content and understands many different categories from different knowledge domains.",
+            "User: Hello, Bob.",
+            "Bob: Hello. How may I help you today?",
+            "User: I will be giving you some category labels and their corrsponding labels, I would like you to remember them when asked to classify content into categories.",
+            "Bob: Ok, I am ready to recieve instructions and start classifying?",
+            "User:",
+        },
+        new string[]
+        {
+            "Paris belongs to which possible category or categories, based upon this list 'Conti, Ctry, Rg, Cty, Vg, Oth'?",
+            "Can give me just the category label between ''."
+        },
+        new string[]{"Conti", "Ctry", "Rg", "Cty", "Vg", "Oth"}, 
+        new string[]{"A continent", "A country", "Part of a country usually a region, province, state in the Unite States, canton in Switzerlandd or equivalent", "A city, district or similar", "A village", "Belongs to none of the specified categories"},
+        new string[]
+        {
+            "The category label '{name}' corresponds to the description '{description}' for our classification", 
+            "The category label '{name}' corresponds to the description '{description}' for our classification", 
+            "The category label '{name}' corresponds to the description '{description}' for our classification",
+            "The category label '{name}' corresponds to the description '{description}' for our classification",
+            "The category label '{name}' corresponds to the description '{description}' for our classification",
+            "The category label '{name}' corresponds to the description '{description}' for our classification"
+        },
+        new string[] {"Vg", "Oth", "Conti"},
+        new string [] {"Cty"}
     )]
     public async void should_classify_with_template(string[] initialPrompt, string[] queries ,string[] categories, string[] categoriesDesc, string[] relations, string [] negatives, string[] positives)
     {   

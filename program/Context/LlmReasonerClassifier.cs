@@ -10,7 +10,7 @@ public record ClassificationTemplate(string Initial, string[] Queries, Category[
 public record Name(string Text, string Tag);
 public record Description(string Text, string Tag);
 
-public record Classification(List<Category> Categories, string Transcript);
+public record Classification(List<Category> Categories, List<string> Transcript);
 
 public class LlmClassifier : IReasoner<Classification, ClassificationTemplate>
 {
@@ -23,24 +23,26 @@ public class LlmClassifier : IReasoner<Classification, ClassificationTemplate>
 
     public async Task<Classification> Reason(ClassificationTemplate Input)
     {   
-        var transcript = "";
-        transcript += Input.Initial;
+        var transcript = new List<string>();
+        transcript.Add(Input.Initial);
         await foreach(var text in _llm.Infer(Input.Initial.ToString()));
         
         foreach(var category in Input.Categories)
         {
             string relation = category.ToRelationPrompt(); 
-            transcript += relation;
-            await foreach (var text in _llm.Infer(relation)) transcript += text;
+            transcript.Add(relation);
+            var response = "";
+            await foreach (var text in _llm.Infer(relation)) response += text;
+            transcript.Add(response);
         }
 
         var results = new List<string>();
 
         foreach(var query in Input.Queries) {
-            transcript += query;
+            transcript.Add(query);
             var result = "";
             await foreach (var text in _llm.Infer(query)) result += text;
-            transcript += result;
+            transcript.Add(result);
             results.Add(result);
         }
 
