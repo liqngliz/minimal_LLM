@@ -56,5 +56,5 @@ public static class ClassificationExtensions
     public static string ToRelationPrompt (this Category category) =>  category.Relation.Replace(category.Name.Tag, category.Name.Text).Replace(category.Description.Tag, category.Description.Text);
     public static Name ToName(this string text, string tag = "{name}") => new Name(text, tag);
     public static Description ToDescription(this string text, string tag = "{description}") => new Description(text, tag);
-    public static bool HasTag(Category category, string content) => content.ToLower().Contains(category.Name.Tag.ToLower());
+    public static bool HasTag(Category category, string content) => content.ToLower().Contains(category.Name.Text.ToLower());
 }

@@ -165,7 +165,8 @@ public class LlmClassifierTest
         var descriptions = categoriesDesc.Select(x => x.ToDescription()).ToArray();
         Category[] cats = relations.WithIndex().Select(x => new Category(names[x.index], descriptions[x.index], x.item)).ToArray();
         var res = await _classification.Reason(new(startPrompt.ToString(), queries, cats, ClassificationExtensions.HasTag));
-        Assert.True(res.Categories.All(x => !negatives.ToList().Contains(x.Name.Text)));
+        Assert.True(!res.Categories.Any(x => negatives.ToList().Contains(x.Name.Text)));
+        Assert.True(res.Categories.All(x => positives.ToList().Contains(x.Name.Text)));
     }
 
 
