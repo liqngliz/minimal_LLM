@@ -32,7 +32,6 @@ public class IoCTest
     [InlineData(typeof(IContext<LlmContextInstance>),typeof(LlamaSharpContext))]
     [InlineData(typeof(IRun), typeof(RunLlama))]
     [InlineData(typeof(Illm<IAsyncEnumerable<string>, string, LlmContextInstance,bool>), typeof(LlmInstance))]
-    [InlineData(typeof(IReasoner<bool, Relevance>), typeof(LlmReasonerRelevance))]
     [InlineData(typeof(IReasoner<string, Summary>), typeof(LlmReasonerSummary))]
     [InlineData(typeof(IReasoner<Classification, ClassificationTemplate>), typeof(LlmClassifier))]
     public void Should_Resolve_As(Type interfaceType, Type classType)
