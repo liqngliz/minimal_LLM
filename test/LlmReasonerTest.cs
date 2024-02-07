@@ -6,17 +6,17 @@ using UtilsExt;
 using LLama.Common;
 using System.Text;
 
-namespace LlmClassifierTest;
+namespace LlmReasonerTest;
 
 [Collection("Sequential")]
-public class LlmClassifierTest
+public class LlmReasonerTest
 {
-    readonly IReasoner<Classification, ClassificationTemplate> _classification;
+    readonly IReasoner<Reasoning, ReasonerTemplate> _classification;
 
-    public LlmClassifierTest()
+    public LlmReasonerTest()
     {
         var modules = (new IoCModule("config.json")).Container();
-        _classification = modules.Resolve<IReasoner<Classification, ClassificationTemplate>>();
+        _classification = modules.Resolve<IReasoner<Reasoning, ReasonerTemplate>>();
     }
 
     [Theory]
@@ -87,10 +87,12 @@ public class LlmClassifierTest
 
         var names = categories.Select(x => x.ToName()).ToArray();
         var descriptions = categoriesDesc.Select(x => x.ToDescription()).ToArray();
-        Category[] cats = relations.WithIndex().Select(x => new Category(names[x.index], descriptions[x.index], x.item)).ToArray();
-        var res = await _classification.Reason(new(startPrompt.ToString(), queries, cats, ClassificationExtensions.HasTag));
-        Assert.True(!res.Categories.Any(x => negatives.ToList().Contains(x.Name.Text)));
-        Assert.True(res.Categories.All(x => positives.ToList().Contains(x.Name.Text)));
+        Relations[] cats = relations.WithIndex().Select(x => new Relations(names[x.index], descriptions[x.index], x.item)).ToArray();
+        var res = await _classification.Reason(new(startPrompt.ToString(), queries, cats));
+        var resCats = cats.Where(x => res.Conclusion.HasTag(x));
+
+        Assert.True(!resCats.Any(x => negatives.ToList().Contains(x.Name.Text)));
+        Assert.True(resCats.All(x => positives.ToList().Contains(x.Name.Text)));
     }
 
     [Theory]
@@ -130,10 +132,13 @@ public class LlmClassifierTest
 
         var names = categories.Select(x => x.ToName()).ToArray();
         var descriptions = categoriesDesc.Select(x => x.ToDescription()).ToArray();
-        Category[] cats = relations.WithIndex().Select(x => new Category(names[x.index], descriptions[x.index], x.item)).ToArray();
-        var res = await _classification.Reason(new(startPrompt.ToString(), queries, cats, ClassificationExtensions.HasTag));
-        Assert.True(!res.Categories.Any(x => negatives.ToList().Contains(x.Name.Text)));
-        Assert.True(res.Categories.All(x => positives.ToList().Contains(x.Name.Text)));
+        Relations[] cats = relations.WithIndex().Select(x => new Relations(names[x.index], descriptions[x.index], x.item)).ToArray();
+        var res = await _classification.Reason(new(startPrompt.ToString(), queries, cats));
+
+        var resCats = cats.Where(x => res.Conclusion.HasTag(x));
+
+        Assert.True(!resCats.Any(x => negatives.ToList().Contains(x.Name.Text)));
+        Assert.True(resCats.All(x => positives.ToList().Contains(x.Name.Text)));
     }
 
     [Theory]
@@ -167,7 +172,7 @@ public class LlmClassifierTest
     public void should_convert_to_category_relation_prompt(string name, string nameTag, string description, string descTag, string relation, string prompt)
     {   
 
-        Category category = new(name.ToName(nameTag), description.ToDescription(descTag), relation);
+        Relations category = new(name.ToName(nameTag), description.ToDescription(descTag), relation);
         Assert.Equal(category.ToRelationPrompt(), prompt);
     }
 
@@ -181,10 +186,10 @@ public class LlmClassifierTest
     )]
     public void should_extract_label(string text, string[] labels, string[] description, string[] expected)
     {
-        var categories = new List<Category>();
+        var categories = new List<Relations>();
         foreach(var label in labels.WithIndex())
-            categories.Add(new Category(label.item.ToName(), description[label.index].ToDescription(), "sgesa" ));
-        var actual = categories.Where(x => ClassificationExtensions.HasTag(x, text));
+            categories.Add(new Relations(label.item.ToName(), description[label.index].ToDescription(), "sgesa" ));
+        var actual = categories.Where(x => text.HasTag(x));
         Assert.Equal(expected.ToList(), actual.Select(x => x.Name.Text).ToList());
     }
 

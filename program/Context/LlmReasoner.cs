@@ -6,28 +6,27 @@ using UtilsExt;
 
 namespace Reasoners;
 
-public record ClassificationTemplate(string Initial, string[] Queries, Category[] Categories, Func<Category, string, bool> Func);
+public record ReasonerTemplate(string Initial, string[] Queries, Relations[] Relations);
 public record Name(string Text, string Tag);
 public record Description(string Text, string Tag);
-
-public record Classification(List<Category> Categories, List<string> Transcript);
-
-public class LlmClassifier : IReasoner<Classification, ClassificationTemplate>
+public record Relations(Name Name, Description Description, string Relation);
+public record Reasoning(string Conclusion, List<string> Transcript, Relations[] Relations);
+public class LlmReasoner : IReasoner<Reasoning, ReasonerTemplate>
 {
     readonly Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> _llm;
 
-    public LlmClassifier(Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> llm)
+    public LlmReasoner(Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> llm)
     {
         _llm = llm;
     }
 
-    public async Task<Classification> Reason(ClassificationTemplate Input)
+    public async Task<Reasoning> Reason(ReasonerTemplate Input)
     {   
         var transcript = new List<string>();
         transcript.Add(Input.Initial);
         await foreach(var text in _llm.Infer(Input.Initial.ToString()));
         
-        foreach(var category in Input.Categories)
+        foreach(var category in Input.Relations)
         {
             string relation = category.ToRelationPrompt(); 
             transcript.Add(relation);
@@ -46,17 +45,18 @@ public class LlmClassifier : IReasoner<Classification, ClassificationTemplate>
             results.Add(result);
         }
 
-        var categories = Input.Categories.Where(x => Input.Func(x, results.Last()));
-
-        return new(categories.ToList(), transcript);
+        return new(results.Last(), transcript, Input.Relations);
     }
 }
 
-public record Category(Name Name, Description Description, string Relation);
-public static class ClassificationExtensions
+public static class ReasoningExtensions
 {
-    public static string ToRelationPrompt (this Category category) =>  category.Relation.Replace(category.Name.Tag, category.Name.Text).Replace(category.Description.Tag, category.Description.Text);
+    public static string ToRelationPrompt (this Relations category) =>  category.Relation.Replace(category.Name.Tag, category.Name.Text).Replace(category.Description.Tag, category.Description.Text);
     public static Name ToName(this string text, string tag = "{name}") => new Name(text, tag);
     public static Description ToDescription(this string text, string tag = "{description}") => new Description(text, tag);
-    public static bool HasTag(Category category, string content) => content.ToLower().Contains(category.Name.Text.ToLower());
+    }
+
+public static class ClassificationExtensions
+{
+    public static bool HasTag(this string content, Relations category) => content.ToLower().Contains(category.Name.Text.ToLower());
 }
