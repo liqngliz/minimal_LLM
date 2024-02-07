@@ -27,7 +27,7 @@ public class LlmClassifierTest
             "New transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is good at classifying different content and understands many different categories from different knowledge domains.",
             "User: Hello, Bob.",
             "Bob: Hello. How may I help you today?",
-            "User: I will be giving you some category labels and their corrsponding labels, I would like you to remember them when asked to classify content into categories.",
+            "User: I will be giving you some category labels and their corresponding labels, I would like you to remember them when asked to classify content into categories.",
             "Bob: Ok, I am ready to recieve instructions and start classifying?",
             "User:",
         },
@@ -35,8 +35,8 @@ public class LlmClassifierTest
         {
             "France belongs to which possible category or categories, based upon this list 'Conti, Ctry, Rg, Cty, Vg, Oth'?"
         },
-        new string[]{"Conti", "Ctry", "Rg", "Cty", "Vg", "Oth"}, 
-        new string[]{"A continent", "A country", "Part of a country usually a region, province, state in the Unite States, canton in Switzerlandd or equivalent", "A city, district or similar", "A village", "Belongs to none of the specified categories"},
+        new string[]{"Continent", "Country", "Region", "City", "Village", "Other"}, 
+        new string[]{"A continentinental landmass", "A country", "Part of a country usually a region, province, state in the Unite States, canton in Switzerlandd or equivalent", "A city, district or similar", "A village", "Belongs to none of the specified categories"},
         new string[]
         {
             "The category label '{name}' corresponds to the description '{description}' for our classification", 
@@ -46,8 +46,8 @@ public class LlmClassifierTest
             "The category label '{name}' corresponds to the description '{description}' for our classification",
             "The category label '{name}' corresponds to the description '{description}' for our classification"
         },
-        new string[] {"Vg", "Oth", "Conti"},
-        new string [] {"Ctry"}
+        new string[] {"Village", "Other", "Continent", "City"},
+        new string [] {"Country"}
     )]
 
     [InlineData(
@@ -57,17 +57,17 @@ public class LlmClassifierTest
             "New transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is good at classifying different content and understands many different categories from different knowledge domains.",
             "User: Hello, Bob.",
             "Bob: Hello. How may I help you today?",
-            "User: I will be giving you some category labels and their corrsponding labels, I would like you to remember them when asked to classify content into categories.",
+            "User: I will be giving you some category labels and their corresponding labels, I would like you to remember them when asked to classify content into categories.",
             "Bob: Ok, I am ready to recieve instructions and start classifying?",
             "User:",
         },
         new string[]
         {
-            "Paris belongs to which possible category or categories, based upon this list 'Conti, Ctry, Rg, Cty, Vg, Oth'?",
+            "Paris a city in France belongs to which possible category or categories, based upon this list 'Conti, Ctry, Rg, Cty, Vg, Oth'?",
             "Can give me just the category label between ''."
         },
-        new string[]{"Conti", "Ctry", "Rg", "Cty", "Vg", "Oth"}, 
-        new string[]{"A continent", "A country", "Part of a country usually a region, province, state in the Unite States, canton in Switzerlandd or equivalent", "A city, district or similar", "A village", "Belongs to none of the specified categories"},
+        new string[]{"Continent", "Country", "Region", "City", "Village", "Other"}, 
+        new string[]{"A continentental landmass", "A country", "Part of a country usually a region, province, state in the Unite States, canton in Switzerlandd or equivalent", "A city, district or similar", "A village", "Belongs to none of the specified categories"},
         new string[]
         {
             "The category label '{name}' corresponds to the description '{description}' for our classification", 
@@ -77,8 +77,8 @@ public class LlmClassifierTest
             "The category label '{name}' corresponds to the description '{description}' for our classification",
             "The category label '{name}' corresponds to the description '{description}' for our classification"
         },
-        new string[] {"Vg", "Oth", "Conti"},
-        new string [] {"Cty"}
+        new string[] {"Village", "Other", "Continent", "Country"},
+        new string [] {"City"}
     )]
     public async void should_classify_with_template(string[] initialPrompt, string[] queries ,string[] categories, string[] categoriesDesc, string[] relations, string [] negatives, string[] positives)
     {   
@@ -101,7 +101,7 @@ public class LlmClassifierTest
             "New transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is good at classifying different content and understands many different categories from different knowledge domains.",
             "User: Hello, Bob.",
             "Bob: Hello. How may I help you today?",
-            "User: I will be giving you some category labels and their corrsponding labels, I would like you to remember them when asked to classify content into categories.",
+            "User: I will be giving you some category labels and their corresponding labels, I would like you to remember them when asked to classify content into categories.",
             "Bob: Ok, I am ready to recieve instructions and start classifying?",
             "User:",
         },
