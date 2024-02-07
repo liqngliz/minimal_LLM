@@ -109,13 +109,14 @@ public class LlmClassifierTest
         {
             "Between 'ContentA' and 'ContentB' which is more relevant to the question 'what is a fruit?'? If neither are relevant, say 'NoRelevance'."
         },
-        new string[]{"ContentA", "ContentB"}, 
+        new string[]{"ContentA", "ContentB", "NoRelevance"}, 
         new string[]{
             "Follow your nose to delicious bursts of fruity flavor in Froot Loops sweetened multi-grain breakfast. Dig into vibrant, colorful crunchy O's made with tasty, natural fruit flavors and grains as the first ingredient. It's like a rainbow in every bowl. Fun to eat for adults and kids, this low-fat, its is a good source of 9 vitamins and minerals per serving. Not a Fruit but packs the same taste as fruits!", 
             "Fruits are the result of plant reproduction, they contain both nutrients and seeds that would allow a the plant's offspring to grow",
-            ""},
+            "None of the other categories fit."},
         new string[]
         {
+            "The category label '{name}' corresponds to the description '{description}' for our classification", 
             "The category label '{name}' corresponds to the description '{description}' for our classification", 
             "The category label '{name}' corresponds to the description '{description}' for our classification", 
         },
@@ -131,7 +132,8 @@ public class LlmClassifierTest
         var descriptions = categoriesDesc.Select(x => x.ToDescription()).ToArray();
         Category[] cats = relations.WithIndex().Select(x => new Category(names[x.index], descriptions[x.index], x.item)).ToArray();
         var res = await _classification.Reason(new(startPrompt.ToString(), queries, cats, ClassificationExtensions.HasTag));
-        
+        Assert.True(!res.Categories.Any(x => negatives.ToList().Contains(x.Name.Text)));
+        Assert.True(res.Categories.All(x => positives.ToList().Contains(x.Name.Text)));
     }
 
     [Theory]
@@ -156,6 +158,7 @@ public class LlmClassifierTest
         if(string.IsNullOrEmpty(tag)) Assert.Equal("{description}", res.Tag);
         else Assert.Equal(tag, res.Tag);
         Assert.IsType<Description>(res);
+
     }
 
     [Theory]
