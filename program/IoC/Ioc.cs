@@ -25,7 +25,7 @@ public class IoCModule: IModule <Config>
         
        _builder.Register(c => new LlmReasoner(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>())).As<IReasoner<Reasoning, ReasonerTemplate>>();
         
-        _builder.Register(c => new RunLlama(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>())).As<IRun>();
+        _builder.Register(c => new RunLlmConsole(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>())).As<IRun>();
 
         //build module container
         _container = _builder.Build();
