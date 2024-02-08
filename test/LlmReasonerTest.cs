@@ -141,6 +141,55 @@ public class LlmReasonerTest
         Assert.True(resCats.All(x => positives.ToList().Contains(x.Name.Text)));
     }
 
+        [Theory]
+    [InlineData(
+        new string[]
+        {
+            "Forget and clear any previous dialogues, transcripts, and instructions.", 
+            "New transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is good at classifying different content, making summaries, coding, and logic.",
+            "User: Hello, Bob.",
+            "Bob: Hello. How may I help you today?",
+            "User: I will be giving you some text to summarize.",
+            "Bob: Ok, I am ready to recieve instructions and start classifying?",
+            "User:",
+        },
+        new string[]
+        {
+            "Can you provide a summary combining 'Content-1', 'Content-2', 'Content-3' and 'Content-4' but exclude 'Content-5'?",
+        },
+        new string[]{"Content-1", "Content-2", "Content-3", "Content-4", "Content-5"}, 
+        new string[]{
+            "The Battle of Hastings[a] was fought on 14 October 1066 between the Norman-French army of William, the Duke of Normandy, and an English army under the Anglo-Saxon King Harold Godwinson, beginning the Norman Conquest of England. It took place approximately 7 mi (11 km) northwest of Hastings, close to the present-day town of Battle, East Sussex, and was a decisive Norman victory.", 
+            "The background to the battle was the death of the childless King Edward the Confessor in January 1066, which set up a succession struggle between several claimants to his throne. Harold was crowned king shortly after Edward's death, but faced invasions by William, his own brother Tostig, and the Norwegian King Harald Hardrada (Harold III of Norway). Hardrada and Tostig defeated a hastily gathered army of Englishmen at the Battle of Fulford on 20 September 1066, and were in turn defeated by Harold at the Battle of Stamford Bridge five days later. The deaths of Tostig and Hardrada at Stamford Bridge left William as Harold's only serious opponent. While Harold and his forces were recovering, William landed his invasion forces in the south of England at Pevensey on 28 September 1066 and established a beachhead for his conquest of the kingdom. Harold was forced to march south swiftly, gathering forces as he went.",
+            "The exact numbers present at the battle are unknown as even modern estimates vary considerably. The composition of the forces is clearer: the English army was composed almost entirely of infantry and had few archers, whereas only about half of the invading force was infantry, the rest split equally between cavalry and archers. Harold appears to have tried to surprise William, but scouts found his army and reported its arrival to William, who marched from Hastings to the battlefield to confront Harold. The battle lasted from about 9 am to dusk. Early efforts of the invaders to break the English battle lines had little effect. Therefore, the Normans adopted the tactic of pretending to flee in panic and then turning on their pursuers. Harold's death, probably near the end of the battle, led to the retreat and defeat of most of his army. After further marching and some skirmishes, William was crowned as king on Christmas Day 1066.",
+            "There continued to be rebellions and resistance to William's rule, but Hastings effectively marked the culmination of William's conquest of England. Casualty figures are hard to come by, but some historians estimate that 2,000 invaders died along with about twice that number of Englishmen. William founded a monastery at the site of the battle, the high altar of the abbey church supposedly placed at the spot where Harold died.",
+            "Neil Armstrong was a key participant at the battle of Hastings. He came at the end of the battle and defeated everbody! It was a sight to behold. Neil Armstrong became the emperor of England after the war is the most important person in the world."},
+        new string[]
+        {
+            "Remember the label '{name}' refers to text '{description}'.", 
+            "Remember the label '{name}' refers to text '{description}'.", 
+            "Remember the label '{name}' refers to text '{description}'.", 
+            "Remember the label '{name}' refers to text '{description}'.", 
+            "Remember the label '{name}' refers to text '{description}'."
+        },
+        new string[] {"Armstrong", "emperor"},
+        new string [] {"Norman", "Harold", "1066", "William"}
+    )]
+    public async void should_imitate_summarizer(string[] initialPrompt, string[] queries ,string[] categories, string[] categoriesDesc, string[] relations, string [] negatives, string[] positives) 
+    {
+        var startPrompt = new StringBuilder();
+        initialPrompt.ToList().ForEach(x => startPrompt.AppendLine(x));
+
+        var names = categories.Select(x => x.ToName()).ToArray();
+        var descriptions = categoriesDesc.Select(x => x.ToDescription()).ToArray();
+        Relations[] cats = relations.WithIndex().Select(x => new Relations(names[x.index], descriptions[x.index], x.item)).ToArray();
+        var res = await _classification.Reason(new(startPrompt.ToString(), queries, cats));
+
+        Assert.True(!negatives.Any(x => res.Conclusion.Contains(x)));
+        Assert.True(positives.All(x => res.Conclusion.Contains(x)));
+    }
+
+
     [Theory]
     [InlineData("name", null)]
     [InlineData("name", "tag")]
