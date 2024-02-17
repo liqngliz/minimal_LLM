@@ -20,7 +20,7 @@ public class IoCModule: IModule <Config>
         
         //register
         _builder.Register(c => new LlamaSharpContext(_configuration)).As<IContext<LlmContextInstance>>().SingleInstance();
-        _builder.Register(c => new LlmInstance(c.Resolve<IContext<LlmContextInstance>>())).As<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>().SingleInstance();
+        _builder.Register(c => new LlmInteractiveInstance(c.Resolve<IContext<LlmContextInstance>>())).As<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>().SingleInstance();
         _builder.Register(c => new LlmReasoner(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>())).As<IReasoner<Reasoning, ReasonerTemplate>>();
 
         //build module container

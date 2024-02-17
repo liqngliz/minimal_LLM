@@ -2,7 +2,7 @@ using Context;
 using LLama;
 using Llm;
 
-public class LlmInstance : Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>
+public class LlmInteractiveInstance : Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>
 { 
     
     readonly IContext<LlmContextInstance> _settings;
@@ -11,8 +11,7 @@ public class LlmInstance : Illm<IAsyncEnumerable<string>, string, LlmContextInst
     private LLamaContext context;
     private InteractiveExecutor interactiveExecutor;
 
-
-    public LlmInstance (IContext<LlmContextInstance> settings)
+    public LlmInteractiveInstance (IContext<LlmContextInstance> settings)
     { 
         _settings = settings;
         _llamaInstance = _settings.Init().Result;
