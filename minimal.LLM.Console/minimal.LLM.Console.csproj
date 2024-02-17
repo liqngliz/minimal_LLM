@@ -28,5 +28,8 @@
     <ProjectReference Include="../minimal.LLM/minimal.LLM.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Execution/" />
+  </ItemGroup>
 
 </Project>

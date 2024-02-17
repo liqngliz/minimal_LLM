@@ -25,4 +25,10 @@
     </ContentWithTargetPath>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Utils/" />
+    <Folder Include="IoC/" />
+    <Folder Include="Library/" />
+  </ItemGroup>
+
 </Project>
