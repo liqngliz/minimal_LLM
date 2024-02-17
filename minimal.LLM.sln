@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.Test", "minimal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.Console", "minimal.LLM.Console\minimal.LLM.Console.csproj", "{33C676C5-213A-4C9B-BCE6-93EEC28EAB89}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.Console.Test", "minimal.LLM.Console.Test\minimal.LLM.Console.Test.csproj", "{00D20497-7D7A-4EE8-89F0-A857C4283841}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{33C676C5-213A-4C9B-BCE6-93EEC28EAB89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33C676C5-213A-4C9B-BCE6-93EEC28EAB89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33C676C5-213A-4C9B-BCE6-93EEC28EAB89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00D20497-7D7A-4EE8-89F0-A857C4283841}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00D20497-7D7A-4EE8-89F0-A857C4283841}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00D20497-7D7A-4EE8-89F0-A857C4283841}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00D20497-7D7A-4EE8-89F0-A857C4283841}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

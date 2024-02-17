@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageReference Include="NSubstitute" Version="5.1.0" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
     <PackageReference Include="xunit" Version="2.7.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -24,23 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Execution/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../minimal.LLM.Console/minimal.LLM.Console.csproj" />
     <ProjectReference Include="../minimal.LLM/minimal.LLM.csproj" />
   </ItemGroup>
-
-    <ItemGroup>
-    <ContentWithTargetPath Include="config.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>%(Filename)%(Extension)</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="prompt.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>%(Filename)%(Extension)</TargetPath>
-    </ContentWithTargetPath>
-  </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="IoC/" />
-      <Folder Include="Library/" />
-    </ItemGroup>
 
 </Project>

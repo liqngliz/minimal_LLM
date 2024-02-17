@@ -2,5 +2,5 @@ namespace Run;
 
 public interface IRun 
 {
-    public Task Run();
+    public Task<bool> Run();
 }
