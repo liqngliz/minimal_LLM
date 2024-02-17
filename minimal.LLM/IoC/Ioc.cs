@@ -2,7 +2,6 @@ using Autofac;
 using Newtonsoft.Json;
 using Configuration;
 using Context;
-using Run;
 using Llm;
 using Reasoners;
 
@@ -22,10 +21,7 @@ public class IoCModule: IModule <Config>
         //register
         _builder.Register(c => new LlamaSharpContext(_configuration)).As<IContext<LlmContextInstance>>().SingleInstance();
         _builder.Register(c => new LlmInstance(c.Resolve<IContext<LlmContextInstance>>())).As<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>().SingleInstance();
-        
-       _builder.Register(c => new LlmReasoner(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>())).As<IReasoner<Reasoning, ReasonerTemplate>>();
-        
-        _builder.Register(c => new RunLlmConsole(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>())).As<IRun>();
+        _builder.Register(c => new LlmReasoner(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>())).As<IReasoner<Reasoning, ReasonerTemplate>>();
 
         //build module container
         _container = _builder.Build();

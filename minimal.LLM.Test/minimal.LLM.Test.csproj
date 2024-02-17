@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\program\minimal_local_AI.csproj" />
+    <ProjectReference Include="../minimal.LLM/minimal.LLM.csproj" />
   </ItemGroup>
 
     <ItemGroup>

@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "minimal_local_AI", ".\program\minimal_local_AI.csproj", "{2AAA5EB7-1EF8-4287-B006-5BB10951BB12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "minimal.LLM", "minimal.LLM\minimal.LLM.csproj", "{2AAA5EB7-1EF8-4287-B006-5BB10951BB12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{69BBDD1C-7DD8-4AAF-994B-F46ED1F8264E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.Test", "minimal.LLM.Test\minimal.LLM.Test.csproj", "{69BBDD1C-7DD8-4AAF-994B-F46ED1F8264E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.Console", "minimal.LLM.Console\minimal.LLM.Console.csproj", "{33C676C5-213A-4C9B-BCE6-93EEC28EAB89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{69BBDD1C-7DD8-4AAF-994B-F46ED1F8264E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69BBDD1C-7DD8-4AAF-994B-F46ED1F8264E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69BBDD1C-7DD8-4AAF-994B-F46ED1F8264E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33C676C5-213A-4C9B-BCE6-93EEC28EAB89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33C676C5-213A-4C9B-BCE6-93EEC28EAB89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33C676C5-213A-4C9B-BCE6-93EEC28EAB89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33C676C5-213A-4C9B-BCE6-93EEC28EAB89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

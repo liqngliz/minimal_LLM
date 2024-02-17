@@ -5,7 +5,6 @@ using Context;
 using IoC;
 using Llm;
 using Reasoners;
-using Run;
 
 namespace IoCTest;
 
@@ -30,7 +29,6 @@ public class IoCTest
 
     [Theory]
     [InlineData(typeof(IContext<LlmContextInstance>),typeof(LlamaSharpContext))]
-    [InlineData(typeof(IRun), typeof(RunLlmConsole))]
     [InlineData(typeof(Illm<IAsyncEnumerable<string>, string, LlmContextInstance,bool>), typeof(LlmInstance))]
     [InlineData(typeof(IReasoner<Reasoning, ReasonerTemplate>), typeof(LlmReasoner))]
     public void Should_Resolve_As(Type interfaceType, Type classType)

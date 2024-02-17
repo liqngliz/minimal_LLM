@@ -7,14 +7,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  
   <ItemGroup>
     <PackageReference Include="Autofac" Version="7.1.0" />
-    <PackageReference Include="LLamaSharp" Version="0.9.1" />
-    <PackageReference Include="LLamaSharp.Backend.Cpu" Version="0.9.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
-  <ItemGroup>
+    <ItemGroup>
     <ContentWithTargetPath Include="config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>%(Filename)%(Extension)</TargetPath>
@@ -23,7 +22,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>%(Filename)%(Extension)</TargetPath>
     </ContentWithTargetPath>
-
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../minimal.LLM/minimal.LLM.csproj" />
+  </ItemGroup>
+
 
 </Project>
