@@ -6,17 +6,14 @@ public static class UtilsExt
     {   
         var res = Enumerable.Range(0, str.Length / chunkSize)
             .Select(i => str.Substring(i * chunkSize, chunkSize)).ToList();
-
         var remainder = str.Count() % chunkSize;
-
-        
         string end = "";
 
         if(remainder > 0) 
         {   
             end = str.Substring(Math.Max(0, str.Length - remainder));
             res.Add(end);
-        }
+        }   
         
         return res.ToList();
     }
@@ -27,8 +24,6 @@ public static class UtilsExt
         res.Sort((a,b) => function(a, b, question).toInt());
         return res;
     }
-    
     public static IEnumerable<(T item, int index)> WithIndex<T>(this IEnumerable<T> self)       
        => self.Select((item, index) => (item, index));
-
 }
