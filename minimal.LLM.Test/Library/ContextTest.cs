@@ -36,6 +36,7 @@ public class ContextTest
         Assert.True(infParams.Temperature >= 0.0f);
         Assert.True(infParams.RepeatPenalty >= 0.0f);
         Assert.True(llmParams.Prompt == File.ReadAllText("prompt.txt"));
+        Assert.True(infParams.AntiPrompts != null);
 
         llmParams = _sut2.InferParams();
         modelParams = llmParams.ModelParams;

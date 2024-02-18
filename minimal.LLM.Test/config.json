@@ -5,6 +5,7 @@
     "MaxTokens": 1024,
     "Temperature": 0.8,
     "RepeatPenalty": 1.1,
+    "AntiPrompts": ["User:"],
     "Model": "openhermes-2.5-mistral-7b.Q4_K_M.gguf",
     "Prompt": "prompt.txt"
 }

@@ -6,7 +6,7 @@ using Microsoft.VisualBasic;
 
 namespace Configuration;
 
-public record Config(uint ContextSize, uint Seed , int GpuLayerCount, int MaxTokens, float Temperature, float RepeatPenalty, Location Model ,Location Prompt); 
+public record Config(uint ContextSize, uint Seed , int GpuLayerCount, int MaxTokens, float Temperature, float RepeatPenalty, List<string> AntiPrompts, Location Model ,Location Prompt); 
 
 public record Location(string locationValue)
 {   

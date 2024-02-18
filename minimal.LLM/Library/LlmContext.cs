@@ -35,7 +35,7 @@ public class LlamaSharpContext : IContext<LlmContextInstance>
             { 
                 Temperature = _config.Temperature, 
                 RepeatPenalty = _config.RepeatPenalty, 
-                AntiPrompts = new List<string> { "User:" }, 
+                AntiPrompts = _config.AntiPrompts, 
                 MaxTokens = _config.MaxTokens 
             };
         
