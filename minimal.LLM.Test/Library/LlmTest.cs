@@ -21,10 +21,10 @@ public class LlmTest
     public async void Should_Infer_Prompt()
     {
         var llama = _sut.InferParams();
-        var prompt = @"Transcript of a dialog, where the User interacts with an assistant named AIssistant.
+        var prompt = @"Transcript of a dialog, where the User interacts with an assistant named AIssistant.Prohibere
         User: Hello, AIssistant.
-        AIssistant:Hello. How may I help you today with you questions?
-        User:";
+        AIssistant:Hello. How may I help you today with you questions?Prohibere
+        User:Prohibere";
 
         string res = "";
 

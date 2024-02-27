@@ -26,8 +26,8 @@ public class RunTest
                 AntiPrompts = new List<string> { "User:" }, 
                 MaxTokens = 1024 
             };
-
-        LlmContextInstance llmInstance = new LlmContextInstance(null,  inferenceParams, "someprompt");
+        ModelParams modelParams = new ModelParams("");
+        LlmContextInstance llmInstance = new LlmContextInstance(modelParams,  inferenceParams, "someprompt");
         var mockData = new[] { "mock prompt response" };
         llm.InferParams().Returns(llmInstance);
         llm.Infer("someprompt").Returns(mockData.ToAsyncEnumerable());

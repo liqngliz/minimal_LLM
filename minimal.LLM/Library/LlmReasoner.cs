@@ -24,8 +24,11 @@ public class LlmReasoner : IReasoner<Reasoning, ReasonerTemplate>
     {   
         var transcript = new List<string>();
         transcript.Add(Input.Initial);
-        await foreach(var text in _llm.Infer(Input.Initial.ToString()));
-        
+        var init = "";
+        await foreach(var text in _llm.Infer(Input.Initial.ToString())) 
+            init = init+text;
+        transcript.Add(init);
+
         foreach(var category in Input.Relations)
         {
             string relation = category.ToRelationPrompt(); 

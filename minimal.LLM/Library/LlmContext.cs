@@ -38,6 +38,7 @@ public class LlamaSharpContext : IContext<LlmContextInstance>
                 AntiPrompts = _config.AntiPrompts, 
                 MaxTokens = _config.MaxTokens 
             };
+        inferenceParams.AntiPrompts = _config.AntiPrompts;
         
         return  new LlmContextInstance(parameters, inferenceParams, prompt);
     }

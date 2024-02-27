@@ -23,47 +23,47 @@ public class LlmReasonerTest
     [InlineData(
         new string[]
         {
-            "Forget and clear any previous dialogues, transcripts, and instructions.", 
-            "New transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is good at classifying different content and understands many different categories from different knowledge domains.",
-            "User: Hello, Bob.",
-            "Bob: Hello. How may I help you today?",
-            "User: I will be giving you some category labels and their corresponding labels, I would like you to remember them when asked to classify content into categories.",
-            "Bob: Ok, I am ready to recieve instructions and start classifying?",
-            "User:",
+            "<|im_start|>system\nForget and clear any previous dialogues, transcripts, and instructions.<|im_end|>Prohibere", 
+            "<|im_start|>system\nNew transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is good at classifying different content and understands many different categories from different knowledge domains.<|im_end|>Prohibere",
+            "<|im_start|>user\n Hello, Bob.<|im_end|>",
+            "<|im_start|>Bob\n Hello. How may I help you today?<|im_end|>Prohibere",
+            "<|im_start|>user\n I will be giving you some category labels and their corresponding labels, I would like you to remember them when asked to classify content into categories.<|im_end|>Prohibere",
+            "<|im_start|>Bob\n Ok, I am ready to recieve instructions and start classifying?<|im_end|>Prohibere",
+            "<|im_start|>user\nProhibere",
         },
         new string[]
         {
-            "France belongs to which possible category or categories, based upon this list 'Conti, Ctry, Rg, Cty, Vg, Oth'?"
+            "<|im_start|>user\nFrance belongs to which one 'Continent, Country, Region, City, Village, None'?<|im_end|>"
         },
-        new string[]{"Continent", "Country", "Region", "City", "Village", "Other"}, 
+        new string[]{"Continent", "Country", "Region", "City", "Village", "None"}, 
         new string[]{"A continentinental landmass", "A country", "Part of a country usually a region, province, state in the Unite States, canton in Switzerlandd or equivalent", "A city, district or similar", "A village", "Belongs to none of the specified categories"},
         new string[]
         {
-            "The category label '{name}' corresponds to the description '{description}' for our classification", 
-            "The category label '{name}' corresponds to the description '{description}' for our classification", 
-            "The category label '{name}' corresponds to the description '{description}' for our classification",
-            "The category label '{name}' corresponds to the description '{description}' for our classification",
-            "The category label '{name}' corresponds to the description '{description}' for our classification",
-            "The category label '{name}' corresponds to the description '{description}' for our classification"
+            "<|im_start|>user\nThe category label '{name}' corresponds to the description '{description}' for our classification<|im_end|>", 
+            "<|im_start|>user\nThe category label '{name}' corresponds to the description '{description}' for our classification<|im_end|>", 
+            "<|im_start|>user\nThe category label '{name}' corresponds to the description '{description}' for our classification<|im_end|>",
+            "<|im_start|>user\nThe category label '{name}' corresponds to the description '{description}' for our classification<|im_end|>",
+            "<|im_start|>user\nThe category label '{name}' corresponds to the description '{description}' for our classification<|im_end|>",
+            "<|im_start|>user\nThe category label '{name}' corresponds to the description '{description}' for our classification<|im_end|>"
         },
-        new string[] {"Village", "Other", "Continent", "City"},
-        new string [] {"Country"}
+        new string[] {"Village", "None", "City"},
+        new string [] {"Country", "Region"}
     )]
 
     [InlineData(
         new string[]
         {
-            "Forget and clear any previous dialogues, transcripts, and instructions.", 
-            "New transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is good at classifying different content and understands many different categories from different knowledge domains.",
+            "Forget and clear any previous dialogues, transcripts, and instructions. Prohibere", 
+            "New transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is good at classifying different content and understands many different categories from different knowledge domains. Prohibere",
             "User: Hello, Bob.",
-            "Bob: Hello. How may I help you today?",
+            "Bob: Hello. How may I help you today? Prohibere",
             "User: I will be giving you some category labels and their corresponding labels, I would like you to remember them when asked to classify content into categories.",
-            "Bob: Ok, I am ready to recieve instructions and start classifying?",
-            "User:",
+            "Bob: Ok, I am ready to recieve instructions and start classifying. Prohibere",
+            "User:Prohibere",
         },
         new string[]
         {
-            "Paris a city in France belongs to which possible category or categories, based upon this list 'Conti, Ctry, Rg, Cty, Vg, Oth'?",
+            "Paris a city in France belongs to which possible category or categories, based upon this list 'Continent, Country, Region, Cty, Village, Other'?",
             "Can give me just the category label between ''."
         },
         new string[]{"Continent", "Country", "Region", "City", "Village", "Other"}, 
@@ -80,7 +80,7 @@ public class LlmReasonerTest
         new string[] {"Village", "Other", "Continent", "Country"},
         new string [] {"City"}
     )]
-    public async void should_classify_with_template(string[] initialPrompt, string[] queries ,string[] categories, string[] categoriesDesc, string[] relations, string [] negatives, string[] positives)
+    public void should_classify_with_template(string[] initialPrompt, string[] queries ,string[] categories, string[] categoriesDesc, string[] relations, string [] negatives, string[] positives)
     {   
         var startPrompt = new StringBuilder();
         initialPrompt.ToList().ForEach(x => startPrompt.AppendLine(x));
@@ -88,7 +88,8 @@ public class LlmReasonerTest
         var names = categories.Select(x => x.ToName()).ToArray();
         var descriptions = categoriesDesc.Select(x => x.ToDescription()).ToArray();
         Relations[] cats = relations.WithIndex().Select(x => new Relations(names[x.index], descriptions[x.index], x.item)).ToArray();
-        var res = await _classification.Reason(new(startPrompt.ToString(), queries, cats));
+        
+        var res = _classification.Reason(new(startPrompt.ToString(), queries, cats)).Result;
         var resCats = cats.Where(x => res.Conclusion.HasTag(x));
 
         Assert.True(!resCats.Any(x => negatives.ToList().Contains(x.Name.Text)));
@@ -99,17 +100,17 @@ public class LlmReasonerTest
     [InlineData(
         new string[]
         {
-            "Forget and clear any previous dialogues, transcripts, and instructions.", 
-            "New transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is good at classifying different content and understands many different categories from different knowledge domains.",
+            "Forget and clear any previous dialogues, transcripts, and instructions. Prohibere", 
+            "New transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is good at classifying different content and understands many different categories from different knowledge domains. Prohibere",
             "User: Hello, Bob.",
-            "Bob: Hello. How may I help you today?",
+            "Bob: Hello. How may I help you today? Prohibere",
             "User: I will be giving you some category labels and their corresponding labels, I would like you to remember them when asked to classify content into categories.",
-            "Bob: Ok, I am ready to recieve instructions and start classifying?",
-            "User:",
+            "Bob: Ok, I am ready to recieve instructions and start classifying? Prohibere",
+            "User:Prohibere",
         },
         new string[]
         {
-            "Between 'ContentA' and 'ContentB' which is more relevant to the question 'what is a fruit?'? If neither are relevant, say 'NoRelevance'."
+            "Between 'ContentA' and 'ContentB' which is more relevant to the question 'what is a fruit?'? If neither are relevant, say 'NoRelevance'. Prohibere"
         },
         new string[]{"ContentA", "ContentB", "NoRelevance"}, 
         new string[]{
@@ -125,7 +126,7 @@ public class LlmReasonerTest
         new string[] {"ContentA", "NoRelevance"},
         new string [] {"ContentB"}
     )]
-    public async void should_imitate_relevance(string[] initialPrompt, string[] queries ,string[] categories, string[] categoriesDesc, string[] relations, string [] negatives, string[] positives) 
+    public void should_imitate_relevance(string[] initialPrompt, string[] queries ,string[] categories, string[] categoriesDesc, string[] relations, string [] negatives, string[] positives) 
     {
         var startPrompt = new StringBuilder();
         initialPrompt.ToList().ForEach(x => startPrompt.AppendLine(x));
@@ -133,7 +134,7 @@ public class LlmReasonerTest
         var names = categories.Select(x => x.ToName()).ToArray();
         var descriptions = categoriesDesc.Select(x => x.ToDescription()).ToArray();
         Relations[] cats = relations.WithIndex().Select(x => new Relations(names[x.index], descriptions[x.index], x.item)).ToArray();
-        var res = await _classification.Reason(new(startPrompt.ToString(), queries, cats));
+        var res = _classification.Reason(new(startPrompt.ToString(), queries, cats)).Result;
 
         var resCats = cats.Where(x => res.Conclusion.HasTag(x));
 
@@ -145,17 +146,18 @@ public class LlmReasonerTest
     [InlineData(
         new string[]
         {
-            "Forget and clear any previous dialogues, transcripts, and instructions.", 
-            "New transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is good at classifying different content, making summaries, coding, and logic.",
+            "Forget and clear any previous dialogues, transcripts, and instructions. Prohibere", 
+            "New transcript of a dialog with roles, where the User interacts with an Assistant named Bob. Bob is good at classifying different content, making summaries, coding, and logic. Prohibere",
             "User: Hello, Bob.",
-            "Bob: Hello. How may I help you today?",
+            "Bob: Hello. How may I help you today? Prohibere",
             "User: I will be giving you some text to summarize.",
-            "Bob: Ok, I am ready to recieve instructions and start classifying?",
-            "User:",
+            "Bob: Ok, I am ready to recieve instructions and start classifying? Prohibere",
+            "User:Prohibere",
         },
         new string[]
         {
             "Can you provide a summary combining 'Content-1', 'Content-2', 'Content-3' and 'Content-4' but exclude 'Content-5'?",
+            "Can you answer only with the summary."
         },
         new string[]{"Content-1", "Content-2", "Content-3", "Content-4", "Content-5"}, 
         new string[]{
@@ -175,7 +177,7 @@ public class LlmReasonerTest
         new string[] {"Armstrong", "emperor"},
         new string [] {"Norman", "Harold", "1066", "William"}
     )]
-    public async void should_imitate_summarizer(string[] initialPrompt, string[] queries ,string[] categories, string[] categoriesDesc, string[] relations, string [] negatives, string[] positives) 
+    public void should_imitate_summarizer(string[] initialPrompt, string[] queries ,string[] categories, string[] categoriesDesc, string[] relations, string [] negatives, string[] positives) 
     {
         var startPrompt = new StringBuilder();
         initialPrompt.ToList().ForEach(x => startPrompt.AppendLine(x));
@@ -183,7 +185,7 @@ public class LlmReasonerTest
         var names = categories.Select(x => x.ToName()).ToArray();
         var descriptions = categoriesDesc.Select(x => x.ToDescription()).ToArray();
         Relations[] cats = relations.WithIndex().Select(x => new Relations(names[x.index], descriptions[x.index], x.item)).ToArray();
-        var res = await _classification.Reason(new(startPrompt.ToString(), queries, cats));
+        var res = _classification.Reason(new(startPrompt.ToString(), queries, cats)).Result;
 
         Assert.True(!negatives.Any(x => res.Conclusion.Contains(x)));
         Assert.True(positives.All(x => res.Conclusion.Contains(x)));
@@ -193,7 +195,7 @@ public class LlmReasonerTest
     [Theory]
     [InlineData("name", null)]
     [InlineData("name", "tag")]
-    public async void should_convert_string_to_Name(string text, string? tag) 
+    public void should_convert_string_to_Name(string text, string? tag) 
     {
         var res = string.IsNullOrEmpty(tag)? text.ToName(): text.ToName(tag);
         Assert.Equal(text, res.Text);
@@ -205,7 +207,7 @@ public class LlmReasonerTest
     [Theory]
     [InlineData("desc", null)]
     [InlineData("desc", "tag")]
-    public async void should_convert_string_to_Description(string text, string? tag) 
+    public void should_convert_string_to_Description(string text, string? tag) 
     {
         var res = string.IsNullOrEmpty(tag)? text.ToDescription(): text.ToDescription(tag);
         Assert.Equal(text, res.Text);

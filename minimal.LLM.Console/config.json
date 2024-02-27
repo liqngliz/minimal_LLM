@@ -2,7 +2,7 @@
     "ContextSize": 2048,
     "Seed": 1337,
     "GpuLayerCount": 1,
-    "MaxTokens": 1024,
+    "MaxTokens": 15,
     "Temperature": 0.8,
     "RepeatPenalty": 1.1,
     "AntiPrompts": ["User:"],
