@@ -1,0 +1,12 @@
+{
+    "ContextSize": 2048,
+    "Seed": 1337,
+    "GpuLayerCount": 1,
+    "MaxTokens": 15,
+    "Temperature": 0.8,
+    "RepeatPenalty": 1.1,
+    "AntiPrompts": ["User:"],
+    "Model": "nous-hermes-phi-2-q4km.gguf",
+    "Prompt": "prompt.txt"
+}
+  

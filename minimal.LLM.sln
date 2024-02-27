@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.Console", "mini
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.Console.Test", "minimal.LLM.Console.Test\minimal.LLM.Console.Test.csproj", "{00D20497-7D7A-4EE8-89F0-A857C4283841}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.SemanticKernel", "minimal.LLM.SemanticKernel\minimal.LLM.SemanticKernel.csproj", "{62C0D827-A300-4A1E-80B4-DEC1458DC3D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.SemanticKernel.Test", "minimal.LLM.SemanticKernelTest\minimal.LLM.SemanticKernel.Test.csproj", "{12DD87C4-8826-4447-830D-252DFCA8421F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{00D20497-7D7A-4EE8-89F0-A857C4283841}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00D20497-7D7A-4EE8-89F0-A857C4283841}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00D20497-7D7A-4EE8-89F0-A857C4283841}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62C0D827-A300-4A1E-80B4-DEC1458DC3D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62C0D827-A300-4A1E-80B4-DEC1458DC3D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62C0D827-A300-4A1E-80B4-DEC1458DC3D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62C0D827-A300-4A1E-80B4-DEC1458DC3D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12DD87C4-8826-4447-830D-252DFCA8421F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12DD87C4-8826-4447-830D-252DFCA8421F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12DD87C4-8826-4447-830D-252DFCA8421F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12DD87C4-8826-4447-830D-252DFCA8421F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
