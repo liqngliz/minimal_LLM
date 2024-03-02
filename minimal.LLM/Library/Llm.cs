@@ -1,17 +1,18 @@
 using Context;
 using LLama;
+using LLama.Abstractions;
 using Llm;
 
-public class LlmInteractiveInstance : Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>
+public class LlmInstance : Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>
 { 
     
     readonly IContext<LlmContextInstance> _settings;
     readonly LlmContextInstance _llamaInstance;
     private LLamaWeights model;
     private LLamaContext context;
-    private InteractiveExecutor interactiveExecutor;
+    private ILLamaExecutor interactiveExecutor;
 
-    public LlmInteractiveInstance (IContext<LlmContextInstance> settings)
+    public LlmInstance (IContext<LlmContextInstance> settings)
     { 
         _settings = settings;
         _llamaInstance = _settings.Init().Result;
@@ -43,4 +44,3 @@ public class LlmInteractiveInstance : Illm<IAsyncEnumerable<string>, string, Llm
 
     public bool IsDisposed() => interactiveExecutor == null;
 }
-

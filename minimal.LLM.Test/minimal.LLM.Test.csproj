@@ -39,7 +39,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="IoC/" />
     <Folder Include="Library/" />
     <Folder Include="Utils/" />
   </ItemGroup>

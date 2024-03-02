@@ -29,7 +29,7 @@ public class IoCTest
 
     [Theory]
     [InlineData(typeof(IContext<LlmContextInstance>),typeof(LlamaSharpContext))]
-    [InlineData(typeof(Illm<IAsyncEnumerable<string>, string, LlmContextInstance,bool>), typeof(LlmInteractiveInstance))]
+    [InlineData(typeof(Illm<IAsyncEnumerable<string>, string, LlmContextInstance,bool>), typeof(LlmInstance))]
     [InlineData(typeof(IReasoner<Reasoning, ReasonerTemplate>), typeof(LlmReasoner))]
     public void Should_Resolve_As(Type interfaceType, Type classType)
     {
