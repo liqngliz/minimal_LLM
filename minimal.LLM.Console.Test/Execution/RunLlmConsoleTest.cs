@@ -27,11 +27,11 @@ public class RunTest
                 MaxTokens = 1024 
             };
         ModelParams modelParams = new ModelParams("");
-        LlmContextInstance llmInstance = new LlmContextInstance(modelParams,  inferenceParams, "someprompt");
+        LlmContextInstance llmInstance = new LlmContextInstance(modelParams,  inferenceParams);
         var mockData = new[] { "mock prompt response" };
         llm.InferParams().Returns(llmInstance);
-        llm.Infer("someprompt").Returns(mockData.ToAsyncEnumerable());
+        llm.Infer(Arg.Any<string>()).Returns(mockData.ToAsyncEnumerable());
         await consoleRunner.Run();
-        llm.Received().Infer("someprompt");
+        llm.Received().Infer(Arg.Any<string>());
     }
 }

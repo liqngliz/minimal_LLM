@@ -5,7 +5,7 @@ using LLama.Native;
 
 namespace Context;
 
-public record LlmContextInstance(ModelParams ModelParams, InferenceParams InferenceParams, string Prompt);
+public record LlmContextInstance(ModelParams ModelParams, InferenceParams InferenceParams);
 
 public class LlamaSharpContext : IContext<LlmContextInstance>
 {   
@@ -20,10 +20,6 @@ public class LlamaSharpContext : IContext<LlmContextInstance>
 
         string modelPath = _config.Model; 
         
-        
-        string prompt = File.ReadAllText(_config.Prompt);
-
-    
         var parameters = new ModelParams(modelPath)
         {   
             ContextSize = _config.ContextSize,
@@ -40,6 +36,6 @@ public class LlamaSharpContext : IContext<LlmContextInstance>
             };
         inferenceParams.AntiPrompts = _config.AntiPrompts;
         
-        return  new LlmContextInstance(parameters, inferenceParams, prompt);
+        return  new LlmContextInstance(parameters, inferenceParams);
     }
 }
