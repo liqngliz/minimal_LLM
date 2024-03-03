@@ -6,6 +6,7 @@ using Llm;
 using Reasoners;
 using LLama.Abstractions;
 using Factory;
+using LLama;
 
 namespace IoC;
 public class IoCModule: IModule <Config>
@@ -27,8 +28,10 @@ public class IoCModule: IModule <Config>
             var context = c.Resolve<IContext<LlmContextInstance>>().Init().Result;
             return new LlmFactory(context);
         }).As<IFactory<ILLamaExecutor>>();
-        
-        _builder.Register(c => new LlmInstance(c.Resolve<IContext<LlmContextInstance>>())).As<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>().SingleInstance();
+
+        _builder.Register(c => 
+            new LlmInstance(c.Resolve<IContext<LlmContextInstance>>(), c.Resolve<IFactory<ILLamaExecutor>>(), typeof(InteractiveExecutor)))
+        .As<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>().SingleInstance();
 
         _builder.Register(c => new LlmReasoner(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>())).As<IReasoner<Reasoning, ReasonerTemplate>>();
 

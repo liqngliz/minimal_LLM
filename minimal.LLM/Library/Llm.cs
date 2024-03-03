@@ -1,4 +1,5 @@
 using Context;
+using Factory;
 using LLama;
 using LLama.Abstractions;
 using Llm;
@@ -8,39 +9,43 @@ public class LlmInstance : Illm<IAsyncEnumerable<string>, string, LlmContextInst
     
     readonly IContext<LlmContextInstance> _settings;
     readonly LlmContextInstance _llamaInstance;
+    readonly IFactory<ILLamaExecutor> _factory;
+    readonly Type _executorType; 
     private LLamaWeights model;
     private LLamaContext context;
-    private ILLamaExecutor interactiveExecutor;
+    private ILLamaExecutor executor;
 
-    public LlmInstance (IContext<LlmContextInstance> settings)
+    public LlmInstance (IContext<LlmContextInstance> settings, IFactory<ILLamaExecutor> factory, Type executorType)
     { 
         _settings = settings;
+        _factory = factory;
         _llamaInstance = _settings.Init().Result;
-        
+        _executorType = executorType;
+
         model = LLamaWeights.LoadFromFile(_llamaInstance.ModelParams);
         context = model.CreateContext(_llamaInstance.ModelParams);
-        interactiveExecutor = new InteractiveExecutor(context);
+        executor = _factory.Make(_executorType);
     }
 
     public void Dispose()
     {
         model.Dispose();
         context.Dispose();
-        interactiveExecutor = null;
+        executor = null;
     }
 
     public IAsyncEnumerable<string> Infer(string prompt) { 
-        if(interactiveExecutor == null)
+        if(executor == null)
         {
             model = LLamaWeights.LoadFromFile(_llamaInstance.ModelParams);
             context = model.CreateContext(_llamaInstance.ModelParams);
-            interactiveExecutor = new InteractiveExecutor(context);
+            executor = _factory.Make(_executorType);
         }
         
-        return interactiveExecutor.InferAsync(prompt, _llamaInstance.InferenceParams);
+        return executor.InferAsync(prompt, _llamaInstance.InferenceParams);
     }
 
     public LlmContextInstance InferParams() => _llamaInstance;
 
-    public bool IsDisposed() => interactiveExecutor == null;
+    public bool IsDisposed() => executor == null;
 }
