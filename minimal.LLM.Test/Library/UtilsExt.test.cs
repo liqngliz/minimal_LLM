@@ -7,7 +7,7 @@ namespace UtilsExtTest;
 public class UtilsExtTest
 {
     [Fact]
-    public void should_split_to_chunks()
+    public void Should_split_to_chunks()
     {
         string text = "ID8ZSOB2M032";
         var res = text.SplitChunk(2);
@@ -22,14 +22,14 @@ public class UtilsExtTest
         Assert.Equal(res.Count(), 7);
     }
     [Fact]
-    public void should_convert_to_int()
+    public void Should_convert_to_int()
     {
         Assert.Equal(true.toInt(), 1);
         Assert.Equal(false.toInt(), -1);
     }
 
     [Fact]
-    public void should_convert_order_by_bool()
+    public void Should_convert_order_by_bool()
     {
         var text = "ID8ZSOB2M03";
         var res = text.SplitChunk(2);
@@ -44,7 +44,7 @@ public class UtilsExtTest
     }
 
     [Fact]
-    public void should_give_index()
+    public void Should_give_index()
     {   
         var nums = new int[]{5,4,3,2,1,0};
         foreach (var num in nums.WithIndex<int>()) 

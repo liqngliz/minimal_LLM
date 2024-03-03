@@ -80,7 +80,7 @@ public class LlmReasonerTest
         new string[] {"Village", "Other", "Continent", "Country"},
         new string [] {"City"}
     )]
-    public void should_classify_with_template(string[] initialPrompt, string[] queries ,string[] categories, string[] categoriesDesc, string[] relations, string [] negatives, string[] positives)
+    public void Should_classify_with_template(string[] initialPrompt, string[] queries ,string[] categories, string[] categoriesDesc, string[] relations, string [] negatives, string[] positives)
     {   
         var startPrompt = new StringBuilder();
         initialPrompt.ToList().ForEach(x => startPrompt.AppendLine(x));
@@ -126,7 +126,7 @@ public class LlmReasonerTest
         new string[] {"ContentA", "NoRelevance"},
         new string [] {"ContentB"}
     )]
-    public void should_imitate_relevance(string[] initialPrompt, string[] queries ,string[] categories, string[] categoriesDesc, string[] relations, string [] negatives, string[] positives) 
+    public void Should_imitate_relevance(string[] initialPrompt, string[] queries ,string[] categories, string[] categoriesDesc, string[] relations, string [] negatives, string[] positives) 
     {
         var startPrompt = new StringBuilder();
         initialPrompt.ToList().ForEach(x => startPrompt.AppendLine(x));
@@ -177,7 +177,7 @@ public class LlmReasonerTest
         new string[] {"Armstrong", "emperor"},
         new string [] {"Norman", "Harold", "1066", "William"}
     )]
-    public void should_imitate_summarizer(string[] initialPrompt, string[] queries ,string[] categories, string[] categoriesDesc, string[] relations, string [] negatives, string[] positives) 
+    public void Should_imitate_summarizer(string[] initialPrompt, string[] queries ,string[] categories, string[] categoriesDesc, string[] relations, string [] negatives, string[] positives) 
     {
         var startPrompt = new StringBuilder();
         initialPrompt.ToList().ForEach(x => startPrompt.AppendLine(x));
@@ -195,7 +195,7 @@ public class LlmReasonerTest
     [Theory]
     [InlineData("name", null)]
     [InlineData("name", "tag")]
-    public void should_convert_string_to_Name(string text, string? tag) 
+    public void Should_convert_string_to_Name(string text, string? tag) 
     {
         var res = string.IsNullOrEmpty(tag)? text.ToName(): text.ToName(tag);
         Assert.Equal(text, res.Text);
@@ -207,7 +207,7 @@ public class LlmReasonerTest
     [Theory]
     [InlineData("desc", null)]
     [InlineData("desc", "tag")]
-    public void should_convert_string_to_Description(string text, string? tag) 
+    public void Should_convert_string_to_Description(string text, string? tag) 
     {
         var res = string.IsNullOrEmpty(tag)? text.ToDescription(): text.ToDescription(tag);
         Assert.Equal(text, res.Text);
@@ -220,7 +220,7 @@ public class LlmReasonerTest
     [Theory]
     [InlineData("name","{name}", "desc", "{description}" , "{name} is label for {description}", "name is label for desc")]
     [InlineData("name","{asdf}", "desc", "{fgh}" , "{asdf} is label for {fgh}", "name is label for desc")]
-    public void should_convert_to_category_relation_prompt(string name, string nameTag, string description, string descTag, string relation, string prompt)
+    public void Should_convert_to_category_relation_prompt(string name, string nameTag, string description, string descTag, string relation, string prompt)
     {   
 
         Relations category = new(name.ToName(nameTag), description.ToDescription(descTag), relation);
@@ -235,7 +235,7 @@ public class LlmReasonerTest
         new string[]{"A continent", "A country", "A region, province, state, canton or equivalent", "A city, district or similar", "A village", "Belongs to none of the specified categories"},
         new string[]{"Rg"}
     )]
-    public void should_extract_label(string text, string[] labels, string[] description, string[] expected)
+    public void Should_extract_label(string text, string[] labels, string[] description, string[] expected)
     {
         var categories = new List<Relations>();
         foreach(var label in labels.WithIndex())

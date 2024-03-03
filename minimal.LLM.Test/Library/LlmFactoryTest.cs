@@ -23,7 +23,7 @@ public class LlmFactoryTest
     [InlineData(typeof(InteractiveExecutor))]
     [InlineData(typeof(InstructExecutor))]
     [InlineData(typeof(StatelessExecutor))]
-    public async void should_resolve_executor(Type expected)
+    public async void Should_resolve_executor(Type expected)
     {   var context = await _IoC.Container().Resolve<IContext<LlmContextInstance>>().Init();
         _sut = new LlmFactory(context);
 
