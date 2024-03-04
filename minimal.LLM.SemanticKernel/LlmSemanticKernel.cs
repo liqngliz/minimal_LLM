@@ -2,17 +2,22 @@
 using System.Text;
 using Autofac;
 using Configuration;
-using Context;
 using Factory;
 using IoC;
 using LLama;
 using LLama.Abstractions;
-using LLama.Common;
 using LLamaSharp.SemanticKernel.ChatCompletion;
 using LLamaSharp.SemanticKernel.TextCompletion;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
+using ChatHistory = Microsoft.SemanticKernel.ChatCompletion.ChatHistory;
 using Microsoft.SemanticKernel.TextGeneration;
+using minimal.LLM.SemanticKernel.Plugins;
+using Microsoft.SemanticKernel.Planning;
+using Microsoft.SemanticKernel.Planning.Handlebars;
+using Reasoners;
+
 
 namespace minimal.LLM.SemanticKernel;
 
@@ -55,5 +60,66 @@ public class LlmSemanticKernel
         var summarize = kernel.CreateFunctionFromPrompt(prompt);
         var res = (await kernel.InvokeAsync(summarize, new() {["input"] = input })).GetValue<string>();
         return res;
+    }
+
+    public async Task<string> copilot(string input)
+    {
+        var ex = (StatelessExecutor)_factory.Make(typeof(StatelessExecutor));
+        _builder = Kernel.CreateBuilder();
+        _builder.Services.AddKeyedSingleton<IChatCompletionService>("local-llama", new LLamaSharpChatCompletion(ex));
+        Kernel kernel = _builder.Build();
+
+        ChatHistory history = new();
+        var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
+        
+        var transcript = new StringBuilder();
+        transcript.AppendLine($"User: {input}");
+        history.AddUserMessage(transcript.ToString());
+        
+        var res = chatCompletionService.GetStreamingChatMessageContentsAsync(history, kernel: kernel);
+
+        string fullMessage = "";
+        var first = true;
+        await foreach (var content in res)
+        {
+            if (content.Role.HasValue && first)
+            {
+                first = false;
+            }
+            fullMessage += content.Content;
+        }
+        return fullMessage;
+    }
+
+    public async Task<string> sqrt(int input)
+    {
+        _builder = Kernel.CreateBuilder();
+        _builder.Plugins.AddFromType<MathPlugin>();
+        Kernel kernel = _builder.Build();
+        double answer = await kernel.InvokeAsync<double>("MathPlugin", "Sqrt", new(){{"number1", input}});
+        return $"The sqaure root of {input} is {answer}";
+    }
+
+    
+    public async Task<string> plannedCopilot(string input)
+    {
+        var ex = (StatelessExecutor)_factory.Make(typeof(StatelessExecutor));
+        _builder = Kernel.CreateBuilder();
+        _builder.Services.AddKeyedSingleton<IChatCompletionService>("local-llama", new LLamaSharpChatCompletion(ex));
+        _builder.Services.AddKeyedSingleton<IReasoner<Reasoning, ReasonerTemplate>>("local-llama-reasoner");
+        _builder.Plugins.AddFromType<MathPlugin>();
+        Kernel kernel = _builder.Build();
+        var mathPlugins = kernel.Plugins;
+        var mathPluginsMeta = kernel.Plugins.GetFunctionsMetadata();
+
+        /*
+        #pragma warning disable SKEXP0060
+        var options = new HandlebarsPlannerOptions() { AllowLoops = true };
+        var planner = new HandlebarsPlanner(options);
+        var plan = await planner.CreatePlanAsync(kernel, input);
+        var planText = plan.ToString();
+        */
+
+        return null;
     }
 }
