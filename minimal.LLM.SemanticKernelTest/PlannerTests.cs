@@ -41,7 +41,7 @@ public class PlannerTests
         Kernel kernel = _builder.Build();
         KernelPlan kPlan = new(kernel, "what is the square root of 9");
         sut = new Planner.Planner();
-        var plans = await sut.CreatePlanAsync(kPlan);
+        var plans = await sut.Plan(kPlan);
         Assert.Equal("Sqrt", plans[0].Item1.Name);
         List<string> results = new List<string>();
         foreach(var plan in plans)

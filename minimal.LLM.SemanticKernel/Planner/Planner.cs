@@ -1,18 +1,14 @@
-using System.Reflection;
 using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
-using LLama.Batched;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using Reasoners;
 
 namespace Planner;
 
-public record KernelPlan(Kernel Kernel, string Prompt);
 public class Planner : IPlanner<Task<List<Tuple<KernelFunction, KernelArguments>>>, KernelPlan>
 {   
-    public async Task<List<Tuple<KernelFunction, KernelArguments>>> CreatePlanAsync(KernelPlan Inputs)
+    public async Task<List<Tuple<KernelFunction, KernelArguments>>> Plan(KernelPlan Inputs)
     {   
         IReasoner<Reasoning, ReasonerTemplate> reasoner = Inputs.Kernel.Services.GetRequiredKeyedService<IReasoner<Reasoning, ReasonerTemplate>>("local-llama-reasoner");
         var functionsMeta = Inputs.Kernel.Plugins.GetFunctionsMetadata();
