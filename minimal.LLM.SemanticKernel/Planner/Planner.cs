@@ -65,7 +65,7 @@ public class Planner : IPlanner<Task<List<Tuple<KernelFunction, KernelArguments>
                 var name = x.Name.ToName();
                 var description = x.Description.ToDescription();
                 var type = x.ParameterType.Name;
-                var relation = "<|im_start|>user\nThe label '{name}' corresponds to the parameter description '{description}' of type {type}.<|im_end|>".Replace("{type}", type);
+                var relation = "<|im_start|>user\n'{name}' corresponds to the parameter '{description}' of type {type} used in the function that {function}.<|im_end|>".Replace("{type}", type).Replace("{function}", function.Description);
                 categoriesParam.Add(new Relations(name, description, relation));
             });
 
@@ -100,13 +100,16 @@ public class Planner : IPlanner<Task<List<Tuple<KernelFunction, KernelArguments>
             foreach(var functionParam in functionParams)
             {
                 var queryText = $"<|im_start|>user\nFor {Inputs.Prompt} what should be the value of {functionParam.Name}?<|im_end|>";
-                var queryText2 = $"<|im_start|>user\nFormat your previous answer and put the value in single quotes ''.<|im_end|>";
+                var queryText2 = $"<|im_start|>user\nThat is correct! Give me the value and format it in single quotes.<|im_end|>";
                 questions.Add(queryText);
                 queriesParameters.Add(queryText);
                 queriesParameters.Add(queryText2);
             }
             IReasoner<Reasoning, ReasonerTemplate> reasonerParam = Inputs.Kernel.Services.GetRequiredKeyedService<IReasoner<Reasoning, ReasonerTemplate>>("local-llama-reasoner");
-            var resParam = reasonerParam.Reason(new(parameterAssistant.ToString(), queriesParameters.ToArray(), categoriesParam.ToArray())).Result;
+            
+            var promptBuilderParam = new StringBuilder();
+            parameterAssistant.ToList().ForEach(x => promptBuilderParam.AppendLine(x));
+            var resParam = reasonerParam.Reason(new(promptBuilderParam.ToString(), queriesParameters.ToArray(), categoriesParam.ToArray())).Result;
             var transcript = resParam.Transcript;
 
             KernelArguments args = new KernelArguments();
