@@ -8,4 +8,4 @@ public interface IPlanner<T, C>
 }
 
 public record KernelPlan(Kernel Kernel, string Prompt);
-public record KernelFunctionPlan(KernelFunction KernelFunction, string Prompt);
+public record KernelFunctionPlan(KernelFunction KernelFunction, Kernel Kernel ,string Prompt);
