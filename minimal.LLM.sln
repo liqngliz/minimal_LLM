@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.Console.Test", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.SemanticKernel", "minimal.LLM.SemanticKernel\minimal.LLM.SemanticKernel.csproj", "{62C0D827-A300-4A1E-80B4-DEC1458DC3D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.SemanticKernel.Test", "minimal.LLM.SemanticKernelTest\minimal.LLM.SemanticKernel.Test.csproj", "{12DD87C4-8826-4447-830D-252DFCA8421F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.SemanticKernel.Test", "minimal.LLM.SemanticKernel.Test\minimal.LLM.SemanticKernel.Test.csproj", "{12DD87C4-8826-4447-830D-252DFCA8421F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
