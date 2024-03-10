@@ -13,6 +13,7 @@ using minimal.LLM.SemanticKernel.Plugins;
 using Planner;
 using Reasoners;
 using Planner.Functions;
+using Planner.Parameters;
 
 namespace minimal.LLM.SemanticKernel.Test;
 
@@ -41,7 +42,7 @@ public class PlannerTests
         _builder.Plugins.AddFromType<MathPlugin>();
         Kernel kernel = _builder.Build();
         KernelPlan kPlan = new(kernel, "what is the square root of 9");
-        sut = new Planner.Planner(new SubPlannerFunctions());
+        sut = new Planner.Planner(new SubPlannerFunctions(), new SubPlannerParameters());
         var plans = await sut.Plan(kPlan);
         Assert.Equal("Sqrt", plans[0].Item1.Name);
         List<string> results = new List<string>();

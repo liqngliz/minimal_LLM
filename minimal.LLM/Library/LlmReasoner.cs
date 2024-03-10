@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using Autofac.Util;
 using Context;
 using Llm;
 using UtilsExt;
@@ -18,6 +19,11 @@ public class LlmReasoner : IReasoner<Reasoning, ReasonerTemplate>
     public LlmReasoner(Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> llm)
     {
         _llm = llm;
+    }
+
+    public void Dispose()
+    {
+        _llm.Dispose();
     }
 
     public async Task<Reasoning> Reason(ReasonerTemplate Input)

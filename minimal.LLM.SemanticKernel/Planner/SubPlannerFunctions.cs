@@ -59,7 +59,8 @@ public class SubPlannerFunctions : IPlanner<Task<List<KernelFunction>>, KernelPl
             var function = Inputs.Kernel.Plugins.GetFunction(functionMetadata.PluginName, functionMetadata.Name);
             functions.Add(function);
         }
-
+        
+        reasoner.Dispose();
         return functions;
     }
 }

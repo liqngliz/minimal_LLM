@@ -60,7 +60,7 @@ public class SubPlannerParameters : IPlanner<Task<KernelArguments>, KernelFuncti
         }
 
         IReasoner<Reasoning, ReasonerTemplate> reasonerParam = Inputs.Kernel.Services.GetRequiredKeyedService<IReasoner<Reasoning, ReasonerTemplate>>("local-llama-reasoner");
-            
+
         var promptBuilderParam = new StringBuilder();
         parameterAssistant.ToList().ForEach(x => promptBuilderParam.AppendLine(x));
         var resParam = reasonerParam.Reason(new(promptBuilderParam.ToString(), queriesParameters.ToArray(), categoriesParam.ToArray())).Result;
@@ -80,7 +80,7 @@ public class SubPlannerParameters : IPlanner<Task<KernelArguments>, KernelFuncti
             var paramVal = Convert.ChangeType(value, paramType);
             args.Add(paramName, paramVal);
         }
-
+        reasonerParam.Dispose();
         return args;
     }
 }
