@@ -7,6 +7,7 @@ using LLama.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using minimal.LLM.SemanticKernel.Plugins;
+using NSubstitute.Core;
 using Planner;
 using Reasoners;
 
@@ -44,5 +45,8 @@ public class SubPlannerParametersTest
         var value = parameters.First().Value.ToString();
         Assert.Equal("9", value);
         Assert.Equal("number1", parameters.First().Key);
+
+        var res = await kernel.InvokeAsync(function, parameters);
+        Assert.Equal("3", res.ToString());
     }
 }
