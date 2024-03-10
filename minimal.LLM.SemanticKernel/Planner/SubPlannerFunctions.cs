@@ -1,11 +1,9 @@
 using System.Text;
-using System.Text.RegularExpressions;
-using Azure.AI.OpenAI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using Reasoners;
 
-namespace Planner;
+namespace Planner.Functions;
 
 public class SubPlannerFunctions : IPlanner<Task<List<KernelFunction>>, KernelPlan>
 {   

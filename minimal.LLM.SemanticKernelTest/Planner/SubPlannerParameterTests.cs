@@ -13,14 +13,14 @@ using Reasoners;
 
 namespace minimal.LLM.SemanticKernel.Test;
 
-public class SubPlannerFunctionsTest
+public class SubPlannerParametersTest
 {
-    private Planner.IPlanner<Task<List<KernelFunction>>, KernelPlan> sut;
+    private Planner.IPlanner<Task<KernelArguments>, KernelFunctionPlan> sut;
     private IKernelBuilder _builder;
     readonly IModule<Config> _module;
     readonly IFactory<ILLamaExecutor> _factory;
 
-    public SubPlannerFunctionsTest()
+    public SubPlannerParametersTest()
     {   
         var configurationJSON = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "config.json" );
         _module = new IoCModule(configurationJSON);
@@ -29,18 +29,20 @@ public class SubPlannerFunctionsTest
     }
 
     [Fact]
-    public async void Should_return_functions_for_prompt()
+    public async void Should_return_values_for_function_from_prompt()
     {   
         _builder = Kernel.CreateBuilder();
         var reasoner = _module.Container().Resolve<IReasoner<Reasoning, ReasonerTemplate>>();
         _builder.Services.AddKeyedSingleton<IReasoner<Reasoning, ReasonerTemplate>>("local-llama-reasoner", reasoner);
         _builder.Plugins.AddFromType<MathPlugin>();
         Kernel kernel = _builder.Build();
-        KernelPlan kPlan = new(kernel, "what is the square root of 9");
-        sut = new Planner.Functions.SubPlannerFunctions();
-        var plans = await sut.Plan(kPlan);
-        var functionNames = plans.Select(x => x.Name);
-        Assert.Equal("Sqrt", plans[0].Name);
-        Assert.True(functionNames.Count() == 1);
+        KernelFunction function = kernel.Plugins.GetFunction("MathPlugin", "Sqrt");
+        KernelFunctionPlan kPlan = new(function ,kernel, "what is the square root of 9");
+
+        sut = new Planner.Parameters.SubPlannerParameters();
+        var parameters = await sut.Plan(kPlan);
+        var value = parameters.First().Value.ToString();
+        Assert.Equal("9", value);
+        Assert.Equal("number1", parameters.First().Key);
     }
 }

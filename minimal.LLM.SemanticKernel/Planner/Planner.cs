@@ -18,7 +18,7 @@ public class Planner : IPlanner<Task<List<Tuple<KernelFunction, KernelArguments>
     {   
         IReasoner<Reasoning, ReasonerTemplate> reasoner = Inputs.Kernel.Services.GetRequiredKeyedService<IReasoner<Reasoning, ReasonerTemplate>>("local-llama-reasoner");
        
-        var functionsPlan = await _subPlannerFucntions.Plan(Inputs);
+        var functionsPlan = _subPlannerFucntions.Plan(Inputs).Result;
 
         var pluginFuncTuples= new List<Tuple<KernelFunction, KernelArguments>>();
 

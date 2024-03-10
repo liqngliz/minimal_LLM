@@ -12,6 +12,7 @@ using Microsoft.SemanticKernel.ChatCompletion;
 using minimal.LLM.SemanticKernel.Plugins;
 using Planner;
 using Reasoners;
+using Planner.Functions;
 
 namespace minimal.LLM.SemanticKernel.Test;
 
