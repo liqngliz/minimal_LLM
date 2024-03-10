@@ -108,6 +108,8 @@ public class LlmSemanticKernel
         _builder.Services.AddKeyedSingleton<IChatCompletionService>("local-llama", new LLamaSharpChatCompletion(ex));
         var reasoner = _module.Container().Resolve<IReasoner<Reasoning, ReasonerTemplate>>();
         _builder.Services.AddKeyedSingleton<IReasoner<Reasoning, ReasonerTemplate>>("local-llama-reasoner", reasoner);
+        var reasonerFactory = _module.Container().Resolve<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>();
+        _builder.Services.AddKeyedSingleton<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>("local-llama-reasoner-factory", reasonerFactory);
         _builder.Plugins.AddFromType<MathPlugin>();
         Kernel kernel = _builder.Build();
         var mathPlugins = kernel.Plugins;

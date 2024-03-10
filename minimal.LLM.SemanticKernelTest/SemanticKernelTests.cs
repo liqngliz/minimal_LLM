@@ -1,5 +1,6 @@
 namespace minimal.LLM.SemanticKernel.Test;
 
+[Collection("Sequential")]
 public class SemanticKernelTest
 {
 string text = 

@@ -29,7 +29,6 @@ public class LlmFactoryTest
 
         var actual = _sut.Make(expected);
         Assert.IsType(expected, actual);
-
     }
 
 }

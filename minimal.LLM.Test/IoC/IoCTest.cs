@@ -2,7 +2,9 @@ using System.Reflection;
 using Autofac;
 using Configuration;
 using Context;
+using Factory;
 using IoC;
+using LLama.Abstractions;
 using Llm;
 using Reasoners;
 
@@ -31,6 +33,8 @@ public class IoCTest
     [InlineData(typeof(IContext<LlmContextInstance>),typeof(LlamaSharpContext))]
     [InlineData(typeof(Illm<IAsyncEnumerable<string>, string, LlmContextInstance,bool>), typeof(LlmInstance))]
     [InlineData(typeof(IReasoner<Reasoning, ReasonerTemplate>), typeof(LlmReasoner))]
+    [InlineData(typeof(IFactory<ILLamaExecutor>), typeof(LlmFactory))]
+    [InlineData(typeof(IFactory<IReasoner<Reasoning, ReasonerTemplate>>), typeof(ReasonerFactory))]
     public void Should_Resolve_As(Type interfaceType, Type classType)
     {
         var res = _sut.Container().Resolve(interfaceType);

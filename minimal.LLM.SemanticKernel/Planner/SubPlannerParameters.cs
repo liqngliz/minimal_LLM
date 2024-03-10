@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.RegularExpressions;
+using Factory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using Reasoners;
@@ -59,7 +60,8 @@ public class SubPlannerParameters : IPlanner<Task<KernelArguments>, KernelFuncti
             queriesParameters.Add(format);
         }
 
-        IReasoner<Reasoning, ReasonerTemplate> reasonerParam = Inputs.Kernel.Services.GetRequiredKeyedService<IReasoner<Reasoning, ReasonerTemplate>>("local-llama-reasoner");
+        IFactory<IReasoner<Reasoning, ReasonerTemplate>> reasonerFactory = Inputs.Kernel.Services.GetRequiredKeyedService<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>("local-llama-reasoner-factory");
+        IReasoner<Reasoning, ReasonerTemplate> reasonerParam = reasonerFactory.Make(typeof(LlmReasoner));
 
         var promptBuilderParam = new StringBuilder();
         parameterAssistant.ToList().ForEach(x => promptBuilderParam.AppendLine(x));

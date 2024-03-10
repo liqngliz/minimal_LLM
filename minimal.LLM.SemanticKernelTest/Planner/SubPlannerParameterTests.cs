@@ -12,8 +12,9 @@ using Planner;
 using Reasoners;
 
 
-namespace minimal.LLM.SemanticKernel.Test;
+namespace PlannerTests;
 
+[Collection("Sequential")]
 public class SubPlannerParametersTest
 {
     private Planner.IPlanner<Task<KernelArguments>, KernelFunctionPlan> sut;
@@ -33,8 +34,8 @@ public class SubPlannerParametersTest
     public async void Should_return_values_for_function_from_prompt()
     {   
         _builder = Kernel.CreateBuilder();
-        var reasoner = _module.Container().Resolve<IReasoner<Reasoning, ReasonerTemplate>>();
-        _builder.Services.AddKeyedSingleton<IReasoner<Reasoning, ReasonerTemplate>>("local-llama-reasoner", reasoner);
+         var reasonerFactory = _module.Container().Resolve<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>();
+        _builder.Services.AddKeyedSingleton<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>("local-llama-reasoner-factory", reasonerFactory);
         _builder.Plugins.AddFromType<MathPlugin>();
         Kernel kernel = _builder.Build();
         KernelFunction function = kernel.Plugins.GetFunction("MathPlugin", "Sqrt");

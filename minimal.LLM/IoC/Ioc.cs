@@ -33,6 +33,11 @@ public class IoCModule: IModule <Config>
             new LlmInstance(c.Resolve<IContext<LlmContextInstance>>(), c.Resolve<IFactory<ILLamaExecutor>>(), typeof(InteractiveExecutor)))
         .As<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>().SingleInstance();
 
+        _builder.Register(c => {
+            var llm = c.Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>();
+            return new ReasonerFactory(llm);
+        }).As<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>();
+
         _builder.Register(c => new LlmReasoner(c.Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>())).As<IReasoner<Reasoning, ReasonerTemplate>>();
 
         //build module container

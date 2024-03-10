@@ -1,4 +1,5 @@
 using System.Text;
+using Factory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using Reasoners;
@@ -22,7 +23,8 @@ public class SubPlannerFunctions : IPlanner<Task<List<KernelFunction>>, KernelPl
 
     public async Task<List<KernelFunction>> Plan(KernelPlan Inputs)
     {   
-        IReasoner<Reasoning, ReasonerTemplate> reasoner = Inputs.Kernel.Services.GetRequiredKeyedService<IReasoner<Reasoning, ReasonerTemplate>>("local-llama-reasoner");
+        IFactory<IReasoner<Reasoning, ReasonerTemplate>> reasonerFactory = Inputs.Kernel.Services.GetRequiredKeyedService<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>("local-llama-reasoner-factory");
+        IReasoner<Reasoning, ReasonerTemplate> reasoner = reasonerFactory.Make(typeof(LlmReasoner));
 
         var functionsMeta = Inputs.Kernel.Plugins.GetFunctionsMetadata();
         List<Relations> categories = new List<Relations>();
