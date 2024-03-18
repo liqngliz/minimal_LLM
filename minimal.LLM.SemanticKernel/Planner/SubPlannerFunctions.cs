@@ -88,4 +88,5 @@ public static class SubPlannerFunctionsExt
     };
 
     public static string ToDefaultFinalQuery(this string input) => "<|im_start|>user\nFor {inputPrompt} which function should be used '{namesLabel}'?<|im_end|>";
+
 }
