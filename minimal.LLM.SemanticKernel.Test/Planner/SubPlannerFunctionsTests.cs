@@ -19,16 +19,12 @@ public class SubPlannerFunctionsTest
     private Planner.IPlanner<Task<List<KernelFunction>>, KernelPlan> sut;
     readonly IKernelBuilder _builder;
     readonly IModule<Config> _module;
-    readonly IFactory<ILLamaExecutor> _factory;
-
     readonly Kernel _kernel;
 
     public SubPlannerFunctionsTest()
     {   
         var configurationJSON = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "config.json" );
         _module = new IoCModule(configurationJSON);
-        var llmContainer = _module.Container();
-        _factory = llmContainer.Resolve<IFactory<ILLamaExecutor>>();
         _builder = Kernel.CreateBuilder();
         var reasonerFactory = _module.Container().Resolve<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>();
         _builder.Services.AddKeyedSingleton<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>("local-llama-reasoner-factory", reasonerFactory);
