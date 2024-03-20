@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Planner.Validators;
 
-public record Validation(bool Valid, KernelParameterMetadata KernelParameter, dynamic Value);
+public record Validation(bool Valid, KernelParameterMetadata KernelParameter, object Value);
 public class SubPlannerValidator : IPlanner<Task<Validation>, KernelParamValidationPlan>
 {
     public async Task<Validation> Plan(KernelParamValidationPlan Inputs)
@@ -13,8 +13,8 @@ public class SubPlannerValidator : IPlanner<Task<Validation>, KernelParamValidat
         var parameterType = Inputs.Parameter.ParameterType;
         try
         {   
-            var derserialized = JsonConvert.DeserializeObject(Inputs.Input, parameterType);
-            return new(true, Inputs.Parameter, derserialized);
+            var output = Convert.ChangeType(Inputs.Input, parameterType);
+            return new(true, Inputs.Parameter, output);
         }
         catch(Exception ex)
         {

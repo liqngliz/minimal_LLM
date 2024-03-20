@@ -21,7 +21,7 @@ public class SubPlannerParametersTest
     [InlineData("MathPlugin", "Add", 2)]
     [InlineData("MathPlugin", "Subtract", 2)]
     [InlineData("MathPlugin", "Multiply", 2)]
-    public async void TestsForAskingUserReplies(string plugin, string function, int expectedReplies)
+    public async void should_get_user_replies(string plugin, string function, int expectedReplies)
     {
         var func = _kernel.Plugins.GetFunction(plugin, function);
         sut = new Planner.Parameters.SubPlannerParameter();

@@ -53,7 +53,7 @@ public class StepPlanner : IPlanner<Task<StepResult>, string>
         if(step == Steps.Validation)
         {
             var validation = await _validationPlanner.Plan(new(inProgress, inputs));
-            if(!validation.Valid) return new(validation.Value, false);
+            if(!validation.Valid) return new(validation.Value.ToString(), false);
 
             ouput.Add(validation.KernelParameter.Name, validation.Value);
             completed.Add(inProgress);
