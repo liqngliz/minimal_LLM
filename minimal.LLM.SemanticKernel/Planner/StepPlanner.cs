@@ -1,10 +1,6 @@
-using System.Text;
-using Factory;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
-using Microsoft.VisualBasic;
 using Planner.Validators;
-using Reasoners;
+
 
 namespace Planner.StepPlanner;
 public record StepResult(string Output, bool Final, FunctionResult FunctionResult = null);
@@ -36,6 +32,12 @@ public class StepPlanner : IPlanner<Task<StepResult>, string>
         if(step == Steps.Function) 
         {
             parameters = await _parameterPlanner.Plan(_kernelFunction);
+            if(parameters.Count() == 0)
+            {
+                FunctionResult result = await _kernel.InvokeAsync(_kernelFunction, new KernelArguments());
+                step = Steps.Function;
+                return new(_success, true, result);
+            }
             step = Steps.Parameters;
         }
 
@@ -66,6 +68,7 @@ public class StepPlanner : IPlanner<Task<StepResult>, string>
             else
             {   
                 FunctionResult result = await _kernel.InvokeAsync(_kernelFunction, ouput);
+                step = Steps.Function;
                 return new(_success, true, result);
             }
         }
