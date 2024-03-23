@@ -4,37 +4,38 @@ using Planner.Validators;
 
 namespace Planner.StepPlanner;
 public record StepResult(string Output, bool Final, FunctionResult FunctionResult = null);
-public class StepPlanner : IPlanner<Task<StepResult>, string>
+public record StepInput(string Input, KernelFunction Function);
+public class StepPlanner : IPlanner<Task<StepResult>, StepInput>
 {
     readonly IPlanner<Task<Dictionary<KernelParameterMetadata,string>>, KernelFunction> _parameterPlanner;
     readonly IPlanner<Task<Validation>, KernelParamValidationPlan> _validationPlanner;
-    readonly KernelFunction _kernelFunction;
     readonly Kernel _kernel;
     readonly string _success;
+    readonly string _failure;
     public StepPlanner(
         IPlanner<Task<Dictionary<KernelParameterMetadata,string>>, KernelFunction> parameterPlanner,
-        IPlanner<Task<Validation>, KernelParamValidationPlan> validationPlanner,
-        KernelFunction kernelFunction, Kernel kernel, string success = null)
+        IPlanner<Task<Validation>, KernelParamValidationPlan> validationPlanner,Kernel kernel, string success = null, string failure = null)
     {
         _parameterPlanner = parameterPlanner;
         _validationPlanner = validationPlanner;
-        _kernelFunction = kernelFunction;
         _kernel = kernel;
         _success = string.IsNullOrEmpty(success)? success.ToDefaultSuccess() : success;
+        _failure = string.IsNullOrEmpty(failure)? failure.ToDefaultFailure() : failure;
     }
     private Steps step = Steps.Function;
     private Dictionary<KernelParameterMetadata, string> parameters;
     private KernelParameterMetadata inProgress;
     private List<KernelParameterMetadata> completed = new List<KernelParameterMetadata>();
-    private KernelArguments ouput = new KernelArguments();
-    public async Task<StepResult> Plan(string inputs)
+    private KernelArguments KernelArgs = new KernelArguments();
+    public async Task<StepResult> Plan(StepInput inputs)
     {   
-        if(step == Steps.Function) 
+        var kernelFunction = inputs.Function;
+        if(step == Steps.Function)
         {
-            parameters = await _parameterPlanner.Plan(_kernelFunction);
+            parameters = await _parameterPlanner.Plan(kernelFunction);
             if(parameters.Count() == 0)
             {
-                FunctionResult result = await _kernel.InvokeAsync(_kernelFunction, new KernelArguments());
+                FunctionResult result = await _kernel.InvokeAsync(kernelFunction, new KernelArguments());
                 step = Steps.Function;
                 return new(_success, true, result);
             }
@@ -52,10 +53,10 @@ public class StepPlanner : IPlanner<Task<StepResult>, string>
 
         if(step == Steps.Validation)
         {
-            var validation = await _validationPlanner.Plan(new(inProgress, inputs));
+            var validation = await _validationPlanner.Plan(new(inProgress, inputs.Input));
             if(!validation.Valid) return new(validation.Value.ToString(), false);
 
-            ouput.Add(validation.KernelParameter.Name, validation.Value);
+            KernelArgs.Add(validation.KernelParameter.Name, validation.Value);
             completed.Add(inProgress);
 
             if(!parameters.Select(x => x.Key).All(x => completed.Contains(x)))
@@ -67,9 +68,20 @@ public class StepPlanner : IPlanner<Task<StepResult>, string>
             }
             else
             {   
-                FunctionResult result = await _kernel.InvokeAsync(_kernelFunction, ouput);
-                step = Steps.Function;
-                return new(_success, true, result);
+                try
+                {
+                    FunctionResult result = await _kernel.InvokeAsync(kernelFunction, KernelArgs);
+                    step = Steps.Function;
+                    return new(_success, true, result);
+                }
+                catch(Exception ex)
+                {   
+                    var failedMsg = _failure
+                        .Replace("{function}", kernelFunction.Name)
+                        .Replace("{inputs}", string.Join(",", KernelArgs.Select(x => x.Value.ToString())))
+                        .Replace("{error}", ex.Message);
+                    return new(ex.Message, true, null);
+                }
             }
         }
 
@@ -85,6 +97,8 @@ public class StepPlanner : IPlanner<Task<StepResult>, string>
 }
 
 public static class StepPlannerExtesions
-{
+{   
     public static string ToDefaultSuccess(this string input) => "<|im_start|>System\nSemantic kernel has successfully invoked a plugin native function<|im_end|>Prohibere";
+    public static string ToDefaultFailure(this string input) => "<|im_start|>System\nSemantic kernel has failed invoked a plugin native function {function} for your {inputs} and resulted in error {error}<|im_end|>Prohibere";
+
 }
