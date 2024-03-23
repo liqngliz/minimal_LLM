@@ -15,7 +15,7 @@ public sealed class FilePlugin
         return fileNames;
     }
 
-    [KernelFunction, Description("Reads the content of a text file")]
+    [KernelFunction, Description("Gets the content of a file")]
     public static string GetContent(
         [Description("Full name of file with extensions to be read")] string fileName) 
     {   
