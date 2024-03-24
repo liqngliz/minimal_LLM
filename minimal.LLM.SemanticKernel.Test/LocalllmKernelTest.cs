@@ -3,17 +3,14 @@ using Autofac;
 using Configuration;
 using Factory;
 using IoC;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using minimal.LLM.SemanticKernel;
-using minimal.LLM.SemanticKernel.Plugins;
 using Planner;
 using Planner.Functions;
 using Planner.Parameters;
 using Planner.StepPlanner;
 using Planner.Validators;
 using Reasoners;
-using Xunit;
 
 namespace LlmKernelTest;
 
@@ -26,7 +23,7 @@ public class LlmKernelTest
         var configurationJSON = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "config.json" );
         _module = new IoCModule(configurationJSON);
         var reasonerFactory = _module.Container().Resolve<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>();
-        List<object> plugins = new List<object>(){ new FilePlugin() };
+        List<object> plugins = new List<object>(){};
         _sut = new LocalllmKernel(plugins, reasonerFactory);
     }
 
@@ -38,8 +35,8 @@ public class LlmKernelTest
     [InlineData(typeof(IPlanner<Task<List<KernelFunction>>, KernelPlan>),typeof(SubPlannerFunctions))]
     public void should_resolve_types(Type serviceType, Type expected)
     {
-        Kernel kernel = _sut.LlmConductor();
-        var services = kernel.Services;
+        LlmConductor conductor = _sut.LlmConductor();
+        var services = conductor.OrchestrationKernel.Services;
         var types = services.GetService(serviceType);
         Assert.IsType(expected, types);
     }

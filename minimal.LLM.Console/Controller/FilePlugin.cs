@@ -1,6 +1,6 @@
 ﻿namespace minimal.LLM.Console;
 
-public interface IKernel
+public class FilePlugin
 {
 
 }

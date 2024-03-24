@@ -28,7 +28,7 @@ public class LocalllmKernel :ILlmConductor
         _stepsPlanner = new StepPlanner(_parameterPlanner, _validationPlanner, stepPlannerTemplate);
     }
 
-    public Kernel LlmConductor()
+    public LlmConductor LlmConductor()
     {   
         var builder = Kernel.CreateBuilder();
         
@@ -44,7 +44,7 @@ public class LocalllmKernel :ILlmConductor
         builder.Services.AddSingleton(_validationPlanner);
 
         Kernel kernel = builder.Build();
-        return kernel;
+        return new(kernel);
         
     }
 }

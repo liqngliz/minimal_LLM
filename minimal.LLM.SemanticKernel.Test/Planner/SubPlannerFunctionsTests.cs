@@ -3,10 +3,9 @@ using Autofac;
 using Configuration;
 using Factory;
 using IoC;
-using LLama.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
-using minimal.LLM.SemanticKernel.Plugins;
+using minimal.LLM.Plugins;
 using Planner;
 using Reasoners;
 

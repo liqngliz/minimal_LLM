@@ -6,5 +6,7 @@ namespace minimal.LLM.SemanticKernel;
 
 public interface ILlmConductor
 {
-    public Kernel LlmConductor();
+    public LlmConductor LlmConductor();
 }
+
+public record LlmConductor(Kernel OrchestrationKernel);

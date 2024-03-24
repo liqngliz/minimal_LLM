@@ -1,4 +1,4 @@
-using minimal.LLM.SemanticKernel.Plugins;
+using minimal.LLM.Plugins;
 
 namespace PluginTests;
 public class FilePluginTest

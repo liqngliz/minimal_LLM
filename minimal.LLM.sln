@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.SemanticKernel"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.SemanticKernel.Test", "minimal.LLM.SemanticKernel.Test\minimal.LLM.SemanticKernel.Test.csproj", "{12DD87C4-8826-4447-830D-252DFCA8421F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.Plugins", "minimal.LLM.Plugins\minimal.LLM.Plugins.csproj", "{7D383805-2479-4002-B53B-B5E366CF0BA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.Plugins.Test", "minimal.LLM.Plugins.Test\minimal.LLM.Plugins.Test.csproj", "{FA0B1605-AE88-4DED-96F2-D08ACA6C2272}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{12DD87C4-8826-4447-830D-252DFCA8421F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12DD87C4-8826-4447-830D-252DFCA8421F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12DD87C4-8826-4447-830D-252DFCA8421F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D383805-2479-4002-B53B-B5E366CF0BA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D383805-2479-4002-B53B-B5E366CF0BA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D383805-2479-4002-B53B-B5E366CF0BA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D383805-2479-4002-B53B-B5E366CF0BA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA0B1605-AE88-4DED-96F2-D08ACA6C2272}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA0B1605-AE88-4DED-96F2-D08ACA6C2272}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA0B1605-AE88-4DED-96F2-D08ACA6C2272}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA0B1605-AE88-4DED-96F2-D08ACA6C2272}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

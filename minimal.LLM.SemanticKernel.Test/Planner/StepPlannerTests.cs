@@ -1,5 +1,5 @@
 using Microsoft.SemanticKernel;
-using minimal.LLM.SemanticKernel.Plugins;
+using minimal.LLM.Plugins;
 using Planner;
 using Planner.Parameters;
 using Planner.StepPlanner;
