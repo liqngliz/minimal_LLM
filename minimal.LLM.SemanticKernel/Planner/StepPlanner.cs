@@ -4,23 +4,23 @@ using Planner.Validators;
 
 namespace Planner.StepPlanner;
 public record StepResult(string Output, bool Final, FunctionResult FunctionResult = null);
-public record StepInput(string Input, KernelFunction Function);
+public record StepInput(string Input, KernelFunction Function, Kernel Kernel);
 public class StepPlanner : IPlanner<Task<StepResult>, StepInput>
 {
     readonly IPlanner<Task<Dictionary<KernelParameterMetadata,string>>, KernelFunction> _parameterPlanner;
     readonly IPlanner<Task<Validation>, KernelParamValidationPlan> _validationPlanner;
-    readonly Kernel _kernel;
+
     readonly string _success;
     readonly string _failure;
     public StepPlanner(
         IPlanner<Task<Dictionary<KernelParameterMetadata,string>>, KernelFunction> parameterPlanner,
-        IPlanner<Task<Validation>, KernelParamValidationPlan> validationPlanner,Kernel kernel, string success = null, string failure = null)
-    {
+        IPlanner<Task<Validation>, KernelParamValidationPlan> validationPlanner,  StepPlannerTemplate stepPlannerTemplate = null)
+    {   
+        if(stepPlannerTemplate == null) stepPlannerTemplate = new();
         _parameterPlanner = parameterPlanner;
         _validationPlanner = validationPlanner;
-        _kernel = kernel;
-        _success = string.IsNullOrEmpty(success)? success.ToDefaultSuccess() : success;
-        _failure = string.IsNullOrEmpty(failure)? failure.ToDefaultFailure() : failure;
+        _success = string.IsNullOrEmpty(stepPlannerTemplate.success)? stepPlannerTemplate.success.ToDefaultSuccess() : stepPlannerTemplate.success;
+        _failure = string.IsNullOrEmpty(stepPlannerTemplate.failure)? stepPlannerTemplate.failure.ToDefaultFailure() : stepPlannerTemplate.failure;
     }
     private Steps step = Steps.Function;
     private Dictionary<KernelParameterMetadata, string> parameters;
@@ -30,12 +30,13 @@ public class StepPlanner : IPlanner<Task<StepResult>, StepInput>
     public async Task<StepResult> Plan(StepInput inputs)
     {   
         var kernelFunction = inputs.Function;
+        var kernel = inputs.Kernel;
         if(step == Steps.Function)
         {
             parameters = await _parameterPlanner.Plan(kernelFunction);
             if(parameters.Count() == 0)
             {
-                FunctionResult result = await _kernel.InvokeAsync(kernelFunction, new KernelArguments());
+                FunctionResult result = await kernel.InvokeAsync(kernelFunction, new KernelArguments());
                 step = Steps.Function;
                 return new(_success, true, result);
             }
@@ -70,7 +71,7 @@ public class StepPlanner : IPlanner<Task<StepResult>, StepInput>
             {   
                 try
                 {
-                    FunctionResult result = await _kernel.InvokeAsync(kernelFunction, KernelArgs);
+                    FunctionResult result = await kernel.InvokeAsync(kernelFunction, KernelArgs);
                     step = Steps.Function;
                     return new(_success, true, result);
                 }
@@ -95,6 +96,8 @@ public class StepPlanner : IPlanner<Task<StepResult>, StepInput>
         Validation
     }
 }
+
+public record StepPlannerTemplate(string success = null, string failure = null);
 
 public static class StepPlannerExtesions
 {   

@@ -27,8 +27,9 @@ public class SubPlannerFunctionsTest
         _module = new IoCModule(configurationJSON);
         _builder = Kernel.CreateBuilder();
         var reasonerFactory = _module.Container().Resolve<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>();
-        _builder.Services.AddKeyedSingleton<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>("local-llama-reasoner-factory", reasonerFactory);
-        _builder.Plugins.AddFromType<MathPlugin>();
+        _builder.Services.AddSingleton(reasonerFactory);
+        //_builder.Plugins.AddFromType<MathPlugin>();
+        _builder.Plugins.AddFromObject(new MathPlugin());
         _kernel = _builder.Build();
     }
 

@@ -14,19 +14,17 @@ using Microsoft.SemanticKernel.ChatCompletion;
 using ChatHistory = Microsoft.SemanticKernel.ChatCompletion.ChatHistory;
 using Microsoft.SemanticKernel.TextGeneration;
 using minimal.LLM.SemanticKernel.Plugins;
-using Microsoft.SemanticKernel.Planning;
-using Microsoft.SemanticKernel.Planning.Handlebars;
 using Reasoners;
 
 
 namespace minimal.LLM.SemanticKernel;
 
-public class LlmSemanticKernel
+public class LlmSemanticKernelSamples
 {
     private IKernelBuilder _builder;
     readonly IModule<Config> _module;
     readonly IFactory<ILLamaExecutor> _factory;
-    public LlmSemanticKernel()
+    public LlmSemanticKernelSamples()
     {
         
         var configurationJSON = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "config.json" );

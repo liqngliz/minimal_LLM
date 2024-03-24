@@ -7,7 +7,14 @@ namespace Planner.Validators;
 
 public record Validation(bool Valid, KernelParameterMetadata KernelParameter, object Value);
 public class SubPlannerValidator : IPlanner<Task<Validation>, KernelParamValidationPlan>
-{
+{   
+    readonly string _errorMessage;
+
+    public SubPlannerValidator(string errorMessage = null)
+    {
+        _errorMessage = string.IsNullOrEmpty(errorMessage) ? errorMessage.ToDefaultErrorReply() : errorMessage;
+    }
+
     public async Task<Validation> Plan(KernelParamValidationPlan Inputs)
     {   
         var parameterType = Inputs.Parameter.ParameterType;
@@ -18,12 +25,13 @@ public class SubPlannerValidator : IPlanner<Task<Validation>, KernelParamValidat
         }
         catch(Exception ex)
         {
-            return new Validation(false, Inputs.Parameter, ex.ToErrorReply(parameterType));
+            return new Validation(false, Inputs.Parameter, _errorMessage.Replace("{exception}", ex.Message).Replace("{type}", parameterType.FullName));
         }
     }
 }
 
 public static class SubPlannerValidatorExtension
 {
-    public static string ToErrorReply(this Exception exception, Type type) => $"<|im_start|>Bob\nYour input could not be parsed as {type} and resulted in the following error '{exception.Message}'<|im_end|>Prohibere";
+    public static string ToDefaultErrorReply(this string exception) => "<|im_start|>Bob\nYour input could not be parsed as {type} and resulted in the following error '{exception}'<|im_end|>Prohibere";
+    
 }

@@ -1,7 +1,9 @@
-namespace minimal.LLM.SemanticKernel.Test;
+using minimal.LLM.SemanticKernel;
+
+namespace KernelExamples;
 
 [Collection("Sequential")]
-public class SemanticKernelTest
+public class SemanticKernelExamplesTest
 {
 string text = 
 @"1st Law of Thermodynamics - Energy cannot be created or destroyed.
@@ -11,7 +13,7 @@ string text =
     [Fact]
     public async void Should_Summarize()
     {
-        var sut = new LlmSemanticKernel();
+        var sut = new LlmSemanticKernelSamples();
         var res = await sut.summarize(text);
         Assert.False(string.IsNullOrEmpty(res));
     }
@@ -19,7 +21,7 @@ string text =
     [Fact]
     public async void Should_Sqrt()
     {
-        var sut = new LlmSemanticKernel();
+        var sut = new LlmSemanticKernelSamples();
         var res = await sut.sqrt(9);
         Assert.Equal("The sqaure root of 9 is 3", res);
     }
@@ -27,16 +29,8 @@ string text =
     [Fact]
     public async void Should_Complete()
     {
-        var sut = new LlmSemanticKernel();
+        var sut = new LlmSemanticKernelSamples();
         var res = await sut.copilot("What is the square root of 24649?");
         Assert.NotNull(res);
-    }
-
-    [Fact]
-    public async void Should_Plan()
-    {
-        var sut = new LlmSemanticKernel();
-        var res = await sut.plannedCopilot("What is the square root of 24649?");
-        //Assert.NotNull(res);
     }
 }

@@ -42,10 +42,10 @@ Read our guide on how to prepare a business plan and download our business plan 
     public async void should_invoke_semantic_function(string plugin, string function, string[] sequence, string expected)
     {
         var func = _kernel.Plugins.GetFunction(plugin, function);
-        sut = new StepPlanner(new SubPlannerParameter(), new SubPlannerValidator(), _kernel);
+        sut = new StepPlanner(new SubPlannerParameter(), new SubPlannerValidator());
         for(var i = 0; i < sequence.Length; i++)
         {
-            var res = await sut.Plan(new (sequence[i], func));
+            var res = await sut.Plan(new (sequence[i], func, _kernel));
             
             if(i == sequence.Length - 1) 
                 Assert.Equivalent(expected, res.FunctionResult.ToString());

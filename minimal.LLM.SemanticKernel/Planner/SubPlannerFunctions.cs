@@ -13,17 +13,18 @@ public class SubPlannerFunctions : IPlanner<Task<List<KernelFunction>>, KernelPl
     readonly List<string> _queries;    
     private string finalQuery;
 
-    public SubPlannerFunctions(string relation = null, string[] initial = null, List<string> queries = null, string final = null)
-    {
-        _relation = relation == null? relation.ToDefaultRelation() : relation;
-        _initial = initial == null? initial.ToDefaultInitial(): initial;
-        _queries = queries == null? queries.ToDefaultQueries(): queries;
-        finalQuery = final == null? final.ToDefaultFinalQuery(): final;
+    public SubPlannerFunctions(SubPlannerFunctionsTemplate Template = null)
+    {   
+        if(Template == null) Template =new SubPlannerFunctionsTemplate();
+        _relation = Template.Relation == null? Template.Relation.ToDefaultRelation() : Template.Relation;
+        _initial = Template.Initial == null? Template.Initial.ToDefaultInitial() : Template.Initial;
+        _queries = Template.Queries == null? Template.Queries.ToDefaultQueries() : Template.Queries;
+        finalQuery = Template.Final == null? Template.Final.ToDefaultFinalQuery() : Template.Final;
     }
 
     public async Task<List<KernelFunction>> Plan(KernelPlan Inputs)
     {   
-        IFactory<IReasoner<Reasoning, ReasonerTemplate>> reasonerFactory = Inputs.Kernel.Services.GetRequiredKeyedService<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>("local-llama-reasoner-factory");
+        IFactory<IReasoner<Reasoning, ReasonerTemplate>> reasonerFactory = Inputs.Kernel.Services.GetService<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>();
         IReasoner<Reasoning, ReasonerTemplate> reasoner = reasonerFactory.Make(typeof(LlmReasoner));
 
         var functionsMeta = Inputs.Kernel.Plugins.GetFunctionsMetadata();
@@ -66,6 +67,8 @@ public class SubPlannerFunctions : IPlanner<Task<List<KernelFunction>>, KernelPl
         return functions;
     }
 }
+
+public record SubPlannerFunctionsTemplate(string Relation = null, string[] Initial = null, List<string> Queries = null, string Final = null);
 
 public static class SubPlannerFunctionsExt 
 {

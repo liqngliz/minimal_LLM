@@ -9,3 +9,5 @@ public interface IPlanner<T, C>
 
 public record KernelPlan(Kernel Kernel, string Prompt);
 public record KernelParamValidationPlan(KernelParameterMetadata Parameter, string Input);
+
+

@@ -50,25 +50,13 @@ public class RunLlmConsole : IRun
 public static class Constants
 {
     public static string InitPrompt =
-@"Transcript of a dialog, where the User interacts with an Python Assistant named Pypy.
+@"Transcript of a dialog, where the User interacts with an Assistant named Bob.
 
-User: Hello, Pypy.
-Pypy: Hello. How may I help you today with Python questions?
-User: Pypy, can you make a function that checks if a number is prime?
-Pypy: Sure! Here is the code
-def is_prime(num):
-     if num <= 1:
-          return False
-     elif num > 1:
-          for i in range(2, num):
-               if (num % i) == 0:
-                    # if factor is found, set flag to True
-                    return False
-                    # break out of loop
-                    break
-          else:
-               return True
+User: Hello, Bob.
+Bob: Hello. How may I help you today with any questions?
+User: Bob, can you make a tell me what is the tallest mountain in the world?
+Bob: Sure! That would be Mount Everest.
 User: Thanks!
-Pypy: Do you have another question?
+Bob: Do you have another question?
 User:";
 }

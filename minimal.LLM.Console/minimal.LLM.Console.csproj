@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Execution/" />
+    <Folder Include="View/" />
   </ItemGroup>
 
 </Project>
