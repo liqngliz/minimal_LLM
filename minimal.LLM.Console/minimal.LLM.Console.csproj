@@ -25,8 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../minimal.LLM/minimal.LLM.csproj" />
+    <ProjectReference Include="..\minimal.LLM\minimal.LLM.csproj" />
     <ProjectReference Include="..\minimal.LLM.SemanticKernel\minimal.LLM.SemanticKernel.csproj" />
+    <ProjectReference Include="..\minimal.LLM.Plugins\minimal.LLM.Plugins.csproj" />
   </ItemGroup>
 
   <ItemGroup>
