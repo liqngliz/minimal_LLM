@@ -39,7 +39,7 @@ public class SubPlannerFunctions : IPlanner<Task<List<KernelFunction>>, KernelPl
         });
 
         var none = "None".ToName();
-        var noneDesc = "No helper or function matches".ToDescription();
+        var noneDesc = "Nothing is relevant or matches".ToDescription();
         categories.Add(new Relations(none, noneDesc, relation));
         names.Add(none.Text);
         

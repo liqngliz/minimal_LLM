@@ -6,6 +6,8 @@ using Llm;
 using Run;
 using Factory;
 using Reasoners;
+using minimal.LLM.Plugins;
+using minimal.LLM.SemanticKernel;
 ;
 
 //Llm Lib container
@@ -16,7 +18,8 @@ var llm = llmContainer.Resolve<Illm<IAsyncEnumerable<string>, string, LlmContext
 
 //Orchestration container
 var reasonerFactory = llmContainer.Resolve<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>();
-List<object> plugins = new List<object>(){};
+List<object> plugins = new List<object>(){ new FilePlugin() };
+ILlmConductorKernel llmConductor = new LlmConductorKernel(plugins, reasonerFactory);
 
 
 //Console Application container

@@ -4,9 +4,8 @@ using Microsoft.SemanticKernel;
 
 namespace minimal.LLM.SemanticKernel;
 
-public interface ILlmConductor
+public interface ILlmConductorKernel
 {
-    public LlmConductor LlmConductor();
+    public Kernel MakeConductorKernel();
 }
 
-public record LlmConductor(Kernel OrchestrationKernel);

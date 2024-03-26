@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace minimal.LLM.SemanticKernel;
 
-public class LocalllmKernel :ILlmConductor
+public class LlmConductorKernel :ILlmConductorKernel
 {  
     readonly List<object> _plugins;
     readonly IPlanner<Task<Dictionary<KernelParameterMetadata,string>>, KernelFunction> _parameterPlanner;
@@ -18,7 +18,7 @@ public class LocalllmKernel :ILlmConductor
     readonly IPlanner<Task<StepResult>, StepInput> _stepsPlanner;
     readonly IPlanner<Task<List<KernelFunction>>, KernelPlan> _functionsPlanner;
     IFactory<IReasoner<Reasoning, ReasonerTemplate>> _llmFactory;
-    public LocalllmKernel(List<object>  plugins, IFactory<IReasoner<Reasoning, ReasonerTemplate>> llmFactory, SubPlannerFunctionsTemplate functionsTemplate = null, StepPlannerTemplate stepPlannerTemplate = null, string parameterPlannerQuery = null, string validationErrorMessage = null)
+    public LlmConductorKernel(List<object>  plugins, IFactory<IReasoner<Reasoning, ReasonerTemplate>> llmFactory, SubPlannerFunctionsTemplate functionsTemplate = null, StepPlannerTemplate stepPlannerTemplate = null, string parameterPlannerQuery = null, string validationErrorMessage = null)
     { 
         _plugins = plugins;
         _llmFactory = llmFactory;
@@ -28,7 +28,7 @@ public class LocalllmKernel :ILlmConductor
         _stepsPlanner = new StepPlanner(_parameterPlanner, _validationPlanner, stepPlannerTemplate);
     }
 
-    public LlmConductor LlmConductor()
+    public Kernel MakeConductorKernel()
     {   
         var builder = Kernel.CreateBuilder();
         
@@ -44,7 +44,7 @@ public class LocalllmKernel :ILlmConductor
         builder.Services.AddSingleton(_validationPlanner);
 
         Kernel kernel = builder.Build();
-        return new(kernel);
+        return kernel;
         
     }
 }

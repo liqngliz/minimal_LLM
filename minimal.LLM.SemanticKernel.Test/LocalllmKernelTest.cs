@@ -16,7 +16,7 @@ namespace LlmKernelTest;
 
 public class LlmKernelTest
 {
-    readonly ILlmConductor _sut;
+    readonly ILlmConductorKernel _sut;
     readonly IModule<Config> _module;
     public LlmKernelTest()
     {
@@ -24,7 +24,7 @@ public class LlmKernelTest
         _module = new IoCModule(configurationJSON);
         var reasonerFactory = _module.Container().Resolve<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>();
         List<object> plugins = new List<object>(){};
-        _sut = new LocalllmKernel(plugins, reasonerFactory);
+        _sut = new LlmConductorKernel(plugins, reasonerFactory);
     }
 
     [Theory]
@@ -35,8 +35,8 @@ public class LlmKernelTest
     [InlineData(typeof(IPlanner<Task<List<KernelFunction>>, KernelPlan>),typeof(SubPlannerFunctions))]
     public void should_resolve_types(Type serviceType, Type expected)
     {
-        LlmConductor conductor = _sut.LlmConductor();
-        var services = conductor.OrchestrationKernel.Services;
+        Kernel conductor = _sut.MakeConductorKernel();
+        var services = conductor.Services;
         var types = services.GetService(serviceType);
         Assert.IsType(expected, types);
     }

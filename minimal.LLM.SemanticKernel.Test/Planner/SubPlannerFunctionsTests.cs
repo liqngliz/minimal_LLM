@@ -38,6 +38,7 @@ public class SubPlannerFunctionsTest
     [InlineData("I want to subtract two numbers", "Subtract")]
     [InlineData("What is -56 added to 78", "Add")]
     [InlineData("57 multiplied by 978", "Multiply")]
+    [InlineData("I want to eat a kebab", "None")]
     public async void Should_return_functions_for_prompt(string prompt, string function)
     {   
         KernelPlan kPlan = new(_kernel, prompt);
