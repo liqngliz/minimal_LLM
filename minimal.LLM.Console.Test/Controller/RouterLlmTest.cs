@@ -31,23 +31,9 @@ public class RouterLlmTest
     [Fact]
     public void should_route_to_files()
     {
-        Kernel kernel = _conductorKernel.MakeConductorKernel();
+        ConductorKernel kernel = _conductorKernel.MakeConductorKernel();
 
-        var validation = 
-            (IPlanner<Task<Validation>, KernelParamValidationPlan>)kernel.Services.GetService(typeof(IPlanner<Task<Validation>, KernelParamValidationPlan>));
-        
-        var parameter = 
-            (IPlanner<Task<Dictionary<KernelParameterMetadata,string>>, KernelFunction>)kernel.Services.GetService(typeof(IPlanner<Task<Dictionary<KernelParameterMetadata,string>>, KernelFunction>));
-
-        var steps = 
-            (IPlanner<Task<StepResult>, StepInput>)kernel.Services.GetService(typeof(IPlanner<Task<StepResult>, StepInput>));
-        
-        var function = 
-            (IPlanner<Task<List<KernelFunction>>, KernelPlan>)kernel.Services.GetService(typeof(IPlanner<Task<List<KernelFunction>>, KernelPlan>));
-
-        var factory = (IFactory<IReasoner<Reasoning, ReasonerTemplate>>)kernel.Services.GetService(typeof(IFactory<IReasoner<Reasoning, ReasonerTemplate>>));
-
-        IRouter<RoutedResult>  router = new Router.Router(parameter, validation, steps, function, factory);
+        IRouter<RoutedResult>  router = new Router.Router(kernel);
 
         var res = router.route(InputMode.Interactive, "can I get some chicken wings?");
 

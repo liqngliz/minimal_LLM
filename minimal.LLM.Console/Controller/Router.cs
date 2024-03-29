@@ -14,32 +14,15 @@ namespace minimal.LLM.Console.Router;
 
 public class Router : IRouter<RoutedResult>
 {   
-    readonly IPlanner<Task<Dictionary<KernelParameterMetadata,string>>, KernelFunction> _parameterPlanner;
-    readonly IPlanner<Task<Validation>, KernelParamValidationPlan> _validationPlanner;
-    readonly IPlanner<Task<StepResult>, StepInput> _stepsPlanner;
-    readonly IPlanner<Task<List<KernelFunction>>, KernelPlan> _functionsPlanner;
-    readonly IFactory<IReasoner<Reasoning, ReasonerTemplate>> _reasonerFactory;
-
-    public Router(
-        IPlanner<Task<Dictionary<KernelParameterMetadata,string>>, KernelFunction> parameterPlanner,
-        IPlanner<Task<Validation>, KernelParamValidationPlan> validationPlanner,
-        IPlanner<Task<StepResult>, StepInput> stepsPlanner,
-        IPlanner<Task<List<KernelFunction>>, KernelPlan> functionsPlanner,
-        IFactory<IReasoner<Reasoning, ReasonerTemplate>> reasonerFactory
-        )
+    readonly ConductorKernel _conductorKernel;
+    public Router(ConductorKernel conductorKernel)
     {
-        _parameterPlanner = parameterPlanner;
-        _functionsPlanner = functionsPlanner;
-        _validationPlanner = validationPlanner;
-        _stepsPlanner = stepsPlanner;
-        _functionsPlanner = functionsPlanner;
-        _reasonerFactory = reasonerFactory;
+        _conductorKernel = conductorKernel;
     }
-
     
     public RoutedResult route(InputMode inputMode, string input)
     {   
-        var reasoner = _reasonerFactory.Make(typeof(LlmReasoner));
+        var reasoner = _conductorKernel.Factory.Make(typeof(LlmReasoner));
         string[] initial = new string[]{}.ToDefaultInitial();
         var promptBuilder = new StringBuilder();
         initial.ToList().ForEach(x => promptBuilder.AppendLine(x));
