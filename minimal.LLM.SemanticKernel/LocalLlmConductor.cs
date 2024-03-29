@@ -28,7 +28,7 @@ public class LlmConductorKernel :ILlmConductorKernel
         _stepsPlanner = new StepPlanner(_parameterPlanner, _validationPlanner, stepPlannerTemplate);
     }
 
-    public Kernel MakeConductorKernel()
+    public ConductorKernel MakeConductorKernel()
     {   
         var builder = Kernel.CreateBuilder();
         

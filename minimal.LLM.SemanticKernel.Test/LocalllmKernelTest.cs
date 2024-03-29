@@ -3,6 +3,7 @@ using Autofac;
 using Configuration;
 using Factory;
 using IoC;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using minimal.LLM.SemanticKernel;
 using Planner;
@@ -39,5 +40,28 @@ public class LlmKernelTest
         var services = conductor.Services;
         var types = services.GetService(serviceType);
         Assert.IsType(expected, types);
+    }
+
+    [Fact]
+    public void should_throw_with_incompatible_kernel_services()
+    {
+        IKernelBuilder badConductorBuilder = Kernel.CreateBuilder();
+        Kernel conductor = _sut.MakeConductorKernel();
+        var validation = (IPlanner<Task<Validation>, KernelParamValidationPlan>?)conductor.Services.GetService(typeof(IPlanner<Task<Validation>, KernelParamValidationPlan>)); 
+        var parameter = (IPlanner<Task<Dictionary<KernelParameterMetadata,string>>, KernelFunction>?)conductor.Services.GetService(typeof(IPlanner<Task<Dictionary<KernelParameterMetadata,string>>, KernelFunction>));
+        _ = badConductorBuilder.Services.AddSingleton(validation);
+        _ = badConductorBuilder.Services.AddSingleton(parameter);
+        Kernel badConductor = badConductorBuilder.Build();
+        Exception exception = null;
+        try
+        {
+            ConductorKernel conductorKernel = badConductor;
+        } 
+        catch(Exception ex)
+        {
+            exception = ex;
+        }
+
+        Assert.True(exception != null);
     }
 }
