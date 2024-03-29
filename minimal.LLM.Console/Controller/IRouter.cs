@@ -2,10 +2,10 @@
 
 public interface IRouter <T>
 {
-    public T route(InputMode inputMode, string input);
+    public T route(Mode mode, string input);
 }
 
-public enum InputMode
+public enum Mode
 {
     Interactive,
     Planned

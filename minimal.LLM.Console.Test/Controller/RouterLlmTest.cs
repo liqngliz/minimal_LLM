@@ -35,14 +35,17 @@ public class RouterLlmTest
 
         IRouter<RoutedResult>  router = new Router.Router(kernel);
 
-        var res = router.route(InputMode.Interactive, "can I get some chicken wings?");
+        var res = router.route(Mode.Interactive, "can I get some chicken wings?");
 
-        Assert.DoesNotContain("yes", res.Output.ToLower());
+        Assert.DoesNotContain("GetFileList", res.Output.ToLower());
+        Assert.True(res.Mode == Mode.Interactive);
 
-        res = router.route(InputMode.Interactive, "Do you have some text files about cats?");
-        Assert.Contains("yes", res.Output.ToLower());
+        res = router.route(Mode.Interactive, "Do you have some text files about cats?");
+        Assert.Contains("GetFileList", res.Output);
+        Assert.True(res.Mode != Mode.Interactive);
 
-        res = router.route(InputMode.Interactive, "Do you have some documents!");
-        Assert.Contains("yes", res.Output.ToLower());
+        res = router.route(Mode.Interactive, "Do you have some documents!");
+        Assert.Contains("GetFileList", res.Output);
+        Assert.True(res.Mode != Mode.Interactive);
     }
 }
