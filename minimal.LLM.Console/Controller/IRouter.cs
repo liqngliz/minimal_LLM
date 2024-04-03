@@ -2,11 +2,13 @@
 
 public interface IRouter <T>
 {
-    public T route(Mode mode, string input);
+    public T route(T routingInput);
 }
 
 public enum Mode
 {
     Interactive,
-    Planned
+    FunctionPlan,
+    StepsPlan,
+    Result
 }
