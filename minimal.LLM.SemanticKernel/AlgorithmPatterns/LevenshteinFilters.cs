@@ -9,16 +9,10 @@ public static class LevenshteinFilters
     public static List<string> ToFlatCharacterStringMatrix(this string input) 
     {   
         List<string> output = new List<string>();
-        var chunks = input.ToLower().Chunk(1).ToList();
-        for(int i = 0; i < chunks.Count; i++)
-        {
-            int remainder = input.Length - i;
-            for(int j = 0; j < remainder; j++)
-            {
-                var stringSet = input.Substring(i, j+1);
-                output.Add(stringSet);
-            }
-        }
+        input.ToLower().Chunk(1).WithIndex().ToList().ForEach(x =>{
+            for(int j = 0; j < input.Length - x.index; j++)
+                output.Add(input.Substring(x.index, j+1));
+        });
         return output;
     } 
 
