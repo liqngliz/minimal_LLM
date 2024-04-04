@@ -2,7 +2,6 @@ using System.Text;
 using Factory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
-using Quickenshtein;
 using Reasoners;
 using UtilsExt;
 
@@ -10,50 +9,80 @@ namespace Planner.Functions;
 
 public class SubPlannerFunctions : IPlanner<Task<List<KernelFunction>>, KernelPlan>
 {   
-    private string _relation;
-    private string[] _initial;
-    private List<string> _queries;    
-    private string finalQuery;
     readonly SubPlannerFunctionsTemplate _template;
-
-    public SubPlannerFunctions(SubPlannerFunctionsTemplate Template = null)
+    readonly string _levMatch;
+    readonly string _levNoMatch;
+    public SubPlannerFunctions(SubPlannerFunctionsTemplate Template = null, string inputLevMatch = null, string inputLevNoMatch = null)
     {   
         if(Template == null) _template = new SubPlannerFunctionsTemplate();
+        _levMatch = inputLevMatch;
+        _levNoMatch = inputLevNoMatch;
     }
+    private string relation;
+    private string[] initial;
+    private List<string> queries;    
+    private string finalQuery;
+    private string levMatch;
+    private string levNoMatch;
 
     private void init()
     {
-        _relation = _template.Relation == null? _template.Relation.ToDefaultRelation() : _template.Relation;
-        _initial = _template.Initial == null? _template.Initial.ToDefaultInitial() : _template.Initial;
-        _queries = _template.Queries == null? _template.Queries.ToDefaultQueries() : _template.Queries;
-        finalQuery = _template.Final == null? _template.Final.ToDefaultFinalQuery() : _template.Final;
+        relation = string.IsNullOrEmpty(_template.Relation)? _template.Relation.ToDefaultRelation() : _template.Relation;
+        initial = _template.Initial == null? _template.Initial.ToDefaultInitial() : _template.Initial;
+        queries = _template.Queries == null? _template.Queries.ToDefaultQueries() : _template.Queries;
+        finalQuery = string.IsNullOrEmpty(_template.Final)? _template.Final.ToDefaultFinalQuery() : _template.Final;
+        levMatch = string.IsNullOrEmpty(_levMatch)? _levMatch.ToDefaultLevMatch() : _levMatch;
+        levNoMatch = string.IsNullOrEmpty(_levNoMatch)? _levNoMatch.ToDefaultLevNoMatch() : _levNoMatch; 
     }
 
-    public async Task<List<KernelFunction>> Plan(KernelPlan Inputs)
+    public async Task<List<KernelFunction>> Plan(KernelPlan inputs)
     {   
         init();
-        IFactory<IReasoner<Reasoning, ReasonerTemplate>> reasonerFactory = Inputs.Kernel.Services.GetService<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>();
+        IFactory<IReasoner<Reasoning, ReasonerTemplate>> reasonerFactory = inputs.Kernel.Services.GetService<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>();
         IReasoner<Reasoning, ReasonerTemplate> reasoner = reasonerFactory.Make(typeof(LlmReasoner));
 
-        var functionsMeta = Inputs.Kernel.Plugins.GetFunctionsMetadata();
+        var functionsMeta = inputs.Kernel.Plugins.GetFunctionsMetadata();
         List<Relations> categories = new List<Relations>();
-        var relation = _relation;
+        var relation = this.relation;
         functionsMeta.ToList().ForEach(x => {
             var name = x.Name.ToName();
             var description = x.Description.ToDescription();
             categories.Add(new Relations(name, description, relation));
         });
         
-        var initial = _initial;
+        var initial = this.initial;
         List<string> operations = new List<string>();
         categories.ForEach(x => {
             init();
-            var queries = _queries;
+
+            var matrix = inputs.Prompt.ToFlatCharacterStringMatrix();
+            var matches = matrix.Distinct().ToList().FilterLevenshteinTolerance(x.Name.Text);
+            string levQuery = null;
+            if(matches.Count > 4)
+            {
+                levQuery = levMatch
+                    .Replace("{input}", inputs.Prompt)
+                    .Replace("{levMatch}", matches.First())
+                    .Replace("{namesLabel}", x.Name.Text);
+            }
+            else
+            {
+                levQuery = levNoMatch
+                    .Replace("{input}", inputs.Prompt)
+                    .Replace("{namesLabel}", x.Name.Text)
+                    .Replace("{namesDescription}", x.Description.Text);
+            }
+
             var final = finalQuery
-                .Replace("{inputPrompt}", Inputs.Prompt)
+                .Replace("{inputPrompt}", inputs.Prompt)
                 .Replace("{namesLabel}",x.Name.Text)
                 .Replace("{namesDescription}", x.Description.Text);
+            
+            var queries = this.queries;
+            if(levQuery != null)
+                queries.Add(levQuery);
             queries.Add(final);
+            
             var promptBuilder = new StringBuilder();
             initial.ToList().ForEach(x => promptBuilder.AppendLine(x));
 
@@ -69,7 +98,7 @@ public class SubPlannerFunctions : IPlanner<Task<List<KernelFunction>>, KernelPl
         List<KernelFunction> functions = new List<KernelFunction>();
         foreach(var functionMetadata in functionMetadatas)
         {
-            var function = Inputs.Kernel.Plugins.GetFunction(functionMetadata.PluginName, functionMetadata.Name);
+            var function = inputs.Kernel.Plugins.GetFunction(functionMetadata.PluginName, functionMetadata.Name);
             functions.Add(function);
         }
         
@@ -102,8 +131,8 @@ public static class SubPlannerFunctionsExt
         "<|im_start|>user\nWhen asked a question, do not answer with another question or ask for futher informaton try your best to answer directly.<|im_end|>"
     };
 
-    public static string ToDefaultLevMatch(this string input) => "<|im_start|>user\nAre you sure of your answer '{input}' contains the word '{levMatch}' which is more than '{levTolereance}' to {namesLabel}?<|im_end|>";
-    public static string ToDefaultLevNoMatch(this string input) => "<|im_start|>user\nDoes the phrase '{inputPrompt}' contain synonymes to '{namesLabel}'?<|im_end|>";
+    public static string ToDefaultLevMatch(this string input) => "<|im_start|>user\nNote that '{input}' contains '{levMatch}' which looks like {namesLabel}. Consider this when answering.<|im_end|>";
+    public static string ToDefaultLevNoMatch(this string input) => "<|im_start|>user\n'{input}' does not contain any words that look like '{namesLabel}'. Consider this when answering<|im_end|>";
 
-    public static string ToDefaultFinalQuery(this string input) => "<|im_start|>user\nDoes the phrase '{inputPrompt}' contain synonymes to '{namesLabel}'?<|im_end|>";
+    public static string ToDefaultFinalQuery(this string input) => "<|im_start|>user\nFor the operation '{inputPrompt}' is the following function '{namesLabel} defined as {namesDescription}' a good fit?<|im_end|>prohib";
 }

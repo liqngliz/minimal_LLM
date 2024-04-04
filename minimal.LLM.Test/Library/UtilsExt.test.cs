@@ -4,45 +4,8 @@ using UtilsExt;
 namespace UtilsExtTest;
 
 [Collection("Sequential")]
-public class UtilsExtTest
+public class EnumerableExtTest
 {
-    [Fact]
-    public void Should_split_to_chunks()
-    {
-        string text = "ID8ZSOB2M032";
-        var res = text.SplitChunk(2);
-        Assert.Equal(res.Count(), 6);
-
-        text = "ID8ZSOB2M03";
-        res = text.SplitChunk(2);
-        Assert.Equal(res.Count(), 6);
-
-        text = "ID8ZSOB2M0324";
-        res = text.SplitChunk(2);
-        Assert.Equal(res.Count(), 7);
-    }
-    [Fact]
-    public void Should_convert_to_int()
-    {
-        Assert.Equal(true.toInt(), 1);
-        Assert.Equal(false.toInt(), -1);
-    }
-
-    [Fact]
-    public void Should_convert_order_by_bool()
-    {
-        var text = "ID8ZSOB2M03";
-        var res = text.SplitChunk(2);
-        Assert.Equal(res.Count(), 6);
-        res = res.SortByBool(reverse, "someTxt");
-        Assert.Equal(res[0], "3"); 
-
-        var strings = new List<string>(){"asgsag", "aggs", "ID8ZSOB2M03", "relevant", "Relevant"};
-        res = strings.SortByBool(relevance, "relevant");
-        res.Reverse();
-        Assert.Equal(res[0], "relevant"); 
-    }
-
     [Fact]
     public void Should_give_index()
     {   
@@ -50,9 +13,37 @@ public class UtilsExtTest
         foreach (var num in nums.WithIndex<int>()) 
             Assert.Equal(num.item, nums[num.index]);
     }
-    private bool reverse (string a, string b, string q) => a.Count() > b.Count();
-
-    private bool relevance (string a, string b, string q) => a == q;
-
     
+}
+
+[Collection("Sequential")]
+public class LevenshteinUtilsExtTest
+{
+   [Theory]
+   [InlineData("I want to add two numbers", "add")]
+   [InlineData("I want to subtract two numbers", "subtract")]
+   public void Should_contain_target_in_matrix(string phrase, string target)
+   {
+      var sut = phrase.ToFlatCharacterStringMatrix();
+      Assert.Contains(target, sut);
+   }
+   
+   [Theory]
+   [InlineData("I want to add two numbers", "add", "add")]
+   [InlineData("I want to suabtract two numbers", "subtract", "suabtract")]
+   [InlineData("I want to perform subtraction", "subtract", "subtracti")]
+   public void Should_contain_target_find_match(string phrase, string input, string target)
+   {
+      var matrix = phrase.ToFlatCharacterStringMatrix();
+      var sut = matrix.Distinct().ToList().FilterLevenshteinTolerance(input);
+      Assert.Contains(target, sut);
+   }
+   [Theory]
+   [InlineData("I want to multiply two numbers 58*39", "add", "add")]
+   public void Should_no_match(string phrase, string input, string target)
+   {
+      var matrix = phrase.ToFlatCharacterStringMatrix();
+      var sut = matrix.Distinct().ToList().FilterLevenshteinTolerance(input);
+      Assert.DoesNotContain(target, sut);
+   }
 }

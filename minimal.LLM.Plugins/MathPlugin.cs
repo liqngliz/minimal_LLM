@@ -11,27 +11,27 @@ public sealed class MathPlugin
     =>  Math.Sqrt(number1);
     
 
-    [KernelFunction, Description("Add two numbers")]
+    [KernelFunction, Description("Sum of two numbers")]
     public static double Add(
         [Description("The first number to add")] double number1,
         [Description("The second number to add")] double number2) 
     => number1 + number2;
 
 
-    [KernelFunction, Description("Subtract two numbers")]
+    [KernelFunction, Description("Subtraction of two numbers")]
     public static double Subtract(
         [Description("The first number to subtract from")] double number1,
         [Description("The second number to subtract away")] double number2)
     => number1 - number2;
     
 
-    [KernelFunction, Description("Multiply two numbers.")]
+    [KernelFunction, Description("Multiplication of two numbers.")]
     public static double Multiply(
         [Description("The first number to multiply")] double number1,
         [Description("The second number to multiply")] double number2) 
     => number1 * number2;
 
-    [KernelFunction, Description("Divide two numbers")]
+    [KernelFunction, Description("Division of two numbers")]
     public static double Divide(
         [Description("The first number to divide from")] double number1,
         [Description("The second number to divide by")] double number2) 

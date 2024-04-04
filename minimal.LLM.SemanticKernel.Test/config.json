@@ -5,7 +5,7 @@
     "MaxTokens": 1024,
     "Temperature": 0.8,
     "RepeatPenalty": 1.1,
-    "AntiPrompts": ["prohibere", "prohibere\n", "Prohibere", "Prohib", "Proh", "proh"],
+    "AntiPrompts": ["prohibere", "prohibere\n", "Prohibere", "Prohib", "Proh", "proh", "prohib", "prohi"],
     "Model": "nous-hermes-phi-2-q4km.gguf",
     "Prompt": "prompt.txt"
 }
