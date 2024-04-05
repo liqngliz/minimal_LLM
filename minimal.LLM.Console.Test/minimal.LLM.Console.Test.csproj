@@ -30,7 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../minimal.LLM.Console/minimal.LLM.Console.csproj" />
-    <ProjectReference Include="../minimal.LLM/minimal.LLM.csproj" />
+    <ProjectReference Include="../minimal.LLM/minimal.LLM.Executors.csproj" />
   </ItemGroup>
 
 </Project>
