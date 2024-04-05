@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.Plugins", "mini
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.Plugins.Test", "minimal.LLM.Plugins.Test\minimal.LLM.Plugins.Test.csproj", "{FA0B1605-AE88-4DED-96F2-D08ACA6C2272}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.ViewModel", "minimal.LLM.ViewModel\minimal.LLM.ViewModel.csproj", "{08938847-9BCE-4C20-965A-BF4CB28977E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.ViewModel.Test", "minimal.LLM.ViewModel.Test\minimal.LLM.ViewModel.Test.csproj", "{07A303B3-C21F-4962-9339-83B5E4C004B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +61,14 @@ Global
 		{FA0B1605-AE88-4DED-96F2-D08ACA6C2272}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA0B1605-AE88-4DED-96F2-D08ACA6C2272}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA0B1605-AE88-4DED-96F2-D08ACA6C2272}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08938847-9BCE-4C20-965A-BF4CB28977E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08938847-9BCE-4C20-965A-BF4CB28977E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08938847-9BCE-4C20-965A-BF4CB28977E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08938847-9BCE-4C20-965A-BF4CB28977E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07A303B3-C21F-4962-9339-83B5E4C004B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07A303B3-C21F-4962-9339-83B5E4C004B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07A303B3-C21F-4962-9339-83B5E4C004B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07A303B3-C21F-4962-9339-83B5E4C004B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

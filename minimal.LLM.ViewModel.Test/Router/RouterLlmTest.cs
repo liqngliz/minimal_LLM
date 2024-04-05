@@ -3,16 +3,12 @@ using Autofac;
 using Configuration;
 using Factory;
 using IoC;
-using Microsoft.SemanticKernel;
-using minimal.LLM.Console.Router;
-using minimal.LLM.Plugins;
+using Plugins;
 using minimal.LLM.SemanticKernel;
-using Planner;
-using Planner.StepPlanner;
-using Planner.Validators;
 using Reasoners;
+using ViewRouter;
 
-namespace minimal.LLM.Console.Test;
+namespace RouterTest;
 
 public class RouterLlmTest
 {
@@ -33,7 +29,7 @@ public class RouterLlmTest
     {
         ConductorKernel kernel = _conductorKernel.MakeConductorKernel();
 
-        IRouter<RoutingPayload>  router = new Router.Router(kernel);
+        IRouter<RoutingPayload>  router = new Router(kernel);
 
         var res = router.route(new (Mode.Interactive, "can I get some chicken wings?"));
 
@@ -54,7 +50,7 @@ public class RouterLlmTest
     {
         ConductorKernel kernel = _conductorKernel.MakeConductorKernel();
 
-        IRouter<RoutingPayload>  router = new Router.Router(kernel);
+        IRouter<RoutingPayload>  router = new Router(kernel);
         var res = router.route(new(Mode.Interactive, "Do you have some text files about cats?"));
         Assert.Contains("GetFileList", res.Text);
         Assert.True(res.Mode == Mode.FunctionPlan);
@@ -76,7 +72,7 @@ public class RouterLlmTest
     {
         ConductorKernel kernel = _conductorKernel.MakeConductorKernel();
 
-        IRouter<RoutingPayload>  router = new Router.Router(kernel);
+        IRouter<RoutingPayload>  router = new Router(kernel);
 
         var res = router.route(new(Mode.Interactive, "I want the content of cats.txt from the file list."));
         Assert.Contains("GetContent", res.Text);

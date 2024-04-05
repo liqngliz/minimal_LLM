@@ -1,5 +1,5 @@
 using Microsoft.SemanticKernel;
-using minimal.LLM.Plugins;
+using Plugins;
 
 
 namespace PlannerTests;

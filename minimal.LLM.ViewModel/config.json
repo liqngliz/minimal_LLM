@@ -1,0 +1,12 @@
+{
+    "ContextSize": 4096,
+    "Seed": 1337,
+    "GpuLayerCount": 10,
+    "MaxTokens": 4096,
+    "Temperature": 0.0,
+    "RepeatPenalty": 1.0,
+    "AntiPrompts": ["prohibere", "prohibere\n", "Prohibere", "Prohib", "Proh", "proh"],
+    "Model": "nous-hermes-phi-2-q4km.gguf",
+    "Prompt": "prompt.txt"
+}
+  

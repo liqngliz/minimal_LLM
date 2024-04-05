@@ -2,7 +2,7 @@
 using Microsoft.SemanticKernel;
 
 
-namespace minimal.LLM.Plugins;
+namespace Plugins;
 
 public sealed class FilePlugin
 {

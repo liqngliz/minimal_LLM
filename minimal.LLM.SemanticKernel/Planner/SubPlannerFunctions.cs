@@ -52,10 +52,10 @@ public class SubPlannerFunctions : IPlanner<Task<List<KernelFunction>>, KernelPl
         
         var initial = this.initial;
         List<string> operations = new List<string>();
+        var matrix = inputs.Prompt.ToFlatCharacterStringMatrix();
+        
         categories.ForEach(x => {
             init();
-
-            var matrix = inputs.Prompt.ToFlatCharacterStringMatrix();
             var matches = matrix.Distinct().ToList().FilterLevenshteinTolerance(x.Name.Text);
             string levQuery = null;
             if(matches.Count > 4)

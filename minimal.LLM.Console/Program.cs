@@ -6,7 +6,7 @@ using Llm;
 using Run;
 using Factory;
 using Reasoners;
-using minimal.LLM.Plugins;
+using Plugins;
 using minimal.LLM.SemanticKernel;
 ;
 

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using Microsoft.SemanticKernel;
 
-namespace minimal.LLM.Plugins;
+namespace Plugins;
 
 public sealed class MathPlugin
 {

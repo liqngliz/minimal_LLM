@@ -1,4 +1,4 @@
-﻿namespace minimal.LLM.Console;
+﻿namespace ViewRouter;
 
 public interface IRouter <T>
 {

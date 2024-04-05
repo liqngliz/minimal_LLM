@@ -1,4 +1,4 @@
-using minimal.LLM.Plugins;
+using Plugins;
 
 namespace FilePluginTest;
 public class FilePluginTest

@@ -13,7 +13,7 @@ using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using ChatHistory = Microsoft.SemanticKernel.ChatCompletion.ChatHistory;
 using Microsoft.SemanticKernel.TextGeneration;
-using minimal.LLM.Plugins;
+using Plugins;
 using Reasoners;
 
 

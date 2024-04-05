@@ -1,16 +1,10 @@
-﻿
-using System.Text;
-using Context;
-using Factory;
-using Llm;
+﻿using System.Text;
 using Microsoft.SemanticKernel;
 using minimal.LLM.SemanticKernel;
-using Planner;
 using Planner.StepPlanner;
-using Planner.Validators;
 using Reasoners;
 
-namespace minimal.LLM.Console.Router;
+namespace ViewRouter;
 
 public class Router : IRouter<RoutingPayload>
 {   

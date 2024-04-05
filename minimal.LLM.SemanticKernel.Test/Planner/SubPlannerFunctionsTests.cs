@@ -7,7 +7,7 @@ using Factory;
 using IoC;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
-using minimal.LLM.Plugins;
+using Plugins;
 using Planner;
 using Planner.Functions;
 using Reasoners;

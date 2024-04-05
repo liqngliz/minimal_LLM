@@ -9,6 +9,7 @@
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
+
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageReference Include="NSubstitute" Version="5.1.0" />
@@ -25,11 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="View/" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="../minimal.LLM.Console/minimal.LLM.Console.csproj" />
+    <ProjectReference Include="../minimal.LLM.ViewModel/minimal.LLM.ViewModel.csproj" />
   </ItemGroup>
 
 </Project>

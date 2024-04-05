@@ -1,6 +1,6 @@
 using Autofac;
 using Microsoft.SemanticKernel;
-using minimal.LLM.Plugins;
+using Plugins;
 using Planner;
 using Planner.Validators;
 
