@@ -56,7 +56,7 @@ public class SubPlannerFunctions : IPlanner<Task<List<KernelFunction>>, KernelPl
         
         categories.ForEach(x => {
             init();
-            var matches = matrix.Distinct().ToList().FilterLevenshteinTolerance(x.Name.Text);
+            var matches = matrix.FilterLevenshteinTolerance(x.Name.Text);
             string levQuery = null;
             if(matches.Count > 4)
             {

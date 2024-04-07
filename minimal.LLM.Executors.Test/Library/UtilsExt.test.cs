@@ -25,7 +25,7 @@ public class LevenshteinUtilsExtTest
    public void Should_contain_target_in_matrix(string phrase, string target)
    {
       var sut = phrase.ToFlatCharacterStringMatrix();
-      Assert.Contains(target, sut);
+      Assert.Contains(target, sut.Select(x => x.Value).ToList());
    }
    
    [Theory]
@@ -36,7 +36,7 @@ public class LevenshteinUtilsExtTest
    {
       var matrix = phrase.ToFlatCharacterStringMatrix();
       var sut = matrix.Distinct().ToList().FilterLevenshteinTolerance(input);
-      Assert.Contains(target, sut);
+      Assert.Contains(target, sut.Select(x => x.Value).ToList());
    }
    [Theory]
    [InlineData("I want to multiply two numbers 58*39", "add", "add")]
@@ -44,6 +44,6 @@ public class LevenshteinUtilsExtTest
    {
       var matrix = phrase.ToFlatCharacterStringMatrix();
       var sut = matrix.Distinct().ToList().FilterLevenshteinTolerance(input);
-      Assert.DoesNotContain(target, sut);
+      Assert.DoesNotContain(target, sut.Select(x => x.Value).ToList());
    }
 }

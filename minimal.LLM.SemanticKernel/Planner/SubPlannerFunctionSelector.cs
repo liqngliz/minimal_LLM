@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.SemanticKernel;
+using Reasoners;
 using UtilsExt;
 
 namespace Planner.FunctionSelector;
@@ -11,7 +12,7 @@ public class SubPlannerFunctionSelector : IPlanner<FunctionSelection, KernelPlan
     readonly string _many;
     readonly string _none;
     readonly string _reply;
-    public SubPlannerFunctionSelector(string reply, string error = null, string many = null, string none = null)
+    public SubPlannerFunctionSelector(string reply = null, string error = null, string many = null, string none = null)
     {
         _error = string.IsNullOrEmpty(error)? error.ToDefaultErrorReply(): error;
         _many = string.IsNullOrEmpty(many)? many.ToDefaultManyReply(): many;
@@ -24,8 +25,16 @@ public class SubPlannerFunctionSelector : IPlanner<FunctionSelection, KernelPlan
         var userInput = inputs.Prompt;
         var functionNames = inputs.Kernel.Plugins.GetFunctionsMetadata().Select(x => x.Name).WithIndex().ToList();
         var functionDescriptions = inputs.Kernel.Plugins.GetFunctionsMetadata().Select(x => x.Description).WithIndex().ToList();
+        var matrix = inputs.Prompt.ToFlatCharacterStringMatrix().ToList();
 
-        
+        functionNames.ForEach(x =>{
+            string value = x.item;
+            int index = x.index;
+            string description = functionDescriptions[index].item;
+            var matches = matrix.FilterLevenshteinTolerance(value);
+
+
+        });
 
         throw new NotImplementedException();
     }
