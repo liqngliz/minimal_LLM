@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="../minimal.LLM/minimal.LLM.Executors.csproj" />
+    <ProjectReference Include="../minimal.LLM.Executors/minimal.LLM.Executors.csproj" />
     <ProjectReference Include="..\minimal.LLM.Plugins\minimal.LLM.Plugins.csproj" />
   </ItemGroup>
 

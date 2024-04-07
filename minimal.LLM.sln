@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "minimal.LLM.Executors", "minimal.LLM\minimal.LLM.Executors.csproj", "{2AAA5EB7-1EF8-4287-B006-5BB10951BB12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "minimal.LLM.Executors", "minimal.LLM.Executors\minimal.LLM.Executors.csproj", "{2AAA5EB7-1EF8-4287-B006-5BB10951BB12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.Executors.Test", "minimal.LLM.Test\minimal.LLM.Executors.Test.csproj", "{69BBDD1C-7DD8-4AAF-994B-F46ED1F8264E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.Executors.Test", "minimal.LLM.Executors.Test\minimal.LLM.Executors.Test.csproj", "{69BBDD1C-7DD8-4AAF-994B-F46ED1F8264E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.LLM.Console", "minimal.LLM.Console\minimal.LLM.Console.csproj", "{33C676C5-213A-4C9B-BCE6-93EEC28EAB89}"
 EndProject

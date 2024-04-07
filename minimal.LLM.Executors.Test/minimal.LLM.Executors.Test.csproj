@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../minimal.LLM/minimal.LLM.Executors.csproj" />
+    <ProjectReference Include="../minimal.LLM.Executors/minimal.LLM.Executors.csproj" />
   </ItemGroup>
 
     <ItemGroup>
