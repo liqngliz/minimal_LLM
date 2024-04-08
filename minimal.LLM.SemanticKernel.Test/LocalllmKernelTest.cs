@@ -8,6 +8,7 @@ using Microsoft.SemanticKernel;
 using minimal.LLM.SemanticKernel;
 using Planner;
 using Planner.Functions;
+using Planner.FunctionSelector;
 using Planner.Parameters;
 using Planner.StepPlanner;
 using Planner.Validators;
@@ -34,6 +35,7 @@ public class LlmKernelTest
     [InlineData(typeof(IPlanner<Task<Dictionary<KernelParameterMetadata,string>>, KernelFunction>),typeof(SubPlannerParameter))]
     [InlineData(typeof(IPlanner<Task<StepResult>, StepInput>),typeof(StepPlanner))]
     [InlineData(typeof(IPlanner<Task<List<KernelFunction>>, KernelPlan>),typeof(SubPlannerFunctions))]
+    [InlineData(typeof(IPlanner<FunctionSelection, FunctionOptions>),typeof(SubPlannerFunctionSelector))]
     public void should_resolve_types(Type serviceType, Type expected)
     {
         Kernel conductor = _sut.MakeConductorKernel();
@@ -63,5 +65,6 @@ public class LlmKernelTest
         }
 
         Assert.True(exception != null);
+        ConductorKernel conductorKernelGood = conductor;
     }
 }

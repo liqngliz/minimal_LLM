@@ -56,13 +56,13 @@ public class SubPlannerFunctions : IPlanner<Task<List<KernelFunction>>, KernelPl
         
         categories.ForEach(x => {
             init();
-            var matches = matrix.FilterLevenshteinTolerance(x.Name.Text);
+            var matches = matrix.FilterLevenshteinMatch(x.Name.Text);
             string levQuery = null;
-            if(matches.Count > 4)
+            if(matches.Count > 2)
             {
                 levQuery = levMatch
                     .Replace("{input}", inputs.Prompt)
-                    .Replace("{levMatch}", matches.First())
+                    .Replace("{levMatch}", matches.First().GetWordFromOrigin())
                     .Replace("{namesLabel}", x.Name.Text);
             }
             else

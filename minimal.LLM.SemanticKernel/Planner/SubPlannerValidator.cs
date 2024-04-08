@@ -1,7 +1,4 @@
 using Microsoft.SemanticKernel;
-using Newtonsoft.Json;
-
-
 
 namespace Planner.Validators;
 

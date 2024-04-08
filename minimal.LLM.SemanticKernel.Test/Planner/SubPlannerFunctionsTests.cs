@@ -1,6 +1,4 @@
 using System.Reflection;
-using System.Security.AccessControl;
-using System.Text;
 using Autofac;
 using Configuration;
 using Factory;
@@ -9,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using Plugins;
 using Planner;
-using Planner.Functions;
 using Reasoners;
 
 
@@ -18,7 +15,6 @@ namespace PlannerTests;
 [Collection("Sequential")]
 public class SubPlannerFunctionsTest
 {
-    private Planner.IPlanner<Task<List<KernelFunction>>, KernelPlan> sut;
     readonly IKernelBuilder _builder;
     readonly IModule<Config> _module;
     readonly Kernel _kernel;
@@ -34,6 +30,7 @@ public class SubPlannerFunctionsTest
         _builder.Plugins.AddFromObject(new MathPlugin());
         _kernel = _builder.Build();
     }
+    private IPlanner<Task<List<KernelFunction>>, KernelPlan> sut;
 
     [Theory]
     [InlineData("I want to get the square root", "Sqrt")]

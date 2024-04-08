@@ -1,7 +1,6 @@
 using Microsoft.SemanticKernel;
 using Planner.Validators;
 
-
 namespace Planner.StepPlanner;
 public record StepResult(string Output, bool Final, FunctionResult FunctionResult = null);
 public record StepInput(string Input, KernelFunction Function, Kernel Kernel);

@@ -60,9 +60,9 @@ public class Router : IRouter<RoutingPayload>
         _functionsQuestion = string.IsNullOrEmpty(functionsQuestion) ? functionsQuestion.ToDefaultInteractiveQueries() : functionsQuestion;
         _functionsResponse = string.IsNullOrEmpty(functionsResponse) ? functionsResponse.ToDefaultInteractiveReponse() : functionsResponse;
 
-
     }
     
+
     public RoutingPayload route(RoutingPayload routingInput)
     {   
         switch(routingInput.Mode)
@@ -114,17 +114,23 @@ public class Router : IRouter<RoutingPayload>
                 
                 if(!useFunctions)
                     return new(Mode.Interactive, "");
+
+                var meta = functionsMeta.Select(x => x.Metadata).ToList();
+                var functionSelection = _conductorKernel.Selector.Plan(new(meta, _conductorKernel, routingInput.Text));
                 
-                var functionList = _conductorKernel.Function.Plan(new(_conductorKernel, routingInput.Text)).Result;
-                var function = functionList.Where(x => routingInput.Functions.Contains(x)).FirstOrDefault();
-                if(function == null) return new(Mode.Result, "");
+                if(!functionSelection.Valid) 
+                    return new(Mode.FunctionPlan, functionSelection.output);
+                else
+                    return new(Mode.StepsPlan, functionSelection.output, functionSelection.KernelFunctions);
+
+            case Mode.StepsPlan:
+                var function = routingInput.Functions.Single();
                 var steps = _conductorKernel.Steps.Plan(new(routingInput.Text, function, _conductorKernel)).Result;
                 
                 if(steps.Final) 
                     return new(Mode.Result, steps.FunctionResult.ToString());
 
                 return new(Mode.StepsPlan, steps.Output, new (){function}, steps);
-
             default: 
                 return new(Mode.Interactive, "");
         }

@@ -1,6 +1,5 @@
 using Microsoft.SemanticKernel;
 
-
 namespace Planner.Parameters;
 
 public class SubPlannerParameter : IPlanner<Task<Dictionary<KernelParameterMetadata,string>>, KernelFunction>
