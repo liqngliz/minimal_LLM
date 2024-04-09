@@ -6,18 +6,29 @@ namespace Planner.FunctionSelector;
 public record FunctionOptions(List<KernelFunctionMetadata> KernelFunctions, Kernel Kernel, string Prompt);
 public record FunctionSelection(bool Valid, string output = null, List<KernelFunction> KernelFunctions = null);
 
+public record FunctionSelectorTemplate(string Success, string Error, string Many, string None);
+
 public class SubPlannerFunctionSelector : IPlanner<FunctionSelection, FunctionOptions>
 {   
     readonly string _error;
     readonly string _many;
     readonly string _none;
     readonly string _success;
-    public SubPlannerFunctionSelector(string success = null, string error = null, string many = null, string none = null)
-    {
-        _error = string.IsNullOrEmpty(error)? error.ToDefaultErrorReply(): error;
-        _many = string.IsNullOrEmpty(many)? many.ToDefaultManyReply(): many;
-        _none = string.IsNullOrEmpty(none)? none.ToDefaultNoneReply(): none;
-        _success = string.IsNullOrEmpty(success)? success.ToDefaultReply() : success;
+    public SubPlannerFunctionSelector(FunctionSelectorTemplate functionSelectorTemplate = null)
+    {   
+        if (functionSelectorTemplate == null){
+            _error = "".ToDefaultErrorReply();
+            _many = "".ToDefaultManyReply();
+            _none = "".ToDefaultNoneReply();
+            _success = "".ToDefaultReply();
+        }
+        else
+        {
+            _error = functionSelectorTemplate.Error;
+            _many = functionSelectorTemplate.Many;
+            _none = functionSelectorTemplate.None;
+            _success = functionSelectorTemplate.Success;
+        }
     }
 
     public FunctionSelection Plan(FunctionOptions inputs)
@@ -66,11 +77,12 @@ public class SubPlannerFunctionSelector : IPlanner<FunctionSelection, FunctionOp
                 break;
             case 1:
                 var function = results.Single();
-                var parameters = function.Metadata.Parameters.Select(x => $"\n'{x.Name}: {x.Description} of type {x.ParameterType}'").ToList();
+                var parameters = function.Metadata.Parameters.Select(x => $"\n'{x.ParameterType} - {x.Name} : {x.Description}'").ToList();
+                var parametersTxt = parameters.Count > 0 ? string.Join("", parameters) : "None";
                 output = _success
                     .Replace("{function}",function.Name)
                     .Replace("{description}",function.Description)
-                    .Replace("{parameters}", string.Join("", parameters));
+                    .Replace("{parameters}", parametersTxt);
                 result = new (true, output, results);
                 break;
             default:

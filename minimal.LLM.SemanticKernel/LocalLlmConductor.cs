@@ -20,7 +20,7 @@ public class LlmConductorKernel :ILlmConductorKernel
     readonly IPlanner<Task<List<KernelFunction>>, KernelPlan> _functionsPlanner;
     readonly IPlanner<FunctionSelection, FunctionOptions> _selector;
     IFactory<IReasoner<Reasoning, ReasonerTemplate>> _llmFactory;
-    public LlmConductorKernel(List<object>  plugins, IFactory<IReasoner<Reasoning, ReasonerTemplate>> llmFactory, SubPlannerFunctionsTemplate functionsTemplate = null, StepPlannerTemplate stepPlannerTemplate = null, string parameterPlannerQuery = null, string validationErrorMessage = null)
+    public LlmConductorKernel(List<object>  plugins, IFactory<IReasoner<Reasoning, ReasonerTemplate>> llmFactory, SubPlannerFunctionsTemplate functionsTemplate = null, FunctionSelectorTemplate functionSelectorTemplate = null,StepPlannerTemplate stepPlannerTemplate = null, string parameterPlannerQuery = null, string validationErrorMessage = null)
     { 
         _plugins = plugins;
         _llmFactory = llmFactory;
@@ -28,7 +28,7 @@ public class LlmConductorKernel :ILlmConductorKernel
         _parameterPlanner = new SubPlannerParameter(parameterPlannerQuery);
         _validationPlanner = new SubPlannerValidator(validationErrorMessage);
         _stepsPlanner = new StepPlanner(_parameterPlanner, _validationPlanner, stepPlannerTemplate);
-        _selector = new SubPlannerFunctionSelector();
+        _selector = new SubPlannerFunctionSelector(functionSelectorTemplate);
     }
 
     public ConductorKernel MakeConductorKernel()

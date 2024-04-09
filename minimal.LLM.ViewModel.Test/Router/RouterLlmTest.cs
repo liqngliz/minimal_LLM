@@ -48,6 +48,11 @@ public class RouterLlmTest
         IRouter<RoutingPayload>  router = new Router(kernel);
         var res = router.route(new(Mode.Interactive, "Do you have some text files about cats?"));
 
+        Assert.True(res.Mode == Mode.FunctionPlan);
+
+        var next = res with {Text = "I would like to use GetFileList"};
+        var sut = router.route(next);
+        Assert.True(sut.Mode == Mode.Result);
     }
 
     [Fact]

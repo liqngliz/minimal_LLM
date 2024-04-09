@@ -119,18 +119,28 @@ public class Router : IRouter<RoutingPayload>
                 var functionSelection = _conductorKernel.Selector.Plan(new(meta, _conductorKernel, routingInput.Text));
                 
                 if(!functionSelection.Valid) 
+                {
                     return new(Mode.FunctionPlan, functionSelection.output);
+                }
                 else
-                    return new(Mode.StepsPlan, functionSelection.output, functionSelection.KernelFunctions);
-
+                {   
+                    var functionToInvoke = functionSelection.KernelFunctions.Single();
+                    var stepsFirst = _conductorKernel.Steps.Plan(new(routingInput.Text, functionToInvoke, _conductorKernel)).Result;
+                    RoutingPayload outputInitial = stepsFirst.Final ? 
+                        new(Mode.Result, stepsFirst.FunctionResult.ToString()) : 
+                        new(Mode.StepsPlan, stepsFirst.Output, new (){functionToInvoke}, stepsFirst);
+                    return outputInitial;
+                }
             case Mode.StepsPlan:
                 var function = routingInput.Functions.Single();
                 var steps = _conductorKernel.Steps.Plan(new(routingInput.Text, function, _conductorKernel)).Result;
                 
-                if(steps.Final) 
-                    return new(Mode.Result, steps.FunctionResult.ToString());
+                RoutingPayload output = steps.Final ? 
+                        new(Mode.Result, steps.FunctionResult.ToString()) : 
+                        new(Mode.StepsPlan, steps.Output, new (){function}, steps);
+                
+                return output;
 
-                return new(Mode.StepsPlan, steps.Output, new (){function}, steps);
             default: 
                 return new(Mode.Interactive, "");
         }
