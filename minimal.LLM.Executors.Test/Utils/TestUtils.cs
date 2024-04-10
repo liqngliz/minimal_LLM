@@ -1,10 +1,10 @@
 using Configuration;
-using IoC;
+using Ioc;
 
 public sealed class IoCSingleton
 {
     private static readonly IoCSingleton instance = new IoCSingleton();
-    private static readonly IModule<Config> ioCModule = new IoCModule("config.json");
+    private static readonly IContainer<Config> ioCModule = new IocContainer("config.json");
 
     static IoCSingleton()
     {
@@ -14,7 +14,7 @@ public sealed class IoCSingleton
     {
     }
 
-    public static IModule<Config> Module
+    public static IContainer<Config> Module
     {
         get
         {

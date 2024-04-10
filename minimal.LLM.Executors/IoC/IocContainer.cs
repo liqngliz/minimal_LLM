@@ -8,13 +8,13 @@ using LLama.Abstractions;
 using Factory;
 using LLama;
 
-namespace IoC;
-public class IoCModule: IModule <Config>
+namespace Ioc;
+public class IocContainer: IContainer <Config>
 {   
     readonly ContainerBuilder _builder;
     readonly IContainer _container;
     readonly Config _configuration;
-    public IoCModule(string configPath)
+    public IocContainer(string configPath)
     {
         _builder = new ContainerBuilder();
 

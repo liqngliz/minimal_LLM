@@ -39,18 +39,10 @@ public static class LevenshteinUtils
             caseInput = input.ToLower();
             caseTarget = target.ToLower();
         }
-
-        if(caseTarget.Length < caseInput.Length)
-        {
-            var change = caseInput;
-            caseInput = caseTarget;
-            caseTarget = change;
-        }
-
+        var longest = target.Length > input.Length ? target.Length : input.Length;
         var distance = Levenshtein.GetDistance(caseInput, caseTarget, CalculationOptions.DefaultWithThreading);
-        var divisor = (double)distance / (double)caseTarget.Length;
-        double matchRate = 1 - divisor;
-        return matchRate >= tolerance;
+        var res = (longest - distance) > longest * tolerance;
+        return res;
     }
 
     public static List<StringSegment> FilterLevenshteinMatch(this List<StringSegment> strings, string input, double tolerance = 0.65, bool caseInsentive = true)

@@ -3,7 +3,7 @@ using Autofac;
 using Configuration;
 using Context;
 using Factory;
-using IoC;
+using Ioc;
 using LLama.Abstractions;
 using Llm;
 using Reasoners;
@@ -13,12 +13,12 @@ namespace IoCTest;
 [Collection("Sequential")]
 public class IoCTest
 {   
-    readonly IModule<Config> _sut;
+    readonly IContainer<Config> _sut;
     private string _assPath;
     readonly string _assParentPath;
     public IoCTest()
     {
-        _sut = new IoCModule("config.json");
+        _sut = new IocContainer("config.json");
         _assPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         _assParentPath = new DirectoryInfo(_assPath).Parent.FullName;
     }

@@ -2,7 +2,7 @@
 using Autofac;
 using Configuration;
 using Factory;
-using IoC;
+using Ioc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using minimal.LLM.SemanticKernel;
@@ -19,11 +19,11 @@ namespace LlmKernelTest;
 public class LlmKernelTest
 {
     readonly ILlmConductorKernel _sut;
-    readonly IModule<Config> _module;
+    readonly IContainer<Config> _module;
     public LlmKernelTest()
     {
         var configurationJSON = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "config.json" );
-        _module = new IoCModule(configurationJSON);
+        _module = new IocContainer(configurationJSON);
         var reasonerFactory = _module.Container().Resolve<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>();
         List<object> plugins = new List<object>(){};
         _sut = new LlmConductorKernel(plugins, reasonerFactory);

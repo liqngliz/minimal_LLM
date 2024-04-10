@@ -1,7 +1,7 @@
 using Autofac;
 using Configuration;
 using Context;
-using IoC;
+using Ioc;
 using Llm;
 
 namespace ContextTest;
@@ -14,7 +14,7 @@ public class ContextTest
 
     public ContextTest () 
     {
-        var modules = new IoCModule("config.json");
+        var modules = new IocContainer("config.json");
         _sut = modules.Container().Resolve<IContext<LlmContextInstance>>();
         _sut2 = modules.Container().Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance,bool>>();
         

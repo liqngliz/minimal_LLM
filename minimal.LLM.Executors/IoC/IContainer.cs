@@ -1,7 +1,7 @@
 using Autofac;
 
-namespace IoC;
-public interface IModule <T>
+namespace Ioc;
+public interface IContainer <T>
 {
     IContainer Container();
     T Configuration();

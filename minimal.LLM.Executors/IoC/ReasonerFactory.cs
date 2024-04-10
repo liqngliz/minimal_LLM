@@ -9,8 +9,6 @@ public class ReasonerFactory : IFactory<IReasoner<Reasoning, ReasonerTemplate>>
 {   
     readonly Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> _llm;
 
-    private ContainerBuilder builder;
-
     public ReasonerFactory(Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> llm)
     {
         _llm = llm;
@@ -18,14 +16,13 @@ public class ReasonerFactory : IFactory<IReasoner<Reasoning, ReasonerTemplate>>
 
     public IReasoner<Reasoning, ReasonerTemplate> Make(Type type)
     {   
-        builder = new ContainerBuilder();
-        var keys = new List<string>(){nameof(LlmReasoner)};
+        ContainerBuilder builder = new ContainerBuilder();
 
          builder.Register(c => 
         {   
             return new LlmReasoner(_llm);
         })
-        .As<IReasoner<Reasoning, ReasonerTemplate>>().Keyed<IReasoner<Reasoning, ReasonerTemplate>>(keys[0]);
+        .As<IReasoner<Reasoning, ReasonerTemplate>>().Keyed<IReasoner<Reasoning, ReasonerTemplate>>(nameof(LlmReasoner));
         
         var container = builder.Build();
         var name = type.Name;

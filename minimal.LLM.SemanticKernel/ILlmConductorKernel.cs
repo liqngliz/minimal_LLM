@@ -1,7 +1,7 @@
 ﻿using System.Dynamic;
 using Configuration;
 using Factory;
-using IoC;
+using Ioc;
 using JetBrains.Annotations;
 using Microsoft.SemanticKernel;
 using Planner;

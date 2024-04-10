@@ -1,5 +1,5 @@
 using Context;
-using IoC;
+using Ioc;
 using Autofac;
 using Reasoners;
 using UtilsExt;
@@ -15,7 +15,7 @@ public class LlmReasonerTest
 
     public LlmReasonerTest()
     {
-        var modules = (new IoCModule("config.json")).Container();
+        var modules = (new IocContainer("config.json")).Container();
         _classification = modules.Resolve<IReasoner<Reasoning, ReasonerTemplate>>();
     }
 

@@ -2,7 +2,7 @@ using System.Reflection;
 using Autofac;
 using Configuration;
 using Factory;
-using IoC;
+using Ioc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using Plugins;
@@ -17,13 +17,13 @@ namespace PlannerTests;
 public class SubPlannerFunctionsSelectorTest
 {   
     readonly IKernelBuilder _builder;
-    readonly IModule<Config> _module;
+    readonly IContainer<Config> _module;
     readonly Kernel _kernel;
 
     public SubPlannerFunctionsSelectorTest()
     {   
         var configurationJSON = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "config.json" );
-        _module = new IoCModule(configurationJSON);
+        _module = new IocContainer(configurationJSON);
         _builder = Kernel.CreateBuilder();
         var reasonerFactory = _module.Container().Resolve<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>();
         _builder.Services.AddSingleton(reasonerFactory);

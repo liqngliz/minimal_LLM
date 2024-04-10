@@ -3,7 +3,7 @@ using System.Text;
 using Autofac;
 using Configuration;
 using Factory;
-using IoC;
+using Ioc;
 using LLama;
 using LLama.Abstractions;
 using LLamaSharp.SemanticKernel.ChatCompletion;
@@ -22,13 +22,13 @@ namespace minimal.LLM.SemanticKernel;
 public class LlmSemanticKernelSamples
 {
     private IKernelBuilder _builder;
-    readonly IModule<Config> _module;
+    readonly IContainer<Config> _module;
     readonly IFactory<ILLamaExecutor> _factory;
     public LlmSemanticKernelSamples()
     {
         
         var configurationJSON = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "config.json" );
-        _module = new IoCModule(configurationJSON);
+        _module = new IocContainer(configurationJSON);
         var llmContainer = _module.Container();
         _factory = llmContainer.Resolve<IFactory<ILLamaExecutor>>();
     }

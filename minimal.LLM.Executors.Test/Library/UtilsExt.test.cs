@@ -84,6 +84,9 @@ public class LevenshteinUtilsExtTest
    [InlineData("0123456789", "012345xxxx", false)]
    [InlineData("0123456", "0123456789", true)]
    [InlineData("0123456789", "0123456", true)]
+   [InlineData("x123456789", "0123456789xx", true)]
+   [InlineData("xx23456789", "1234567xx", false)]
+   [InlineData("xx23456789", "XX1234567", true)]
    public void Should_find_match_when_tolerant(string phrase1, string phrase2, bool expected)
    {
       bool sut = phrase1.LevenshteinMatch(phrase2);

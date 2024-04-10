@@ -2,23 +2,24 @@
 using Autofac;
 using Configuration;
 using Factory;
-using IoC;
+using Ioc;
 using Plugins;
 using minimal.LLM.SemanticKernel;
 using Reasoners;
 using ViewRouter;
+using Microsoft.SemanticKernel;
 
 namespace RouterTest;
 
 public class RouterLlmTest
 {
     readonly ILlmConductorKernel _conductorKernel;
-    readonly IModule<Config> _module;
+    readonly IContainer<Config> _module;
 
     public RouterLlmTest()
     {
          var configurationJSON = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "config.json" );
-        _module = new IoCModule(configurationJSON);
+        _module = new IocContainer(configurationJSON);
         var reasonerFactory = _module.Container().Resolve<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>();
         List<object> plugins = new List<object>(){ new FilePlugin()};
         _conductorKernel = new LlmConductorKernel(plugins, reasonerFactory);
@@ -40,19 +41,23 @@ public class RouterLlmTest
         Assert.True(res.Mode == expectedMode);
     }
 
-    [Fact]
-    public void should_route_to_steps_when_function_selected()
+    [Theory]
+    [InlineData("I want to use GetFileList", Mode.Result)]
+    [InlineData("I want to use GetContent", Mode.StepsPlan)]
+    [InlineData("I want to use GetFileList and GetContent", Mode.FunctionPlan)]
+    [InlineData("I want to use the function buyCountry", Mode.FunctionPlan)]
+    [InlineData("I want to eat some fried chicken", Mode.Interactive)]
+    public void should_route_to_steps_when_function_selected(string text, Mode expectedMode)
     {
         ConductorKernel kernel = _conductorKernel.MakeConductorKernel();
 
         IRouter<RoutingPayload>  router = new Router(kernel);
-        var res = router.route(new(Mode.Interactive, "Do you have some text files about cats?"));
+        List<KernelFunction> kernelFunctions= kernel.Kernel.Plugins.GetFunctionsMetadata()
+            .Select(x => kernel.Kernel.Plugins.GetFunction(x.PluginName, x.Name)).ToList();
 
-        Assert.True(res.Mode == Mode.FunctionPlan);
-
-        var next = res with {Text = "I would like to use GetFileList"};
+        RoutingPayload next = new RoutingPayload(Mode.FunctionPlan, text, kernelFunctions);
         var sut = router.route(next);
-        Assert.True(sut.Mode == Mode.Result);
+        Assert.True(sut.Mode == expectedMode);
     }
 
     [Fact]

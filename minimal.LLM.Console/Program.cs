@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Autofac;
 using Context;
-using IoC;
+using Ioc;
 using Llm;
 using Run;
 using Factory;
@@ -13,7 +13,7 @@ using minimal.LLM.SemanticKernel;
 //Llm Lib container
 Console.WriteLine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
 var configurationJSON = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "config.json" );
-var llmContainer = new IoCModule(configurationJSON).Container();
+var llmContainer = new IocContainer(configurationJSON).Container();
 var llm = llmContainer.Resolve<Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool>>();
 
 //Orchestration container

@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Configuration;
 using Context;
-using IoC;
+using Ioc;
 using LLama;
 using LLama.Abstractions;
 using Factory;
@@ -11,12 +11,12 @@ namespace LlmFactoryTest;
 [Collection("Sequential")]
 public class LlmFactoryTest
 {
-    readonly IModule<Config> _IoC;
+    readonly IContainer<Config> _IoC;
     private IFactory<ILLamaExecutor> _sut;
   
     public LlmFactoryTest()
     {
-        _IoC = new IoCModule("config.json");
+        _IoC = new IocContainer("config.json");
     }
 
     [Theory]
