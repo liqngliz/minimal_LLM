@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../minimal.LLM.ViewModel/minimal.LLM.ViewModel.csproj" />
+    <ProjectReference Include="..\minimal.LLM.Plugins.Test\minimal.LLM.Plugins.Test.csproj" />
   </ItemGroup>
 
 </Project>

@@ -8,6 +8,7 @@ using minimal.LLM.SemanticKernel;
 using Reasoners;
 using ViewRouter;
 using Microsoft.SemanticKernel;
+using FilePluginTest;
 
 namespace RouterTest;
 
@@ -17,7 +18,9 @@ public class RouterLlmTest
     readonly IContainer<Config> _module;
 
     public RouterLlmTest()
-    {
+    {   
+        FilePluginTestUtils.CheckTestFiles();
+
          var configurationJSON = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "config.json" );
         _module = new IocContainer(configurationJSON);
         var reasonerFactory = _module.Container().Resolve<IFactory<IReasoner<Reasoning, ReasonerTemplate>>>();

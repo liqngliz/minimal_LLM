@@ -17,13 +17,17 @@ For JSON configuration (config.json)
     "MaxTokens": <Max tokens per prompt>,
     "Temperature": <Temperature affect randomization>,
     "RepeatPenalty": <Repeat penalty, affects randomization>,
-    "Model": <GGUF model file location>,
+    "Model": <GGUF model file location in bin>,
     "Prompt": <prompt.txt file location to initiate conversation>
 }
 
-To run program and tests, openhermes-2.5-mistral-7b.Q4_K_M or equivalent is required, add model to bin folder.
+The program was built and tested against a 4KM quantized Phi-2 OpenHermes Finetuned Model in GGUF format. 
+This model needs to be added to your bin folders for testing and execution
 
-GGUF Files:
-https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/tree/main
-OpenHermes Project Page:
-https://huggingface.co/teknium/OpenHermes-2.5-Mistral-7B
+2.7B Phi-2 Open Hermes Project page:
+https://huggingface.co/g-ronimo/phi-2-OpenHermes-2.5/tree/main
+
+LlammCPP used to quantize JSON model to GGUF format to use with LlamaSharp:
+https://github.com/ggerganov/llama.cpp
+
+
