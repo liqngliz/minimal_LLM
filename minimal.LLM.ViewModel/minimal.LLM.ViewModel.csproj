@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../minimal.LLM.Executors/minimal.LLM.Executors.csproj" />
-    <ProjectReference Include="..\minimal.LLM.SemanticKernel\minimal.LLM.SemanticKernel.csproj" />
+    <ProjectReference Include="../minimal.LLM.SemanticKernel/minimal.LLM.SemanticKernel.csproj" />
   </ItemGroup>
 
 </Project>
