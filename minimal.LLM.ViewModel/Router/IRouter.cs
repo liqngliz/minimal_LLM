@@ -1,4 +1,4 @@
-﻿namespace ViewRouter;
+﻿namespace Router;
 
 public interface IRouter <T>
 {

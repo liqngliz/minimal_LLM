@@ -4,7 +4,7 @@ using minimal.LLM.SemanticKernel;
 using Planner.StepPlanner;
 using Reasoners;
 
-namespace ViewRouter;
+namespace Router;
 
 public class Router : IRouter<RoutingPayload>
 {   

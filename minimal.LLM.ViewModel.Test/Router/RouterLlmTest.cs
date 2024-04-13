@@ -6,7 +6,7 @@ using Ioc;
 using Plugins;
 using minimal.LLM.SemanticKernel;
 using Reasoners;
-using ViewRouter;
+using Router;
 using Microsoft.SemanticKernel;
 using FilePluginTest;
 using Planner.StepPlanner;
@@ -37,7 +37,7 @@ public class RouterLlmTest
     {
         ConductorKernel kernel = _conductorKernel.MakeConductorKernel();
 
-        IRouter<RoutingPayload>  router = new Router(kernel);
+        IRouter<RoutingPayload> router = new Router.Router(kernel);
 
         var res = router.route(new (Mode.Interactive, input));
 
@@ -55,7 +55,7 @@ public class RouterLlmTest
     {
         ConductorKernel kernel = _conductorKernel.MakeConductorKernel();
 
-        IRouter<RoutingPayload>  router = new Router(kernel);
+        IRouter<RoutingPayload> router = new Router.Router(kernel);
         List<KernelFunction> kernelFunctions = kernel.Kernel.Plugins.GetFunctionsMetadata()
             .Select(x => kernel.Kernel.Plugins.GetFunction(x.PluginName, x.Name)).ToList();
 
@@ -70,7 +70,7 @@ public class RouterLlmTest
     {
         ConductorKernel kernel = _conductorKernel.MakeConductorKernel();
 
-        IRouter<RoutingPayload>  router = new Router(kernel);
+        IRouter<RoutingPayload> router = new Router.Router(kernel);
         List<KernelFunction> kernelFunctions = new List<KernelFunction>(){kernel.Kernel.Plugins.GetFunction("FilePlugin", functionName)};
         StepResult stepResult = new StepResult("some output", false);
 
