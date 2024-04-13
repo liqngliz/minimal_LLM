@@ -29,6 +29,7 @@ public class SubPlannerFunctionsTest
         //_builder.Plugins.AddFromType<MathPlugin>();
         _builder.Plugins.AddFromObject(new MathPlugin());
         _kernel = _builder.Build();
+        sut = new Planner.Functions.SubPlannerFunctions();
     }
     private IPlanner<Task<List<KernelFunction>>, KernelPlan> sut;
 
@@ -42,7 +43,7 @@ public class SubPlannerFunctionsTest
     public async void Should_return_functions_for_prompt(string prompt, string function)
     {   
         KernelPlan kPlan = new(_kernel, prompt);
-        sut = new Planner.Functions.SubPlannerFunctions();
+        
         var plans = await sut.Plan(kPlan);
         var functionNames = plans.Select(x => x.Name);
         Assert.Contains(function, functionNames);

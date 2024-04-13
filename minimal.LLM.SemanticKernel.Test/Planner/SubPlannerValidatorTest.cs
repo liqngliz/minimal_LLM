@@ -16,6 +16,7 @@ public class SubPlannerValidatorTest
         _builder = Kernel.CreateBuilder();
         _builder.Plugins.AddFromType<MathPlugin>();
         _kernel = _builder.Build();
+        sut = new SubPlannerValidator();
     }
     
     [Theory]
@@ -29,7 +30,7 @@ public class SubPlannerValidatorTest
     {
         var func = _kernel.Plugins.GetFunction(plugin, function);
         var parameter = func.Metadata.Parameters.Where(x => x.Name == param).Single();
-        sut = new SubPlannerValidator();
+        
         var result = await sut.Plan(new KernelParamValidationPlan(parameter, input));
         Assert.Equal(result.Valid, validity);
         Assert.Equal(expected, result.Value.ToString());

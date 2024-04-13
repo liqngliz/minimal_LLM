@@ -9,6 +9,7 @@ using Reasoners;
 using ViewRouter;
 using Microsoft.SemanticKernel;
 using FilePluginTest;
+using Planner.StepPlanner;
 
 namespace RouterTest;
 
@@ -55,7 +56,7 @@ public class RouterLlmTest
         ConductorKernel kernel = _conductorKernel.MakeConductorKernel();
 
         IRouter<RoutingPayload>  router = new Router(kernel);
-        List<KernelFunction> kernelFunctions= kernel.Kernel.Plugins.GetFunctionsMetadata()
+        List<KernelFunction> kernelFunctions = kernel.Kernel.Plugins.GetFunctionsMetadata()
             .Select(x => kernel.Kernel.Plugins.GetFunction(x.PluginName, x.Name)).ToList();
 
         RoutingPayload next = new RoutingPayload(Mode.FunctionPlan, text, kernelFunctions);
@@ -63,14 +64,19 @@ public class RouterLlmTest
         Assert.True(sut.Mode == expectedMode);
     }
 
-    [Fact]
-    public void should_route_to_result_when_valid_parameters()
+    [Theory]
+    [InlineData("test_text.txt", "GetContent", Mode.StepsPlan, Mode.Result)]
+    public void should_route_to_result_when_valid_parameters(string input, string functionName, Mode mode, Mode expectedMode)
     {
         ConductorKernel kernel = _conductorKernel.MakeConductorKernel();
 
         IRouter<RoutingPayload>  router = new Router(kernel);
+        List<KernelFunction> kernelFunctions = new List<KernelFunction>(){kernel.Kernel.Plugins.GetFunction("FilePlugin", functionName)};
+        StepResult stepResult = new StepResult("some output", false);
 
-        var res = router.route(new(Mode.Interactive, "I want the content of cats.txt from the file list."));
-
+        RoutingPayload next = new RoutingPayload(mode, input, kernelFunctions, stepResult);
+        var sut = router.route(next);
+        sut = router.route(next);
+        Assert.True(sut.Mode == expectedMode);
     }
 }

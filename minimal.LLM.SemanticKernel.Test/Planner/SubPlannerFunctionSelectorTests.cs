@@ -30,6 +30,7 @@ public class SubPlannerFunctionsSelectorTest
         //_builder.Plugins.AddFromType<MathPlugin>();
         _builder.Plugins.AddFromObject(new MathPlugin());
         _kernel = _builder.Build();
+        sut = new SubPlannerFunctionSelector();
     }
 
     private IPlanner<FunctionSelection, FunctionOptions> sut;
@@ -44,7 +45,7 @@ public class SubPlannerFunctionsSelectorTest
     {   
         var kernelFunctionsMeta = _kernel.Plugins.GetFunctionsMetadata();
         var kernelFunctions = kernelFunctionsMeta.Select(x => _kernel.Plugins.GetFunction(x.PluginName, x.Name)).ToList();
-        sut = new SubPlannerFunctionSelector();
+        
         var res = sut.Plan(new(kernelFunctionsMeta.ToList(), _kernel, input));
         KernelFunction expectedFunction = kernelFunctions.Where(x => x.Name == expectedFunctionName).FirstOrDefault();
         Assert.Equal(res.Valid, expected);

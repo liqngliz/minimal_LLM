@@ -14,6 +14,7 @@ public class SubPlannerParametersTest
         _builder = Kernel.CreateBuilder();
         _builder.Plugins.AddFromType<MathPlugin>();
         _kernel = _builder.Build();
+        sut = new Planner.Parameters.SubPlannerParameter();
     }
 
     [Theory]
@@ -24,7 +25,7 @@ public class SubPlannerParametersTest
     public async void should_get_user_replies(string plugin, string function, int expectedReplies)
     {
         var func = _kernel.Plugins.GetFunction(plugin, function);
-        sut = new Planner.Parameters.SubPlannerParameter();
+        
         var plans = await sut.Plan(func);
         Assert.Equal(expectedReplies, plans.Count);
     }

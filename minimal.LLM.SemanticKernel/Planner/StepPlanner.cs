@@ -72,6 +72,7 @@ public class StepPlanner : IPlanner<Task<StepResult>, StepInput>
                 {
                     FunctionResult result = await kernel.InvokeAsync(kernelFunction, KernelArgs);
                     step = Steps.Function;
+                    reset();
                     return new(_success, true, result);
                 }
                 catch(Exception ex)
@@ -80,12 +81,22 @@ public class StepPlanner : IPlanner<Task<StepResult>, StepInput>
                         .Replace("{function}", kernelFunction.Name)
                         .Replace("{inputs}", string.Join(",", KernelArgs.Select(x => x.Value.ToString())))
                         .Replace("{error}", ex.Message);
+                    reset();
                     return new(ex.Message, true, null);
                 }
             }
         }
 
         throw new NotImplementedException();
+    }
+
+    private void reset()
+    {   
+        step = Steps.Function;
+        inProgress = null;
+        completed = new List<KernelParameterMetadata>();
+        KernelArgs = new KernelArguments();
+
     }
 
     private enum Steps
