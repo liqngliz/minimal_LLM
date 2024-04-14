@@ -1,5 +1,4 @@
 using Context;
-using LLama.Common;
 using Llm;
 
 namespace Run;
@@ -19,17 +18,17 @@ public class RunLlmConsole : IRun
 
     public async Task<bool> Run()
     {   
-        var llm = _llmSharp.InferParams();
+        var llmParams = _llmSharp.InferParams();
         var prompt = Constants.InitPrompt;
-
+        using  Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> llm = _llmSharp;
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine($"The executor has been enabled. In this example, the prompt is printed, the maximum tokens is set to {(llm.InferenceParams == null ? 0 : llm.InferenceParams.MaxTokens)} (an example for medium scale usage) {(llm.ModelParams==null ? 0 : llm.ModelParams.ContextSize)} Max context size");
+        Console.WriteLine($"The executor has been enabled. In this example, the prompt is printed, the maximum tokens is set to {(llmParams.InferenceParams == null ? 0 : llmParams.InferenceParams.MaxTokens)} (an example for medium scale usage) {(llmParams.ModelParams==null ? 0 : llmParams.ModelParams.ContextSize)} Max context size");
         Console.ForegroundColor = ConsoleColor.Gray;
         Console.Write(prompt);
         bool run = true;
         while (run)
         {   
-            await foreach (var text in _llmSharp.Infer(prompt)) 
+            await foreach (var text in llm.Infer(prompt)) 
             {   
                 Console.Write(text);
                 
