@@ -3,12 +3,12 @@ using UtilsExt;
 
 namespace Router;
 
-public sealed class ModeSingleton
+public sealed class ModeSingleton : IModeSingleton
 {
     private static readonly ModeSingleton instance = new ModeSingleton();
     private bool useAgent;
     public bool UseAgent{get => useAgent;}
-    private string key;
+    private string key = null;
     public string Key{get => key;}
     private string message;
 
@@ -25,7 +25,7 @@ public sealed class ModeSingleton
             return instance;
         }
     }
-    public void FixAgentKeyMessage(string inputKey, string inputMessage) 
+    public void Init(string inputKey, string inputMessage) 
     { 
         if(string.IsNullOrEmpty(key))
             key = inputKey;
@@ -34,7 +34,7 @@ public sealed class ModeSingleton
 
         message = inputMessage;
     }
-    public string SetMode(string input) 
+    public string CheckMode(string input) 
     {   
         if(string.IsNullOrEmpty(key)) 
             throw new InvalidOperationException("Agent Key is not set please set key before mode can be set");

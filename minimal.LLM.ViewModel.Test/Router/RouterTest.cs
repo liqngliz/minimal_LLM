@@ -13,12 +13,12 @@ using Planner.StepPlanner;
 
 namespace RouterTest;
 
-public class RouterLlmTest
+public class RouterTest
 {
     readonly ILlmConductorKernel _conductorKernel;
     readonly IContainer<Config> _module;
 
-    public RouterLlmTest()
+    public RouterTest()
     {   
         FilePluginTestUtils.CheckTestFiles();
 
