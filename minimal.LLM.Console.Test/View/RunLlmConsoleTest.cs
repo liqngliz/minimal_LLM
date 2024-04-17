@@ -3,6 +3,7 @@ using Context;
 using LLama.Common;
 using Llm;
 using NSubstitute;
+using Router;
 using Run;
 namespace minimal.LLM.Console.Test;
 
@@ -12,9 +13,11 @@ public class RunTest
     public async void should_run()
     {   
         Illm<IAsyncEnumerable<string>, string, Context.LlmContextInstance, bool > llm = Substitute.For<Illm<IAsyncEnumerable<string>, string, Context.LlmContextInstance, bool>>();
+        IRouter<RoutingPayload> router = Substitute.For<IRouter<RoutingPayload>>();
+        IModeSingleton modeSingleton= Substitute.For<IModeSingleton>();
 
         var consoleBuilder = new ContainerBuilder();
-        consoleBuilder.Register(c => new RunLlmConsole(llm, true)).As<IRun>();
+        consoleBuilder.Register(c => new RunLlmConsole(llm, router, modeSingleton, true)).As<IRun>();
         
         var consoleContainer =consoleBuilder.Build();
         var consoleRunner = consoleContainer.Resolve<IRun>();

@@ -8,6 +8,7 @@ using Factory;
 using Reasoners;
 using Plugins;
 using minimal.LLM.SemanticKernel;
+using Router;
 ;
 
 //Llm Lib container
@@ -21,10 +22,13 @@ var reasonerFactory = llmContainer.Resolve<IFactory<IReasoner<Reasoning, Reasone
 List<object> plugins = new List<object>(){ new FilePlugin() };
 ILlmConductorKernel llmConductor = new LlmConductorKernel(plugins, reasonerFactory);
 
+//Semantic Router
+IRouter<RoutingPayload> router = new Router.Router(llmConductor.MakeConductorKernel());
+IModeSingleton modeSingleton = ModeSingleton.Instance;
 
 //Console Application container
 var consoleBuilder = new ContainerBuilder();
-consoleBuilder.Register(c => new RunLlmConsole(llm)).As<IRun>();
+consoleBuilder.Register(c => new RunLlmConsole(llm, router, modeSingleton)).As<IRun>();
 var consoleContainer = consoleBuilder.Build();
 var consoleRunner = consoleContainer.Resolve<IRun>();
 await consoleRunner.Run();

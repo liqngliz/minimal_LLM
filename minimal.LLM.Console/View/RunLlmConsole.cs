@@ -1,5 +1,8 @@
+using System.Text;
 using Context;
+using HandlebarsDotNet.Extensions;
 using Llm;
+using Router;
 
 namespace Run;
 
@@ -8,13 +11,19 @@ namespace Run;
 public class RunLlmConsole : IRun
 {   
     readonly Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> _llmSharp;
+    readonly IRouter<RoutingPayload> _router;
+    readonly IModeSingleton _modeSingleton;
     readonly bool _testMode;
 
-    public RunLlmConsole(Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> llmSharp, bool testmode = false)
+    public RunLlmConsole(Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> llmSharp, IRouter<RoutingPayload> router, IModeSingleton modeSingleton, bool testmode = false)
     {
         _llmSharp = llmSharp;
         _testMode = testmode;
+        _router = router;
+        _modeSingleton = modeSingleton;
     }
+
+    private StringBuilder Transcript = new StringBuilder();
 
     public async Task<bool> Run()
     {   
@@ -28,21 +37,27 @@ public class RunLlmConsole : IRun
         bool run = true;
         while (run)
         {   
-            await foreach (var text in llm.Infer(prompt)) 
-            {   
-                Console.Write(text);
-                
-                if(_testMode){
-                    run = false;
-                    return true;
-                }
+            string inferenceRes = await InferAsync(llm, prompt);
+            Transcript.Append(inferenceRes);
+
+            if(_testMode){
+                run = false;
+                return true;
             }
+            
             Console.ForegroundColor = ConsoleColor.Green;
             prompt = Console.ReadLine();
             Console.ForegroundColor = ConsoleColor.Gray;
 
         }
         return false;
+    }
+
+    private async Task<string> InferAsync(Illm<IAsyncEnumerable<string>, string, LlmContextInstance, bool> llm, string prompt)
+    {
+        var res = "";
+        await foreach (var text in llm.Infer(prompt)) Console.Write(text);
+        return res;
     }
 }
 
