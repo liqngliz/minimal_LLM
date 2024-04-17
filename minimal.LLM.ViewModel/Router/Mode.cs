@@ -55,4 +55,6 @@ public sealed class ModeSingleton : IModeSingleton
 
         return output;
     }
+
+    public bool UseRouting() => useAgent;
 }

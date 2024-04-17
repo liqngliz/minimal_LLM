@@ -25,6 +25,7 @@ ILlmConductorKernel llmConductor = new LlmConductorKernel(plugins, reasonerFacto
 //Semantic Router
 IRouter<RoutingPayload> router = new Router.Router(llmConductor.MakeConductorKernel());
 IModeSingleton modeSingleton = ModeSingleton.Instance;
+modeSingleton.Init("toggle_agent", "Agent Routing Active:");
 
 //Console Application container
 var consoleBuilder = new ContainerBuilder();

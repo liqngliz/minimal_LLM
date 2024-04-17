@@ -21,6 +21,7 @@ public class ModeSingletonTest
         var expected = "Using agent routing: True";
         var res = _sut.CheckMode("I would like to toggle_use_agent");
         Assert.Equal(expected, res);
+        Assert.True(_sut.UseRouting());
         
         expected = null;
         res = _sut.CheckMode("I want to getfiles named text.txt");
@@ -29,5 +30,6 @@ public class ModeSingletonTest
         expected = "Using agent routing: False";
         res = sut2.CheckMode("toggle_use_agent");
         Assert.Equal(expected, res);
+        Assert.True(!_sut.UseRouting());
     }
 }

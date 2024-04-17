@@ -37,17 +37,27 @@ public class RunLlmConsole : IRun
         bool run = true;
         while (run)
         {   
-            string inferenceRes = await InferAsync(llm, prompt);
+            //check mode
+            bool isAgent = _modeSingleton.UseRouting();
+            
+            //if mode is use_agent, use agent
+            string inferenceRes = "";
+            if(!isAgent)
+                await InferAsync(llm, prompt);
+            
             Transcript.Append(inferenceRes);
 
             if(_testMode){
                 run = false;
                 return true;
             }
-            
+
             Console.ForegroundColor = ConsoleColor.Green;
             prompt = Console.ReadLine();
             Console.ForegroundColor = ConsoleColor.Gray;
+
+            //set mode
+
 
         }
         return false;

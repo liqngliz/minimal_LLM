@@ -31,9 +31,12 @@ public class RunTest
             };
         ModelParams modelParams = new ModelParams("");
         LlmContextInstance llmInstance = new LlmContextInstance(modelParams,  inferenceParams);
+        
         var mockData = new[] { "mock prompt response" };
         llm.InferParams().Returns(llmInstance);
         llm.Infer(Arg.Any<string>()).Returns(mockData.ToAsyncEnumerable());
+        modeSingleton.UseRouting().Returns(false);
+
         await consoleRunner.Run();
         llm.Received().Infer(Arg.Any<string>());
     }
